@@ -1,6 +1,6 @@
 {
   "name": "iobroker.open-meteo-pv-forecast",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "PV Forecast Data",
   "author": {
     "name": "H5N1v2",
