@@ -76,26 +76,28 @@ class ApiCaller {
    * @param query - Search query (address, city, etc.)
    * @returns Promise with search results
    */
-  async searchLocation(query) {
-    const url = `https://nominatim.openstreetmap.org/search`;
-    try {
-      const response = await this.axiosInstance.get(url, {
-        params: {
-          q: query,
-          format: "json"
-        },
-        headers: {
-          "User-Agent": "ioBroker.open-meteo-pv-forecast"
-        }
-      });
-      return response.data;
-    } catch (error) {
-      if (import_axios.default.isAxiosError(error)) {
-        throw new Error(`Nominatim API error: ${error.message}`);
-      }
-      throw error;
-    }
-  }
+  /*async searchLocation(query: string): Promise<NominatimResult[]> {
+  		const url = `https://nominatim.openstreetmap.org/search`;
+  
+  		try {
+  			const response = await this.axiosInstance.get<NominatimResult[]>(url, {
+  				params: {
+  					q: query,
+  					format: 'json',
+  				},
+  				headers: {
+  					'User-Agent': 'ioBroker.open-meteo-pv-forecast',
+  				},
+  			});
+  
+  			return response.data;
+  		} catch (error) {
+  			if (axios.isAxiosError(error)) {
+  				throw new Error(`Nominatim API error: ${error.message}`);
+  			}
+  			throw error;
+  		}
+  	}*/
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

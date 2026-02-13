@@ -23,16 +23,16 @@ export interface OpenMeteoResponse {
 }
 
 /** Search result from Nominatim API */
-export interface NominatimResult {
-	/** Unique place identifier */
-	place_id: number;
-	/** Human-readable location name */
-	display_name: string;
-	/** Latitude as string */
-	lat: string;
-	/** Longitude as string */
-	lon: string;
-}
+//export interface NominatimResult {
+/** Unique place identifier */
+//	place_id: number;
+/** Human-readable location name */
+//	display_name: string;
+/** Latitude as string */
+//	lat: string;
+/** Longitude as string */
+//	lon: string;
+//}
 
 /** API caller for Open-Meteo and Nominatim services */
 export class ApiCaller {
@@ -84,7 +84,7 @@ export class ApiCaller {
 	 * @param query - Search query (address, city, etc.)
 	 * @returns Promise with search results
 	 */
-	async searchLocation(query: string): Promise<NominatimResult[]> {
+	/*async searchLocation(query: string): Promise<NominatimResult[]> {
 		const url = `https://nominatim.openstreetmap.org/search`;
 
 		try {
@@ -105,5 +105,5 @@ export class ApiCaller {
 			}
 			throw error;
 		}
-	}
+	}*/
 }
