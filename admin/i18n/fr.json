@@ -1,0 +1,18 @@
+{
+	"open-meteo-pv-forecast adapter settings": "Paramètres d'adaptateur pour open-meteo-pv-forecast",
+	"info_header": "Paramètres Généraux",
+	"forecastHours": "Heures de Prévision",
+	"updateInterval": "Intervalle de Mise à Jour (minutes)",
+	"updateInterval_help": "Fréquence de récupération des données (en minutes)",
+	"locations_header": "Emplacements",
+	"locations": "Emplacements PV",
+	"name": "Nom",
+	"latitude": "Latitude",
+	"longitude": "Longitude",
+	"tilt": "Inclinaison (°)",
+	"azimuth": "Azimut (°)",
+	"timezone": "Fuseau Horaire",
+	"actions": "Actions",
+	"location_help": "Astuce: Azimut -180° = Nord, -90° = Est, 0° = Sud, 90° = Ouest, 180° = Nord. Inclinaison 0° = horizontal, 90° = vertical",
+	"global_tilted_irradiance": "Irradiation Globale Inclinée"
+}

@@ -1,0 +1,135 @@
+{
+	"i18n": true,
+	"type": "panel",
+	"items": {
+		"_info": {
+			"type": "header",
+			"text": "info_header",
+			"size": 3
+		},
+		"forecastHours": {
+			"type": "select",
+			"label": "forecastHours",
+			"sm": 12,
+			"md": 6,
+			"lg": 4,
+			"options": [
+				{"label": "3", "value": 3},
+				{"label": "6", "value": 6},
+				{"label": "12", "value": 12},
+				{"label": "24", "value": 24},
+				{"label": "48", "value": 48}
+			],
+			"newLine": true
+		},
+		"updateInterval": {
+			"type": "select",
+			"label": "updateInterval",
+			"sm": 12,
+			"md": 6,
+			"lg": 4,
+			"default": 15,
+			"options": [
+				{ "value": 15, "label": "interval_15_min" },
+				{ "value": 30, "label": "interval_30_min" },
+				{ "value": 60, "label": "interval_60_min" }
+			],
+			"help": "updateInterval_help"
+		},
+		"_locationsHeader": {
+			"type": "header",
+			"text": "locations_header",
+			"size": 3,
+			"newLine": true
+		},
+		"locations": {
+			"type": "table",
+			"newLine": true,
+			"label": "locations",
+			"items": [
+				{
+					"type": "text",
+					"title": "name",
+					"attr": "name",
+					"width": "20%",
+					"filter": false,
+					"sort": true,
+					"validator": "data.name && data.name.length > 0"
+				},
+				{
+					"type": "text",
+					"title": "latitude",
+					"attr": "latitude",
+					"width": "13%",
+					"filter": false,
+					"sort": false,
+					"validator": "data.latitude !== undefined && data.latitude >= -90 && data.latitude <= 90"
+				},
+				{
+					"type": "text",
+					"title": "longitude",
+					"attr": "longitude",
+					"width": "13%",
+					"filter": false,
+					"sort": false,
+					"validator": "data.longitude !== undefined && data.longitude >= -180 && data.longitude <= 180"
+				},
+				{
+					"type": "number",
+					"title": "tilt",
+					"attr": "tilt",
+					"width": "13%",
+					"filter": false,
+					"sort": false,
+					"min": 0,
+					"max": 90,
+					"validator": "data.tilt !== undefined && data.tilt >= 0 && data.tilt <= 90"
+				},
+				{
+					"type": "number",
+					"title": "azimuth",
+					"attr": "azimuth",
+					"width": "13%",
+					"filter": false,
+					"sort": false,
+					"min": -180,
+					"max": 180,
+					"validator": "data.azimuth !== undefined && data.azimuth >= -180 && data.azimuth <= 180"
+				},
+				{
+					"type": "number",
+					"title": "kwp",
+					"attr": "kwp",
+					"width": "13%",
+					"filter": false,
+					"sort": false,
+					"min": 0,
+					"validator": "data.kwp !== undefined && data.kwp >= 0"
+				},
+				{
+					"type": "text",
+					"title": "timezone",
+					"attr": "timezone",
+					"width": "18%",
+					"filter": false,
+					"sort": false,
+					"validator": "data.timezone && data.timezone.length > 0"
+				},
+				{
+					"type": "custom",
+					"label": "actions",
+					"i18n": true
+				}
+			]
+		},
+		"_locationHelp": {
+			"type": "staticText",
+			"text": "location_help",
+			"newLine": true,
+			"style": {
+				"fontSize": "smaller",
+				"fontStyle": "italic"
+			}
+		}
+	}
+}

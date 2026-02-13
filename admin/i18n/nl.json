@@ -1,0 +1,18 @@
+{
+	"open-meteo-pv-forecast adapter settings": "Adapterinstellingen voor open-meteo-pv-forecast",
+	"info_header": "Algemene Instellingen",
+	"forecastHours": "Voorspellingsuren",
+	"updateInterval": "Update-interval (minuten)",
+	"updateInterval_help": "Hoe vaak gegevens ophalen (in minuten)",
+	"locations_header": "Locaties",
+	"locations": "PV-locaties",
+	"name": "Naam",
+	"latitude": "Breedtegraad",
+	"longitude": "Lengtegraad",
+	"tilt": "Kantelhoek (°)",
+	"azimuth": "Azimut (°)",
+	"timezone": "Tijdzone",
+	"actions": "Acties",
+	"location_help": "Tip: Azimut -180° = Noord, -90° = Oost, 0° = Zuid, 90° = West, 180° = Noord. Kantelhoek 0° = horizontaal, 90° = verticaal",
+	"global_tilted_irradiance": "Globale Gekantelde Instraling"
+}

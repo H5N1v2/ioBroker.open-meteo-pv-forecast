@@ -1,0 +1,18 @@
+{
+	"open-meteo-pv-forecast adapter settings": "Ustawienia adaptera dla open-meteo-pv-forecast",
+	"info_header": "Ustawienia Ogólne",
+	"forecastHours": "Godziny Prognozy",
+	"updateInterval": "Interwał Aktualizacji (minuty)",
+	"updateInterval_help": "Jak często pobierać dane (w minutach)",
+	"locations_header": "Lokalizacje",
+	"locations": "Lokalizacje PV",
+	"name": "Nazwa",
+	"latitude": "Szerokość geograficzna",
+	"longitude": "Długość geograficzna",
+	"tilt": "Nachylenie (°)",
+	"azimuth": "Azymut (°)",
+	"timezone": "Strefa Czasowa",
+	"actions": "Akcje",
+	"location_help": "Wskazówka: Azymut -180° = Północ, -90° = Wschód, 0° = Południe, 90° = Zachód, 180° = Północ. Nachylenie 0° = poziomo, 90° = pionowo",
+	"global_tilted_irradiance": "Globalne Napromieniowanie Nachylone"
+}

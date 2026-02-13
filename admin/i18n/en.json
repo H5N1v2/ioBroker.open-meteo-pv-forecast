@@ -1,0 +1,18 @@
+{
+	"open-meteo-pv-forecast adapter settings": "Adapter settings for open-meteo-pv-forecast",
+	"info_header": "General Settings",
+	"forecastHours": "Forecast Hours",
+	"updateInterval": "Update Interval (minutes)",
+	"updateInterval_help": "How often to fetch data (in minutes)",
+	"locations_header": "Locations",
+	"locations": "PV Locations",
+	"name": "Name",
+	"latitude": "Latitude",
+	"longitude": "Longitude",
+	"tilt": "Tilt (°)",
+	"azimuth": "Azimuth (°)",
+	"timezone": "Timezone",
+	"actions": "Actions",
+	"location_help": "Tip: Azimuth -180° = North, -90° = East, 0° = South, 90° = West, 180° = North. Tilt 0° = horizontal, 90° = vertical",
+	"global_tilted_irradiance": "Global Tilted Irradiance"
+}

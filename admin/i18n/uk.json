@@ -1,0 +1,18 @@
+{
+	"open-meteo-pv-forecast adapter settings": "Налаштування адаптера для open-meteo-pv-forecast",
+	"info_header": "Загальні Налаштування",
+	"forecastHours": "Години Прогнозу",
+	"updateInterval": "Інтервал Оновлення (хвилини)",
+	"updateInterval_help": "Як часто отримувати дані (у хвилинах)",
+	"locations_header": "Місцезнаходження",
+	"locations": "Місцезнаходження PV",
+	"name": "Назва",
+	"latitude": "Широта",
+	"longitude": "Довгота",
+	"tilt": "Нахил (°)",
+	"azimuth": "Азимут (°)",
+	"timezone": "Часовий Пояс",
+	"actions": "Дії",
+	"location_help": "Порада: Азимут -180° = Північ, -90° = Схід, 0° = Південь, 90° = Захід, 180° = Північ. Нахил 0° = горизонтально, 90° = вертикально",
+	"global_tilted_irradiance": "Глобальне Нахилене Опромінення"
+}
