@@ -16,6 +16,7 @@ declare global {
 		interface AdapterConfig {
 			locations: Location[];
 			forecastHours: number;
+			forecastDays: number;
 			updateInterval: number;
 		}
 	}
