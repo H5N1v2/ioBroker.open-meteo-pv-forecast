@@ -22,6 +22,20 @@
 			],
 			"newLine": true
 		},
+		"forecastDays": {
+			"type": "select",
+			"label": "forecastDays",
+			"sm": 12,
+			"md": 6,
+			"lg": 4,
+			"default": 7,
+			"options": [
+				{"label": "3", "value": 3},
+				{"label": "5", "value": 5},
+				{"label": "7", "value": 7},
+				{"label": "10", "value": 10}
+			]
+		},
 		"updateInterval": {
 			"type": "select",
 			"label": "updateInterval",
