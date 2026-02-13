@@ -2,6 +2,7 @@
 	"open-meteo-pv-forecast adapter settings": "open-meteo-pv-forecast的适配器设置",
 	"info_header": "一般设置",
 	"forecastHours": "预测小时",
+	"forecastDays": "预测天数",
 	"updateInterval": "更新间隔（分钟）",
 	"updateInterval_help": "获取数据的频率（以分钟为单位）",
 	"locations_header": "位置",
@@ -14,5 +15,8 @@
 	"timezone": "时区",
 	"actions": "操作",
 	"location_help": "提示：方位角 -180° = 北, -90° = 东, 0° = 南, 90° = 西, 180° = 北。倾斜 0° = 水平, 90° = 垂直",
-	"global_tilted_irradiance": "全局倾斜辐照度"
+	"global_tilted_irradiance": "全局倾斜辐照度",
+	"interval_15_min": "15分钟",
+	"interval_30_min": "30分钟",
+	"interval_60_min": "60分钟"
 }

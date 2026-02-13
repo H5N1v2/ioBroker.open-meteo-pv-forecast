@@ -2,6 +2,7 @@
 	"open-meteo-pv-forecast adapter settings": "Настройки адаптера для open-meteo-pv-forecast",
 	"info_header": "Общие Настройки",
 	"forecastHours": "Часы Прогноза",
+	"forecastDays": "Дни Прогноза",
 	"updateInterval": "Интервал Обновления (минуты)",
 	"updateInterval_help": "Как часто получать данные (в минутах)",
 	"locations_header": "Местоположения",
@@ -14,5 +15,8 @@
 	"timezone": "Часовой Пояс",
 	"actions": "Действия",
 	"location_help": "Совет: Азимут -180° = Север, -90° = Восток, 0° = Юг, 90° = Запад, 180° = Север. Наклон 0° = горизонтально, 90° = вертикально",
-	"global_tilted_irradiance": "Глобальное Наклонное Облучение"
+	"global_tilted_irradiance": "Глобальное Наклонное Облучение",
+	"interval_15_min": "15 минут",
+	"interval_30_min": "30 минут",
+	"interval_60_min": "60 минут"
 }

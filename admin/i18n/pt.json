@@ -2,6 +2,7 @@
 	"open-meteo-pv-forecast adapter settings": "Configurações do adaptador para open-meteo-pv-forecast",
 	"info_header": "Configurações Gerais",
 	"forecastHours": "Horas de Previsão",
+	"forecastDays": "Dias de Previsão",
 	"updateInterval": "Intervalo de Atualização (minutos)",
 	"updateInterval_help": "Frequência de busca de dados (em minutos)",
 	"locations_header": "Localizações",
@@ -14,5 +15,8 @@
 	"timezone": "Fuso Horário",
 	"actions": "Ações",
 	"location_help": "Dica: Azimute -180° = Norte, -90° = Leste, 0° = Sul, 90° = Oeste, 180° = Norte. Inclinação 0° = horizontal, 90° = vertical",
-	"global_tilted_irradiance": "Irradiância Global Inclinada"
+	"global_tilted_irradiance": "Irradiância Global Inclinada",
+	"interval_15_min": "15 minutos",
+	"interval_30_min": "30 minutos",
+	"interval_60_min": "60 minutos"
 }
