@@ -19,7 +19,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		});
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
-		this.on('message', this.onMessage.bind(this));
+		//this.on('message', this.onMessage.bind(this));
 		this.on('unload', this.onUnload.bind(this));
 
 		this.apiCaller = new ApiCaller();
@@ -40,6 +40,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		// Set default values if not configured
 		if (!this.config.forecastHours) {
 			this.config.forecastHours = 24;
+		}
+		if (!this.config.forecastDays) {
+			this.config.forecastDays = 7;
 		}
 		if (!this.config.updateInterval) {
 			this.config.updateInterval = 60; // Default: 60 minutes
@@ -130,7 +133,67 @@ class OpenMeteoPvForecast extends utils.Adapter {
 						},
 						type: 'number',
 						role: 'value.power',
-						unit: 'W/m²',
+						unit: 'W',
+						read: true,
+						write: false,
+					},
+					native: {},
+				});
+			}
+
+			// Create daily-forecast channel
+			await this.setObjectNotExistsAsync(`${locationName}.daily-forecast`, {
+				type: 'channel',
+				common: {
+					name: 'Daily Forecast',
+				},
+				native: {},
+			});
+
+			// Create state objects for forecast days
+			for (let day = 0; day < this.config.forecastDays; day++) {
+				// Create day channel
+				await this.setObjectNotExistsAsync(`${locationName}.daily-forecast.day${day}`, {
+					type: 'channel',
+					common: {
+						name: `Day ${day}`,
+					},
+					native: {},
+				});
+
+				// Create date state
+				await this.setObjectNotExistsAsync(`${locationName}.daily-forecast.day${day}.Date`, {
+					type: 'state',
+					common: {
+						name: 'Date',
+						type: 'string',
+						role: 'date',
+						read: true,
+						write: false,
+					},
+					native: {},
+				});
+
+				// Create Peak_day state (total daily yield in Wh)
+				await this.setObjectNotExistsAsync(`${locationName}.daily-forecast.day${day}.Peak_day`, {
+					type: 'state',
+					common: {
+						name: {
+							en: 'Daily Peak Energy',
+							de: 'Täglicher Spitzenertrag',
+							ru: 'Дневная Пиковая Энергия',
+							pt: 'Energia de Pico Diária',
+							nl: 'Dagelijkse Piekenergie',
+							fr: 'Énergie de Pointe Quotidienne',
+							it: 'Energia di Picco Giornaliera',
+							es: 'Energía Pico Diaria',
+							pl: 'Dzienna Energia Szczytowa',
+							uk: 'Денна Пікова Енергія',
+							'zh-cn': '每日峰值能量',
+						},
+						type: 'number',
+						role: 'value.power.consumption',
+						unit: 'Wh',
 						read: true,
 						write: false,
 					},
@@ -166,7 +229,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		this.log.debug(`Fetching forecast for ${location.name}`);
 
 		try {
-			const data = await this.apiCaller.fetchForecastData(location, this.config.forecastHours);
+			// Fetch enough hours to cover both hourly and daily forecasts
+			const hoursNeeded = Math.max(this.config.forecastHours, this.config.forecastDays * 24);
+			const data = await this.apiCaller.fetchForecastData(location, hoursNeeded);
 
 			if (!data.hourly || !data.hourly.time || !data.hourly.global_tilted_irradiance) {
 				this.log.error(`Invalid data received from API for location ${location.name}`);
@@ -211,8 +276,19 @@ class OpenMeteoPvForecast extends utils.Adapter {
 				const calculatedPower = Math.round(rawIrradiance * kwpFactor);
 
 				if (time) {
+					// Erzeuge ein Datumsobjekt aus dem API-String
+					const apiDate = new Date(time);
+
+					// Formatiere es auf HH:mm (z.B. "12:00")
+					const formattedTime = apiDate.toLocaleTimeString('de-DE', {
+						hour: '2-digit',
+						minute: '2-digit',
+						hour12: false,
+					});
+
+					// Schreibe die kurze Uhrzeit statt des langen Datums
 					await this.setState(`${locationName}.pv-forecast.hour${hour}.time`, {
-						val: time,
+						val: formattedTime,
 						ack: true,
 					});
 
@@ -225,10 +301,92 @@ class OpenMeteoPvForecast extends utils.Adapter {
 			}
 
 			this.log.debug(`Successfully updated ${hoursToUpdate} hours for ${location.name}`);
+
+			// Calculate and update daily forecast data
+			await this.updateDailyForecast(location, data, currentHourIndex, locationName);
 		} catch (error) {
 			this.log.error(`Failed to fetch data for ${location.name}: ${(error as Error).message}`);
 			throw error;
 		}
+	}
+
+	/**
+	 * Calculate and update daily forecast data from hourly data
+	 *
+	 * @param location - Location configuration
+	 * @param data - API response data
+	 * @param currentHourIndex - Index of the current hour in the API response
+	 * @param locationName - Sanitized location name
+	 */
+	private async updateDailyForecast(
+		location: Location,
+		data: any,
+		currentHourIndex: number,
+		locationName: string,
+	): Promise<void> {
+		const kwpFactor = location.kwp || 0;
+
+		// Map to store daily sums: key = date string, value = { sum: number, date: Date }
+		const dailySums = new Map<string, { sum: number; date: Date }>();
+
+		// Process all hourly data starting from current hour
+		for (let i = currentHourIndex; i < data.hourly.time.length; i++) {
+			const timeStr = data.hourly.time[i];
+			const rawIrradiance = data.hourly.global_tilted_irradiance[i];
+
+			if (!timeStr || rawIrradiance === undefined) {
+				continue;
+			}
+
+			const hourDate = new Date(timeStr);
+			const dateKey = hourDate.toISOString().split('T')[0]; // YYYY-MM-DD
+
+			// Calculate power in Watt
+			const calculatedPower = rawIrradiance * kwpFactor;
+
+			// Add to daily sum (Watt becomes Wh when summed over hours)
+			if (!dailySums.has(dateKey)) {
+				dailySums.set(dateKey, { sum: 0, date: hourDate });
+			}
+			const dayData = dailySums.get(dateKey)!;
+			dayData.sum += calculatedPower;
+		}
+
+		// Convert map to sorted array
+		const sortedDays = Array.from(dailySums.entries())
+			.map(([dateKey, data]) => ({ dateKey, ...data }))
+			.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+		// Update states for each day (day0 = today, day1 = tomorrow, etc.)
+		const daysToUpdate = Math.min(this.config.forecastDays, sortedDays.length);
+
+		for (let day = 0; day < daysToUpdate; day++) {
+			const dayData = sortedDays[day];
+
+			// Format date as DD.MM.YYYY
+			const formattedDate = dayData.date.toLocaleDateString('de-DE', {
+				day: '2-digit',
+				month: '2-digit',
+				year: 'numeric',
+			});
+
+			// Round sum to whole Wh
+			const roundedSum = Math.round(dayData.sum);
+
+			// Update Date state
+			await this.setState(`${locationName}.daily-forecast.day${day}.Date`, {
+				val: formattedDate,
+				ack: true,
+			});
+
+			// Update Peak_day state
+			await this.setState(`${locationName}.daily-forecast.day${day}.Peak_day`, {
+				val: roundedSum,
+				ack: true,
+			});
+		}
+
+		this.log.debug(`Successfully updated ${daysToUpdate} days for ${location.name}`);
 	}
 
 	/**
@@ -279,7 +437,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 	 *
 	 * @param obj - Message object
 	 */
-	private async onMessage(obj: ioBroker.Message): Promise<void> {
+	/*	private async onMessage(obj: ioBroker.Message): Promise<void> {
 		if (typeof obj === 'object' && obj.message) {
 			if (obj.command === 'searchLocation') {
 				try {
@@ -319,7 +477,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 				}
 			}
 		}
-	}
+	}*/
 }
 
 if (require.main !== module) {

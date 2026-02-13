@@ -33,7 +33,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
     });
     this.on("ready", this.onReady.bind(this));
     this.on("stateChange", this.onStateChange.bind(this));
-    this.on("message", this.onMessage.bind(this));
     this.on("unload", this.onUnload.bind(this));
     this.apiCaller = new import_api_caller.ApiCaller();
   }
@@ -48,6 +47,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
     }
     if (!this.config.forecastHours) {
       this.config.forecastHours = 24;
+    }
+    if (!this.config.forecastDays) {
+      this.config.forecastDays = 7;
     }
     if (!this.config.updateInterval) {
       this.config.updateInterval = 60;
@@ -119,7 +121,58 @@ class OpenMeteoPvForecast extends utils.Adapter {
             },
             type: "number",
             role: "value.power",
-            unit: "W/m\xB2",
+            unit: "W",
+            read: true,
+            write: false
+          },
+          native: {}
+        });
+      }
+      await this.setObjectNotExistsAsync(`${locationName}.daily-forecast`, {
+        type: "channel",
+        common: {
+          name: "Daily Forecast"
+        },
+        native: {}
+      });
+      for (let day = 0; day < this.config.forecastDays; day++) {
+        await this.setObjectNotExistsAsync(`${locationName}.daily-forecast.day${day}`, {
+          type: "channel",
+          common: {
+            name: `Day ${day}`
+          },
+          native: {}
+        });
+        await this.setObjectNotExistsAsync(`${locationName}.daily-forecast.day${day}.Date`, {
+          type: "state",
+          common: {
+            name: "Date",
+            type: "string",
+            role: "date",
+            read: true,
+            write: false
+          },
+          native: {}
+        });
+        await this.setObjectNotExistsAsync(`${locationName}.daily-forecast.day${day}.Peak_day`, {
+          type: "state",
+          common: {
+            name: {
+              en: "Daily Peak Energy",
+              de: "T\xE4glicher Spitzenertrag",
+              ru: "\u0414\u043D\u0435\u0432\u043D\u0430\u044F \u041F\u0438\u043A\u043E\u0432\u0430\u044F \u042D\u043D\u0435\u0440\u0433\u0438\u044F",
+              pt: "Energia de Pico Di\xE1ria",
+              nl: "Dagelijkse Piekenergie",
+              fr: "\xC9nergie de Pointe Quotidienne",
+              it: "Energia di Picco Giornaliera",
+              es: "Energ\xEDa Pico Diaria",
+              pl: "Dzienna Energia Szczytowa",
+              uk: "\u0414\u0435\u043D\u043D\u0430 \u041F\u0456\u043A\u043E\u0432\u0430 \u0415\u043D\u0435\u0440\u0433\u0456\u044F",
+              "zh-cn": "\u6BCF\u65E5\u5CF0\u503C\u80FD\u91CF"
+            },
+            type: "number",
+            role: "value.power.consumption",
+            unit: "Wh",
             read: true,
             write: false
           },
@@ -150,7 +203,8 @@ class OpenMeteoPvForecast extends utils.Adapter {
   async updateLocation(location) {
     this.log.debug(`Fetching forecast for ${location.name}`);
     try {
-      const data = await this.apiCaller.fetchForecastData(location, this.config.forecastHours);
+      const hoursNeeded = Math.max(this.config.forecastHours, this.config.forecastDays * 24);
+      const data = await this.apiCaller.fetchForecastData(location, hoursNeeded);
       if (!data.hourly || !data.hourly.time || !data.hourly.global_tilted_irradiance) {
         this.log.error(`Invalid data received from API for location ${location.name}`);
         return;
@@ -183,8 +237,14 @@ class OpenMeteoPvForecast extends utils.Adapter {
         const kwpFactor = location.kwp || 0;
         const calculatedPower = Math.round(rawIrradiance * kwpFactor);
         if (time) {
+          const apiDate = new Date(time);
+          const formattedTime = apiDate.toLocaleTimeString("de-DE", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false
+          });
           await this.setState(`${locationName}.pv-forecast.hour${hour}.time`, {
-            val: time,
+            val: formattedTime,
             ack: true
           });
           await this.setState(`${locationName}.pv-forecast.hour${hour}.global_tilted_irradiance`, {
@@ -194,10 +254,58 @@ class OpenMeteoPvForecast extends utils.Adapter {
         }
       }
       this.log.debug(`Successfully updated ${hoursToUpdate} hours for ${location.name}`);
+      await this.updateDailyForecast(location, data, currentHourIndex, locationName);
     } catch (error) {
       this.log.error(`Failed to fetch data for ${location.name}: ${error.message}`);
       throw error;
     }
+  }
+  /**
+   * Calculate and update daily forecast data from hourly data
+   *
+   * @param location - Location configuration
+   * @param data - API response data
+   * @param currentHourIndex - Index of the current hour in the API response
+   * @param locationName - Sanitized location name
+   */
+  async updateDailyForecast(location, data, currentHourIndex, locationName) {
+    const kwpFactor = location.kwp || 0;
+    const dailySums = /* @__PURE__ */ new Map();
+    for (let i = currentHourIndex; i < data.hourly.time.length; i++) {
+      const timeStr = data.hourly.time[i];
+      const rawIrradiance = data.hourly.global_tilted_irradiance[i];
+      if (!timeStr || rawIrradiance === void 0) {
+        continue;
+      }
+      const hourDate = new Date(timeStr);
+      const dateKey = hourDate.toISOString().split("T")[0];
+      const calculatedPower = rawIrradiance * kwpFactor;
+      if (!dailySums.has(dateKey)) {
+        dailySums.set(dateKey, { sum: 0, date: hourDate });
+      }
+      const dayData = dailySums.get(dateKey);
+      dayData.sum += calculatedPower;
+    }
+    const sortedDays = Array.from(dailySums.entries()).map(([dateKey, data2]) => ({ dateKey, ...data2 })).sort((a, b) => a.date.getTime() - b.date.getTime());
+    const daysToUpdate = Math.min(this.config.forecastDays, sortedDays.length);
+    for (let day = 0; day < daysToUpdate; day++) {
+      const dayData = sortedDays[day];
+      const formattedDate = dayData.date.toLocaleDateString("de-DE", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      });
+      const roundedSum = Math.round(dayData.sum);
+      await this.setState(`${locationName}.daily-forecast.day${day}.Date`, {
+        val: formattedDate,
+        ack: true
+      });
+      await this.setState(`${locationName}.daily-forecast.day${day}.Peak_day`, {
+        val: roundedSum,
+        ack: true
+      });
+    }
+    this.log.debug(`Successfully updated ${daysToUpdate} days for ${location.name}`);
   }
   /**
    * Sanitize location name for use in state IDs
@@ -241,43 +349,47 @@ class OpenMeteoPvForecast extends utils.Adapter {
    *
    * @param obj - Message object
    */
-  async onMessage(obj) {
-    var _a, _b;
-    if (typeof obj === "object" && obj.message) {
-      if (obj.command === "searchLocation") {
-        try {
-          const query = obj.message;
-          this.log.debug(`Searching for location: ${query}`);
-          const results = await this.apiCaller.searchLocation(query);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, results, obj.callback);
-          }
-        } catch (error) {
-          this.log.error(`Error searching location: ${error.message}`);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, { error: error.message }, obj.callback);
-          }
-        }
-      } else if (obj.command === "getSystemConfig") {
-        try {
-          const systemConfig = await this.getForeignObjectAsync("system.config");
-          const result = {
-            latitude: ((_a = systemConfig == null ? void 0 : systemConfig.common) == null ? void 0 : _a.latitude) || 0,
-            longitude: ((_b = systemConfig == null ? void 0 : systemConfig.common) == null ? void 0 : _b.longitude) || 0,
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"
-          };
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, result, obj.callback);
-          }
-        } catch (error) {
-          this.log.error(`Error getting system config: ${error.message}`);
-          if (obj.callback) {
-            this.sendTo(obj.from, obj.command, { error: error.message }, obj.callback);
-          }
-        }
-      }
-    }
-  }
+  /*	private async onMessage(obj: ioBroker.Message): Promise<void> {
+  		if (typeof obj === 'object' && obj.message) {
+  			if (obj.command === 'searchLocation') {
+  				try {
+  					const query = obj.message as string;
+  					this.log.debug(`Searching for location: ${query}`);
+  
+  					const results = await this.apiCaller.searchLocation(query);
+  
+  					if (obj.callback) {
+  						this.sendTo(obj.from, obj.command, results, obj.callback);
+  					}
+  				} catch (error) {
+  					this.log.error(`Error searching location: ${(error as Error).message}`);
+  					if (obj.callback) {
+  						this.sendTo(obj.from, obj.command, { error: (error as Error).message }, obj.callback);
+  					}
+  				}
+  			} else if (obj.command === 'getSystemConfig') {
+  				try {
+  					// Get system configuration (latitude, longitude, timezone)
+  					const systemConfig = await this.getForeignObjectAsync('system.config');
+  
+  					const result = {
+  						latitude: systemConfig?.common?.latitude || 0,
+  						longitude: systemConfig?.common?.longitude || 0,
+  						timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+  					};
+  
+  					if (obj.callback) {
+  						this.sendTo(obj.from, obj.command, result, obj.callback);
+  					}
+  				} catch (error) {
+  					this.log.error(`Error getting system config: ${(error as Error).message}`);
+  					if (obj.callback) {
+  						this.sendTo(obj.from, obj.command, { error: (error as Error).message }, obj.callback);
+  					}
+  				}
+  			}
+  		}
+  	}*/
 }
 if (require.main !== module) {
   module.exports = (options) => new OpenMeteoPvForecast(options);
