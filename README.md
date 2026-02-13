@@ -16,10 +16,12 @@ PV Forecast Data
 
 
 ## Changelog
-<!--
-	Placeholder for the next version (at the beginning of the line):
-	### **WORK IN PROGRESS**
--->
+### **WORK IN PROGRESS**
+* (H5N1v2) feat: add forecastDays for Sum
+* (H5N1v2) Modified the fetching logic to retrieve enough hourly data to cover both hourly and daily forecasts.
+* (H5N1v2) Implemented a new method to calculate and update daily forecast data based on hourly data.
+* (H5N1v2) Adjusted the time format for hourly forecast states to display only HH:mm.
+
 ### 0.0.1-alpha.0 (2026-02-13)
 * (H5N1v2) initial release
 
