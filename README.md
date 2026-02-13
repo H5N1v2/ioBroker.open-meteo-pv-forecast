@@ -16,7 +16,7 @@ PV Forecast Data
 
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 0.1.0-alpha.0 (2026-02-13)
 * (H5N1v2) feat: add forecastDays for Sum
 * (H5N1v2) Modified the fetching logic to retrieve enough hourly data to cover both hourly and daily forecasts.
 * (H5N1v2) Implemented a new method to calculate and update daily forecast data based on hourly data.

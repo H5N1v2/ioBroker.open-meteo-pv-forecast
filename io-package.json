@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "open-meteo-pv-forecast",
-    "version": "0.0.1-alpha.0",
+    "version": "0.1.0-alpha.0",
     "news": {
+      "0.1.0-alpha.0": {
+        "en": "feat: add forecastDays for Sum\nModified the fetching logic to retrieve enough hourly data to cover both hourly and daily forecasts.\nImplemented a new method to calculate and update daily forecast data based on hourly data.\nAdjusted the time format for hourly forecast states to display only HH:mm.",
+        "de": "feat: Prognose hinzufügen Tage für Sum\nModifizierte die fetching-Logik, um genügend stündliche Daten abzurufen, um sowohl stündliche als auch tägliche Prognosen abzudecken.\nErgänzte eine neue Methode zur Berechnung und Aktualisierung von Tagesprognosendaten basierend auf Stundendaten.\nDas Zeitformat für Stundenprognosen wurde angepasst, um nur HH:mm anzuzeigen.",
+        "ru": "исполнитель: Add forecast Дни для Sum\nИзменили логику извлечения, чтобы получить достаточное количество почасовых данных для покрытия как почасовых, так и ежедневных прогнозов.\nВнедрен новый метод расчета и обновления ежедневных прогнозных данных на основе почасовых данных.\nСкорректированный формат времени для почасовых прогнозных состояний для отображения только HH:mm.",
+        "pt": "façanha: adicionar previsão Dias para a soma\nModificou a lógica de busca para recuperar dados horários suficientes para cobrir previsões horárias e diárias.\nImplementou um novo método para calcular e atualizar dados de previsão diária com base em dados horários.\nAjustei o formato de hora para os estados de previsão horária para exibir apenas HH:mm.",
+        "nl": "feat: voorspelling toevoegen Dagen voor de som\nModified de ophalende logica om voldoende uurgegevens op te halen voor zowel uur- als dagvoorspellingen.\nImplementeerde een nieuwe methode om dagelijkse prognosegegevens te berekenen en bij te werken op basis van uurgegevens.\nHet tijdformaat voor de uurvoorspelling staat aangepast om alleen HH:mm weer te geven.",
+        "fr": "exploit : ajouter des prévisions Jours pour la somme\nModification de la logique de récupération pour récupérer suffisamment de données horaires pour couvrir les prévisions horaires et quotidiennes.\nMise en oeuvre d'une nouvelle méthode de calcul et de mise à jour des prévisions quotidiennes à partir de données horaires.\nAjusté le format de temps pour les états de prévision horaires pour afficher uniquement HH:mm.",
+        "it": "feat: aggiungi previsioni Giorni per Sum\nModificata la logica di acquisizione per recuperare abbastanza dati orali per coprire le previsioni orarie e quotidiane.\nHo implementato un nuovo metodo per calcolare e aggiornare i dati di previsione giornalieri in base ai dati orari.\nRegolato il formato di tempo per gli stati di previsione oraria per visualizzare solo HH:mm.",
+        "es": "hazaña: añadir pronóstico Días para Sum\nModificó la lógica de búsqueda para recuperar suficientes datos por hora para cubrir pronósticos tanto por hora como por día.\nImplementó un nuevo método para calcular y actualizar los datos de pronóstico diario basados en datos por hora.\nAjuste el formato de tiempo para los estados de pronóstico por hora para mostrar sólo HH:mm.",
+        "pl": "feat: dodać prognozę Dni dla Sum\nZmodyfikowano logikę pobierania, aby uzyskać wystarczającą ilość danych godzinowych, aby pokryć zarówno prognozy godzinowe, jak i dzienne.\nWdrożenie nowej metody obliczania i aktualizacji dziennych danych prognozowanych na podstawie danych godzinowych.\nDostosowana format czasu dla stanów prognozy godzinowej, aby wyświetlić tylko HH: mm.",
+        "uk": "feat: додати прогноз Днів на суму\nЗмінено логіку fetching для отримання достатньо часових даних, щоб покрити одночасно та добові прогнози.\nРеалізовано новий метод обчислення та оновлення добових даних прогнозів на основі даних годин.\nРегульований формат часу на часові прогнозні стани для відображення тільки HH:mm.",
+        "zh-cn": "功绩: 添加预测 总计天数\n修改了采集逻辑,以获取足够的小时数据,涵盖小时和每日预测.\n采用新方法,根据小时数据计算和更新每日预报数据.\n调整了小时预测状态的时间格式,只显示 HH:mm."
+      },
       "0.0.1-alpha.0": {
         "en": "initial release",
         "de": "erstausstrahlung",
