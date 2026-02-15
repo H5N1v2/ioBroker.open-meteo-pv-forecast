@@ -44,10 +44,10 @@ class ApiCaller {
    * Fetch PV forecast data from Open-Meteo API
    *
    * @param location - Location configuration
-   * @param forecastHours - Number of hours to forecast
+   * @param forecastDays - Number of days to forecast
    * @returns Promise with forecast data
    */
-  async fetchForecastData(location, forecastHours) {
+  async fetchForecastData(location, forecastDays) {
     const hourlyparam_keys = "global_tilted_irradiance";
     const url = `https://api.open-meteo.com/v1/forecast`;
     try {
@@ -58,8 +58,10 @@ class ApiCaller {
           tilt: location.tilt,
           azimuth: location.azimuth,
           hourly: hourlyparam_keys,
-          timezone: location.timezone,
-          forecast_hours: forecastHours
+          timezone: location.timezone || "auto",
+          // 'auto' erkennt lokale Zeitzone
+          forecast_days: forecastDays
+          // Geändert von forecast_hours
         }
       });
       return response.data;
