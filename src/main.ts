@@ -2,8 +2,6 @@
  * Created with @iobroker/create-adapter v3.1.2
  */
 
-// The adapter-core module gives you access to the core ioBroker functions
-// you need to create an adapter
 import * as utils from '@iobroker/adapter-core';
 import { ApiCaller } from './lib/api_caller';
 import type { Location } from './lib/adapter-config';
@@ -19,121 +17,69 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		});
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
-		//this.on('message', this.onMessage.bind(this));
 		this.on('unload', this.onUnload.bind(this));
 
 		this.apiCaller = new ApiCaller();
 	}
 
-	/**
-	 * Is called when databases are connected and adapter received configuration.
-	 */
 	private async onReady(): Promise<void> {
 		this.log.info('Starting open-meteo-pv-forecast adapter');
 
-		// Validate configuration
 		if (!this.config.locations || this.config.locations.length === 0) {
 			this.log.warn('No locations configured. Please configure at least one location in the adapter settings.');
 			return;
 		}
 
-		// Set default values if not configured
-		if (!this.config.forecastHours) {
-			this.config.forecastHours = 24;
-		}
-		if (!this.config.forecastDays) {
-			this.config.forecastDays = 7;
-		}
-		if (!this.config.updateInterval) {
-			this.config.updateInterval = 60; // Default: 60 minutes
-		}
+		// Defaults
+		this.config.forecastHours = this.config.forecastHours || 24;
+		this.config.forecastDays = this.config.forecastDays || 7;
+		this.config.updateInterval = this.config.updateInterval || 60;
 
-		// Create states for all locations
 		await this.createStatesForLocations();
-
-		// Initial data fetch
 		await this.updateAllLocations();
 
-		// Set up periodic updates
 		const intervalMs = this.config.updateInterval * 60 * 1000;
 		this.updateInterval = setInterval(() => {
 			void this.updateAllLocations();
 		}, intervalMs);
-
-		this.log.info(
-			`Adapter configured with ${this.config.locations.length} location(s), updating every ${this.config.updateInterval} minutes`,
-		);
 	}
 
-	/**
-	 * Create state objects for all configured locations
-	 */
 	private async createStatesForLocations(): Promise<void> {
 		for (const location of this.config.locations) {
 			const locationName = this.sanitizeLocationName(location.name);
 
-			// Create channel for location
 			await this.setObjectNotExistsAsync(locationName, {
 				type: 'channel',
-				common: {
-					name: location.name,
-				},
+				common: { name: location.name },
 				native: {},
 			});
 
-			// Create pv-forecast channel
 			await this.setObjectNotExistsAsync(`${locationName}.pv-forecast`, {
 				type: 'channel',
-				common: {
-					name: 'PV Forecast',
-				},
+				common: { name: 'PV Forecast' },
 				native: {},
 			});
 
-			// Create state objects for forecast hours
 			for (let hour = 0; hour < this.config.forecastHours; hour++) {
-				// Create hour channel
 				await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}`, {
 					type: 'channel',
-					common: {
-						name: `Hour ${hour}`,
-					},
+					common: { name: `Hour ${hour}` },
 					native: {},
 				});
 
-				// Create time state
 				await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}.time`, {
 					type: 'state',
-					common: {
-						name: 'Timestamp',
-						type: 'string',
-						role: 'date',
-						read: true,
-						write: false,
-					},
+					common: { name: 'Timestamp', type: 'string', role: 'date', read: true, write: false },
 					native: {},
 				});
 
-				// Create global_tilted_irradiance state
 				await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}.global_tilted_irradiance`, {
 					type: 'state',
 					common: {
-						name: {
-							en: 'Global Tilted Irradiance',
-							de: 'Globalstrahlung auf geneigter Fläche',
-							ru: 'Глобальное Наклонное Облучение',
-							pt: 'Irradiância Global Inclinada',
-							nl: 'Globale Gekantelde Instraling',
-							fr: 'Irradiation Globale Inclinée',
-							it: 'Irradianza Globale Inclinata',
-							es: 'Irradiancia Global Inclinada',
-							pl: 'Globalne Napromieniowanie Nachylone',
-							uk: 'Глобальне Нахилене Опромінення',
-							'zh-cn': '全局倾斜辐照度',
-						},
+						name: { en: 'Global Tilted Irradiance', de: 'Globalstrahlung auf geneigter Fläche' },
 						type: 'number',
 						role: 'value.power',
-						unit: 'W',
+						unit: 'Wh',
 						read: true,
 						write: false,
 					},
@@ -141,56 +87,29 @@ class OpenMeteoPvForecast extends utils.Adapter {
 				});
 			}
 
-			// Create daily-forecast channel
 			await this.setObjectNotExistsAsync(`${locationName}.daily-forecast`, {
 				type: 'channel',
-				common: {
-					name: 'Daily Forecast',
-				},
+				common: { name: 'Daily Forecast' },
 				native: {},
 			});
 
-			// Create state objects for forecast days
 			for (let day = 0; day < this.config.forecastDays; day++) {
-				// Create day channel
 				await this.setObjectNotExistsAsync(`${locationName}.daily-forecast.day${day}`, {
 					type: 'channel',
-					common: {
-						name: `Day ${day}`,
-					},
+					common: { name: `Day ${day}` },
 					native: {},
 				});
 
-				// Create date state
 				await this.setObjectNotExistsAsync(`${locationName}.daily-forecast.day${day}.Date`, {
 					type: 'state',
-					common: {
-						name: 'Date',
-						type: 'string',
-						role: 'date',
-						read: true,
-						write: false,
-					},
+					common: { name: 'Date', type: 'string', role: 'date', read: true, write: false },
 					native: {},
 				});
 
-				// Create Peak_day state (total daily yield in Wh)
 				await this.setObjectNotExistsAsync(`${locationName}.daily-forecast.day${day}.Peak_day`, {
 					type: 'state',
 					common: {
-						name: {
-							en: 'Daily Peak Energy',
-							de: 'Täglicher Spitzenertrag',
-							ru: 'Дневная Пиковая Энергия',
-							pt: 'Energia de Pico Diária',
-							nl: 'Dagelijkse Piekenergie',
-							fr: 'Énergie de Pointe Quotidienne',
-							it: 'Energia di Picco Giornaliera',
-							es: 'Energía Pico Diaria',
-							pl: 'Dzienna Energia Szczytowa',
-							uk: 'Денна Пікова Енергія',
-							'zh-cn': '每日峰值能量',
-						},
+						name: { en: 'Daily Peak Energy', de: 'Täglicher Spitzenertrag' },
 						type: 'number',
 						role: 'value.power.consumption',
 						unit: 'Wh',
@@ -200,17 +119,10 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					native: {},
 				});
 			}
-
-			this.log.debug(`Created states for location: ${location.name}`);
 		}
 	}
 
-	/**
-	 * Update forecast data for all locations
-	 */
 	private async updateAllLocations(): Promise<void> {
-		this.log.info('Updating forecast data for all locations');
-
 		for (const location of this.config.locations) {
 			try {
 				await this.updateLocation(location);
@@ -220,181 +132,100 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		}
 	}
 
-	/**
-	 * Update forecast data for a specific location
-	 *
-	 * @param location - Location configuration
-	 */
 	private async updateLocation(location: Location): Promise<void> {
-		this.log.debug(`Fetching forecast for ${location.name}`);
+		const locationName = this.sanitizeLocationName(location.name);
 
 		try {
-			// Fetch enough hours to cover both hourly and daily forecasts
-			const hoursNeeded = Math.max(this.config.forecastHours, this.config.forecastDays * 24);
-			const data = await this.apiCaller.fetchForecastData(location, hoursNeeded);
+			// Wir übergeben jetzt die Anzahl der TAGE an den ApiCaller
+			const data = await this.apiCaller.fetchForecastData(location, this.config.forecastDays);
 
-			if (!data.hourly || !data.hourly.time || !data.hourly.global_tilted_irradiance) {
-				this.log.error(`Invalid data received from API for location ${location.name}`);
+			if (!data || !data.hourly || !data.hourly.time) {
+				this.log.error(`[${location.name}] API lieferte keine Daten.`);
 				return;
 			}
 
-			const locationName = this.sanitizeLocationName(location.name);
-			const currentTime = new Date();
-			const currentHour = new Date(
-				currentTime.getFullYear(),
-				currentTime.getMonth(),
-				currentTime.getDate(),
-				currentTime.getHours(),
-			);
+			// kwp sicher als Zahl interpretieren (Komma durch Punkt ersetzen falls String)
+			let kwpRaw = location.kwp as any;
+			if (typeof kwpRaw === 'string') {
+				kwpRaw = kwpRaw.replace(',', '.');
+			}
+			const kwpFactor = parseFloat(kwpRaw) || 0;
 
-			// Find the index of the current hour in the API response
-			let currentHourIndex = -1;
+			const dailySums: Record<string, number> = {};
+
+			// 1. Alle Stunden summieren
 			for (let i = 0; i < data.hourly.time.length; i++) {
-				const apiTime = new Date(data.hourly.time[i]);
-				if (apiTime >= currentHour) {
-					currentHourIndex = i;
-					break;
+				const timeStr = data.hourly.time[i];
+				const rawIrradiance = data.hourly.global_tilted_irradiance[i];
+
+				if (timeStr && rawIrradiance !== undefined) {
+					const dateKey = timeStr.split('T')[0]; // "2026-02-15"
+					if (!dailySums[dateKey]) {
+						dailySums[dateKey] = 0;
+					}
+					dailySums[dateKey] += rawIrradiance * kwpFactor;
 				}
 			}
 
+			// 2. Daily States schreiben
+			const todayObj = new Date();
+			for (let day = 0; day < this.config.forecastDays; day++) {
+				const targetDate = new Date(todayObj);
+				targetDate.setDate(todayObj.getDate() + day);
+
+				const dateKey = `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, '0')}-${String(targetDate.getDate()).padStart(2, '0')}`;
+
+				const totalWh = Math.round(dailySums[dateKey] || 0);
+				const formattedDisplayDate = `${String(targetDate.getDate()).padStart(2, '0')}.${String(targetDate.getMonth() + 1).padStart(2, '0')}.${targetDate.getFullYear()}`;
+
+				await this.setState(`${locationName}.daily-forecast.day${day}.Date`, {
+					val: formattedDisplayDate,
+					ack: true,
+				});
+				await this.setState(`${locationName}.daily-forecast.day${day}.Peak_day`, { val: totalWh, ack: true });
+			}
+
+			// 3. Stündliche Rolling-Werte (für die Anzeige "was kommt als nächstes")
+			const now = new Date();
+			// Finde den Index der aktuellen Stunde
+			const currentHourStart = new Date(
+				now.getFullYear(),
+				now.getMonth(),
+				now.getDate(),
+				now.getHours(),
+			).getTime();
+
+			let currentHourIndex = data.hourly.time.findIndex(t => new Date(t).getTime() >= currentHourStart);
 			if (currentHourIndex === -1) {
-				this.log.warn(`Could not find current hour in API response for ${location.name}`);
 				currentHourIndex = 0;
 			}
 
-			// Update states with rolling data (hour0 = current hour)
-			const hoursToUpdate = Math.min(this.config.forecastHours, data.hourly.time.length - currentHourIndex);
+			for (let hour = 0; hour < this.config.forecastHours; hour++) {
+				const idx = currentHourIndex + hour;
+				if (idx < data.hourly.time.length) {
+					const apiDate = new Date(data.hourly.time[idx]);
+					const formattedTime = apiDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+					const powerW = Math.round(data.hourly.global_tilted_irradiance[idx] * kwpFactor);
 
-			for (let hour = 0; hour < hoursToUpdate; hour++) {
-				const dataIndex = currentHourIndex + hour;
-				const time = dataIndex < data.hourly.time.length ? data.hourly.time[dataIndex] : null;
-				const rawIrradiance = data.hourly.global_tilted_irradiance[dataIndex];
-
-				// Berechnung: W/m² von der API * installierte kWp
-				// Beispiel: 500 W/m² * 5 kWp = 2500 Watt (2.5 kW)
-				const kwpFactor = location.kwp || 0;
-				const calculatedPower = Math.round(rawIrradiance * kwpFactor);
-
-				if (time) {
-					// Erzeuge ein Datumsobjekt aus dem API-String
-					const apiDate = new Date(time);
-
-					// Formatiere es auf HH:mm (z.B. "12:00")
-					const formattedTime = apiDate.toLocaleTimeString('de-DE', {
-						hour: '2-digit',
-						minute: '2-digit',
-						hour12: false,
-					});
-
-					// Schreibe die kurze Uhrzeit statt des langen Datums
 					await this.setState(`${locationName}.pv-forecast.hour${hour}.time`, {
 						val: formattedTime,
 						ack: true,
 					});
-
-					// Wir schreiben den berechneten Watt-Wert in den State
 					await this.setState(`${locationName}.pv-forecast.hour${hour}.global_tilted_irradiance`, {
-						val: calculatedPower,
+						val: powerW,
 						ack: true,
 					});
 				}
 			}
 
-			this.log.debug(`Successfully updated ${hoursToUpdate} hours for ${location.name}`);
-
-			// Calculate and update daily forecast data
-			await this.updateDailyForecast(location, data, currentHourIndex, locationName);
+			this.log.info(
+				`[${location.name}] Update erfolgreich. Day0: ${Math.round(dailySums[Object.keys(dailySums)[0]] || 0)} Wh`,
+			);
 		} catch (error) {
-			this.log.error(`Failed to fetch data for ${location.name}: ${(error as Error).message}`);
-			throw error;
+			this.log.error(`[${location.name}] Fehler: ${(error as Error).message}`);
 		}
 	}
 
-	/**
-	 * Calculate and update daily forecast data from hourly data
-	 *
-	 * @param location - Location configuration
-	 * @param data - API response data
-	 * @param currentHourIndex - Index of the current hour in the API response
-	 * @param locationName - Sanitized location name
-	 */
-	private async updateDailyForecast(
-		location: Location,
-		data: any,
-		currentHourIndex: number,
-		locationName: string,
-	): Promise<void> {
-		const kwpFactor = location.kwp || 0;
-
-		// Map to store daily sums: key = date string, value = { sum: number, date: Date }
-		const dailySums = new Map<string, { sum: number; date: Date }>();
-
-		// Process all hourly data starting from current hour
-		for (let i = currentHourIndex; i < data.hourly.time.length; i++) {
-			const timeStr = data.hourly.time[i];
-			const rawIrradiance = data.hourly.global_tilted_irradiance[i];
-
-			if (!timeStr || rawIrradiance === undefined) {
-				continue;
-			}
-
-			const hourDate = new Date(timeStr);
-			const dateKey = hourDate.toISOString().split('T')[0]; // YYYY-MM-DD
-
-			// Calculate power in Watt
-			const calculatedPower = rawIrradiance * kwpFactor;
-
-			// Add to daily sum (Watt becomes Wh when summed over hours)
-			if (!dailySums.has(dateKey)) {
-				dailySums.set(dateKey, { sum: 0, date: hourDate });
-			}
-			const dayData = dailySums.get(dateKey)!;
-			dayData.sum += calculatedPower;
-		}
-
-		// Convert map to sorted array
-		const sortedDays = Array.from(dailySums.entries())
-			.map(([dateKey, data]) => ({ dateKey, ...data }))
-			.sort((a, b) => a.date.getTime() - b.date.getTime());
-
-		// Update states for each day (day0 = today, day1 = tomorrow, etc.)
-		const daysToUpdate = Math.min(this.config.forecastDays, sortedDays.length);
-
-		for (let day = 0; day < daysToUpdate; day++) {
-			const dayData = sortedDays[day];
-
-			// Format date as DD.MM.YYYY
-			const formattedDate = dayData.date.toLocaleDateString('de-DE', {
-				day: '2-digit',
-				month: '2-digit',
-				year: 'numeric',
-			});
-
-			// Round sum to whole Wh
-			const roundedSum = Math.round(dayData.sum);
-
-			// Update Date state
-			await this.setState(`${locationName}.daily-forecast.day${day}.Date`, {
-				val: formattedDate,
-				ack: true,
-			});
-
-			// Update Peak_day state
-			await this.setState(`${locationName}.daily-forecast.day${day}.Peak_day`, {
-				val: roundedSum,
-				ack: true,
-			});
-		}
-
-		this.log.debug(`Successfully updated ${daysToUpdate} days for ${location.name}`);
-	}
-
-	/**
-	 * Sanitize location name for use in state IDs
-	 *
-	 * @param name - Location name to sanitize
-	 * @returns Sanitized name
-	 */
 	private sanitizeLocationName(name: string): string {
 		return name
 			.replace(/[^a-zA-Z0-9_-]/g, '_')
@@ -402,88 +233,22 @@ class OpenMeteoPvForecast extends utils.Adapter {
 			.replace(/^_|_$/g, '');
 	}
 
-	/**
-	 * Is called when adapter shuts down - callback has to be called under any circumstances!
-	 *
-	 * @param callback - Callback function
-	 */
 	private onUnload(callback: () => void): void {
-		try {
-			if (this.updateInterval) {
-				clearInterval(this.updateInterval);
-			}
-			this.log.info('Adapter stopped');
-			callback();
-		} catch (error) {
-			this.log.error(`Error during unloading: ${(error as Error).message}`);
-			callback();
+		if (this.updateInterval) {
+			clearInterval(this.updateInterval);
 		}
+		callback();
 	}
 
-	/**
-	 * Is called if a subscribed state changes
-	 *
-	 * @param id - State ID
-	 * @param state - State object
-	 */
 	private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
 		if (state && !state.ack) {
-			this.log.debug(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+			this.log.debug(`state ${id} changed: ${state.val}`);
 		}
 	}
-
-	/**
-	 * Handle messages from admin UI
-	 *
-	 * @param obj - Message object
-	 */
-	/*	private async onMessage(obj: ioBroker.Message): Promise<void> {
-		if (typeof obj === 'object' && obj.message) {
-			if (obj.command === 'searchLocation') {
-				try {
-					const query = obj.message as string;
-					this.log.debug(`Searching for location: ${query}`);
-
-					const results = await this.apiCaller.searchLocation(query);
-
-					if (obj.callback) {
-						this.sendTo(obj.from, obj.command, results, obj.callback);
-					}
-				} catch (error) {
-					this.log.error(`Error searching location: ${(error as Error).message}`);
-					if (obj.callback) {
-						this.sendTo(obj.from, obj.command, { error: (error as Error).message }, obj.callback);
-					}
-				}
-			} else if (obj.command === 'getSystemConfig') {
-				try {
-					// Get system configuration (latitude, longitude, timezone)
-					const systemConfig = await this.getForeignObjectAsync('system.config');
-
-					const result = {
-						latitude: systemConfig?.common?.latitude || 0,
-						longitude: systemConfig?.common?.longitude || 0,
-						timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
-					};
-
-					if (obj.callback) {
-						this.sendTo(obj.from, obj.command, result, obj.callback);
-					}
-				} catch (error) {
-					this.log.error(`Error getting system config: ${(error as Error).message}`);
-					if (obj.callback) {
-						this.sendTo(obj.from, obj.command, { error: (error as Error).message }, obj.callback);
-					}
-				}
-			}
-		}
-	}*/
 }
 
 if (require.main !== module) {
-	// Export the constructor in compact mode
 	module.exports = (options: Partial<utils.AdapterOptions> | undefined) => new OpenMeteoPvForecast(options);
 } else {
-	// otherwise start the instance directly
 	(() => new OpenMeteoPvForecast())();
 }
