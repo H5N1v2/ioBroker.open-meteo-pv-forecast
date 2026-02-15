@@ -16,7 +16,7 @@ PV Forecast Data
 
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 0.1.1-alpha.0 (2026-02-15)
 (H5N1v2) Fix: Daily peak was incorrect, it only recorded the period from the current hour until the end of the day.
 
 ### 0.1.0-alpha.0 (2026-02-13)

@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "open-meteo-pv-forecast",
-    "version": "0.1.0-alpha.0",
+    "version": "0.1.1-alpha.0",
     "news": {
+      "0.1.1-alpha.0": {
+        "en": "(H5N1v2) Fix: Daily peak was incorrect, it only recorded the period from the current hour until the end of the day.",
+        "de": "(H5N1v2) Fix: Der Tagesgipfel war falsch, er erfasste nur die Zeit von der aktuellen Stunde bis zum Ende des Tages.",
+        "ru": "(H5N1v2) Исправить: Ежедневный пик был неверным, он фиксировал только период с текущего часа до конца дня.",
+        "pt": "(H5N1v2) Correcção: O pico diário estava incorreto, registrando apenas o período da hora atual até o final do dia.",
+        "nl": "(H5N1v2) Fix: De dagelijkse piek was onjuist, het heeft alleen de periode van het huidige uur tot het einde van de dag geregistreerd.",
+        "fr": "(H5N1v2) Correction: Le pic quotidien était incorrect, il n'enregistrait que la période de l'heure actuelle jusqu'à la fin de la journée.",
+        "it": "(H5N1v2) Correzione: Il picco giornaliero era errato, ha registrato solo il periodo dall'ora corrente fino alla fine della giornata.",
+        "es": "(H5N1v2) Fijar: El pico diario era incorrecto, sólo registró el período desde la hora actual hasta el final del día.",
+        "pl": "(H5N1v2) Dzienny szczyt był nieprawidłowy, zarejestrowano tylko okres od bieżącej godziny do końca dnia.",
+        "uk": "(H5N1v2) Фіксація: Щоденний пік був некоректним, він тільки записав період з поточного години до закінчення дня.",
+        "zh-cn": "(H5N1v2) 修补: 每日高峰不正确,只记录了从现时到末日的期间."
+      },
       "0.1.0-alpha.0": {
         "en": "feat: add forecastDays for Sum\nModified the fetching logic to retrieve enough hourly data to cover both hourly and daily forecasts.\nImplemented a new method to calculate and update daily forecast data based on hourly data.\nAdjusted the time format for hourly forecast states to display only HH:mm.",
         "de": "feat: Prognose hinzufügen Tage für Sum\nModifizierte die fetching-Logik, um genügend stündliche Daten abzurufen, um sowohl stündliche als auch tägliche Prognosen abzudecken.\nErgänzte eine neue Methode zur Berechnung und Aktualisierung von Tagesprognosendaten basierend auf Stundendaten.\nDas Zeitformat für Stundenprognosen wurde angepasst, um nur HH:mm anzuzeigen.",
