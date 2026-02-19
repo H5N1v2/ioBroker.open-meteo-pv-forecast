@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "open-meteo-pv-forecast",
-    "version": "0.1.1-alpha.0",
+    "version": "0.2.0-alpha.0",
     "news": {
+      "0.2.0-alpha.0": {
+        "en": "Added temperature_2m, cloud_cover, wind_speed_10m, sunshine_duration to hourly forecast.\nfeat: Leave latitude and longitude empty to use system coordinates.\nAdded URL debug output for API calls.\nUpdate dev dependencies.",
+        "de": "Hinzugefügt temperatur_2m, cloud_cover, wind_speed_10m, sunshine_duration zu stündlicher Prognose.\nfeat: Lassen Sie Breite und Länge leer, um Systemkoordinaten zu verwenden.\nURL-Debug-Ausgabe für API-Anrufe hinzugefügt.\nAktualisieren von dev Abhängigkeiten.",
+        "ru": "Добавлена температура_2 м, облачность_покрытие, ветер_скорость_10 м, солнечный свет_продолжительность к почасовому прогнозу.\nоставьте широту и долготу пустыми для использования системных координат.\nДобавлен вывод отладки URL для вызовов API.\nОбновление зависимостей dev.",
+        "pt": "Adicionado temperatura_2m, nuvem_cover, vento_velocidade_10m, sol_duração à previsão horária.\nfeat: Deixe a latitude e longitude vazias para usar as coordenadas do sistema.\nSaída de depuração de URL adicionada para chamadas de API.\nAtualizar dependências dev.",
+        "nl": "Toegevoegd temperatuur_2m, cloud_cover, wind_speed_10m, sunshine_duration aan uurvoorspelling.\nfeat: Laat breedte- en lengtegraad leeg om systeemcoördinaten te gebruiken.\nToegevoegd URL debug uitvoer voor API oproepen.\nBijwerken van afhankelijkheden.",
+        "fr": "Ajout de temperature_2m, cloud_cover, wind_speed_10m, sunny_duration à la prévision horaire.\nexploit : laisser la latitude et la longitude vides pour utiliser les coordonnées du système.\nAjout de la sortie URL debug pour les appels API.\nMettre à jour les dépendances.",
+        "it": "Aggiunta temperatura_2m, cloud_cover, wind_speed_10m, sun_duration a previsioni orarie.\nfeat: Lasciare latitudine e longitudine vuota per usare le coordinate di sistema.\nAggiunto URL debug output per le chiamate API.\nAggiornare le dipendenze dev.",
+        "es": "Temperatura agregada_2m, cloud_cover, wind_speed_10m, sun_duration a hora de previsión.\nhaz: Dejar la latitud y la longitud vacías para usar las coordenadas del sistema.\nAñadido URL depurar salida para llamadas API.\nActualizar las dependencias dev.",
+        "pl": "Dodano temperaturę _ 2m, chmurę _ cover, wiatr _ speed _ 10m, czas trwania słońca do godzinowej prognozy.\nfeat: pozostawić szerokość geograficzną i długość geograficzną pustą, aby użyć współrzędnych systemowych.\nDodano wyjście debugowania URL dla połączeń API.\nAktualizuj zależności dev.",
+        "uk": "Додано температуру_2m, Cloud_cover, Wind_speed_10m, sunshine_durations to Hourly прогнозування.\nfeat: Залишити широтість і довготи порожній для використання системних координат.\nДодано вихід URL-адреси для викликів API.\nОновити залежності dev.",
+        "zh-cn": "加入温度_2m,云_覆盖,风_速度_10m,阳光_持续时间为小时预报.\n功绩:留经纬度和经度空用系统坐标.\n为API调用添加了 URL 调试输出.\n更新非依赖性 ."
+      },
       "0.1.1-alpha.0": {
         "en": "(H5N1v2) Fix: Daily peak was incorrect, it only recorded the period from the current hour until the end of the day.",
         "de": "(H5N1v2) Fix: Der Tagesgipfel war falsch, er erfasste nur die Zeit von der aktuellen Stunde bis zum Ende des Tages.",

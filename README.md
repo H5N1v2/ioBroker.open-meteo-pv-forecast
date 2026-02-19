@@ -16,7 +16,7 @@ PV Forecast Data
 
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 0.2.0-alpha.0 (2026-02-19)
 * (H5N1v2) Added temperature_2m, cloud_cover, wind_speed_10m, sunshine_duration to hourly forecast.
 * (H5N1v2) feat: Leave latitude and longitude empty to use system coordinates.
 * (H5N1v2) Added URL debug output for API calls.
