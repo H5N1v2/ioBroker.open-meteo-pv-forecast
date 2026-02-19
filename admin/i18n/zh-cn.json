@@ -18,5 +18,6 @@
 	"global_tilted_irradiance": "全局倾斜辐照度",
 	"interval_15_min": "15分钟",
 	"interval_30_min": "30分钟",
-	"interval_60_min": "60分钟"
+	"interval_60_min": "60分钟",
+	"autom": "自动（根据坐标）"
 }

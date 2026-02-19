@@ -18,5 +18,6 @@
 	"global_tilted_irradiance": "Глобальное Наклонное Облучение",
 	"interval_15_min": "15 минут",
 	"interval_30_min": "30 минут",
-	"interval_60_min": "60 минут"
+	"interval_60_min": "60 минут",
+	"autom": "Автоматически (по координатам)"
 }

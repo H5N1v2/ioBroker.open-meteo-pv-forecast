@@ -33,7 +33,7 @@
 				{"label": "3", "value": 3},
 				{"label": "5", "value": 5},
 				{"label": "7", "value": 7},
-				{"label": "10", "value": 10}
+				{"label": "14", "value": 14}
 			]
 		},
 		"updateInterval": {
@@ -77,16 +77,42 @@
 					"width": "13%",
 					"filter": false,
 					"sort": false,
-					"validator": "data.latitude !== undefined && data.latitude >= -90 && data.latitude <= 90"
+					"validator": "data.latitude !== undefined && data.latitude >= -90 && data.latitude <= 90",
+					"help": {
+						"en": "Leave empty to use system latitude",
+						"de": "Leer lassen, um System-Breitengrad zu verwenden",
+						"fr": "Laissez vide pour utiliser la latitude du système",
+						"es": "Dejar vacío para usar la latitud del sistema",
+						"it": "Lascia vuoto per utilizzare la latitudine del sistema",
+						"pt": "Deixe vazio para usar a latitude do sistema",
+						"nl": "Leeg laten om systeem breedtegraad te gebruiken",
+						"pl": "Pozostaw puste, aby użyć szerokości geograficznej systemu",
+						"ru": "Оставьте пустым, чтобы использовать широту системы",
+						"uk": "Залиште порожнім, щоб використовувати широту системы",
+						"zh-cn": "留空以使用系统纬度"
+					}
 				},
-				{
+                { 
 					"type": "text",
 					"title": "longitude",
 					"attr": "longitude",
 					"width": "13%",
 					"filter": false,
 					"sort": false,
-					"validator": "data.longitude !== undefined && data.longitude >= -180 && data.longitude <= 180"
+					"validator": "data.longitude !== undefined && data.longitude >= -180 && data.longitude <= 180",
+					"help": {
+						"en": "Leave empty to use system longitude",
+						"de": "Leer lassen, um System-Längengrad zu verwenden",
+						"fr": "Laissez vide pour utiliser la longitude du système",
+						"es": "Dejar vacío para usar la longitud del sistema",
+						"it": "Lascia vuoto per utilizzare la longitudine del sistema",
+						"pt": "Deixe vazio para usar a longitude do sistema",
+						"nl": "Leeg laten om systeem lengtegraad te gebruiken",
+						"pl": "Pozostaw puste, aby użyć długości geograficznej systemu",
+						"ru": "Оставьте пустым, чтобы использовать долготу системы",
+						"uk": "Залиште порожнім, щоб використовувати довготу системи",
+						"zh-cn": "留空以使用系统经度"
+					}
 				},
 				{
 					"type": "number",
@@ -121,13 +147,33 @@
 					"validator": "data.kwp !== undefined && data.kwp >= 0"
 				},
 				{
-					"type": "text",
+					"type": "select",
 					"title": "timezone",
 					"attr": "timezone",
 					"width": "18%",
 					"filter": false,
 					"sort": false,
-					"validator": "data.timezone && data.timezone.length > 0"
+					"validator": "data.timezone && data.timezone.length > 0",
+					"options":[
+							{ "value": "auto", "label": "autom" },
+							{ "value": "GMT", "label": "GMT / UTC" },
+							{ "value": "Europe/Berlin", "label": "Europa/Berlin" },
+							{ "value": "Europe/London", "label": "Europe/London" },
+							{ "value": "Europe/Moscow", "label": "Europe/Moscow" },
+							{ "value": "America/New_York", "label": "America/New York" },
+							{ "value": "America/Chicago", "label": "America/Chicago" },
+							{ "value": "America/Denver", "label": "America/Denver" },
+							{ "value": "America/Los_Angeles", "label": "America/Los Angeles" },
+							{ "value": "America/Sao_Paulo", "label": "America/Sao Paulo" },
+							{ "value": "America/Anchorage", "label": "America/Anchorage" },
+							{ "value": "Asia/Tokyo", "label": "Asia/Tokyo" },
+							{ "value": "Asia/Bangkok", "label": "Asia/Bangkok" },
+							{ "value": "Asia/Singapore", "label": "Asia/Singapore" },
+							{ "value": "Australia/Sydney", "label": "Australia/Sydney" },
+							{ "value": "Africa/Cairo", "label": "Afrika/Cairo" },
+							{ "value": "Pacific/Auckland", "label": "Pacific/Auckland" }
+						],
+						"default": "auto"
 				},
 				{
 					"type": "custom",

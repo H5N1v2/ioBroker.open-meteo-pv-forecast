@@ -18,5 +18,6 @@
 	"global_tilted_irradiance": "Irradiancia Global Inclinada",
 	"interval_15_min": "15 minutos",
     "interval_30_min": "30 minutos",
-    "interval_60_min": "60 minutos"
+    "interval_60_min": "60 minutos",
+    "autom": "Automático (según coordenadas)"
 }

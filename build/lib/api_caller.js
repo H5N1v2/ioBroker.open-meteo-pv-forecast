@@ -34,8 +34,14 @@ module.exports = __toCommonJS(api_caller_exports);
 var import_axios = __toESM(require("axios"));
 class ApiCaller {
   axiosInstance;
-  /** Initialize the API caller with axios configuration */
-  constructor() {
+  log;
+  /**
+   * Initialize the API caller with axios configuration
+   *
+   * @param adapter - Adapter instance providing logger access
+   */
+  constructor(adapter) {
+    this.log = adapter.log;
     this.axiosInstance = import_axios.default.create({
       timeout: 1e4
     });
@@ -48,7 +54,8 @@ class ApiCaller {
    * @returns Promise with forecast data
    */
   async fetchForecastData(location, forecastDays) {
-    const hourlyparam_keys = "global_tilted_irradiance";
+    var _a;
+    const hourlyparam_keys = "global_tilted_irradiance,cloud_cover,temperature_2m,wind_speed_10m,sunshine_duration";
     const url = `https://api.open-meteo.com/v1/forecast`;
     try {
       const response = await this.axiosInstance.get(url, {
@@ -59,47 +66,20 @@ class ApiCaller {
           azimuth: location.azimuth,
           hourly: hourlyparam_keys,
           timezone: location.timezone || "auto",
-          // 'auto' erkennt lokale Zeitzone
           forecast_days: forecastDays
-          // Geändert von forecast_hours
         }
       });
+      const fullUrl = import_axios.default.getUri(response.config);
+      this.log.debug(`[${location.name}] DEBUG: API URL: ${fullUrl}`);
       return response.data;
     } catch (error) {
       if (import_axios.default.isAxiosError(error)) {
+        this.log.error(`Fehler bei URL: ${(_a = error.config) == null ? void 0 : _a.url}`);
         throw new Error(`Open-Meteo API error: ${error.message}`);
       }
       throw error;
     }
   }
-  /**
-   * Search for locations using Nominatim API
-   *
-   * @param query - Search query (address, city, etc.)
-   * @returns Promise with search results
-   */
-  /*async searchLocation(query: string): Promise<NominatimResult[]> {
-  		const url = `https://nominatim.openstreetmap.org/search`;
-  
-  		try {
-  			const response = await this.axiosInstance.get<NominatimResult[]>(url, {
-  				params: {
-  					q: query,
-  					format: 'json',
-  				},
-  				headers: {
-  					'User-Agent': 'ioBroker.open-meteo-pv-forecast',
-  				},
-  			});
-  
-  			return response.data;
-  		} catch (error) {
-  			if (axios.isAxiosError(error)) {
-  				throw new Error(`Nominatim API error: ${error.message}`);
-  			}
-  			throw error;
-  		}
-  	}*/
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {

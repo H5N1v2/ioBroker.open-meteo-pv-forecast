@@ -8,6 +8,14 @@ export interface OpenMeteoHourlyData {
 	time: string[];
 	/** Array of irradiance values in W/m² */
 	global_tilted_irradiance: number[];
+	/** Array of temperature values at 2m height in °C */
+	temperature_2m: number[];
+	/** Array of cloud cover percentage values */
+	cloud_cover: number[];
+	/** Array of wind speed values at 10m height in km/h */
+	wind_speed_10m: number[];
+	/** Array of sunshine duration values in minutes */
+	sunshine_duration: number[];
 }
 
 /** Response structure from Open-Meteo API */
@@ -22,24 +30,18 @@ export interface OpenMeteoResponse {
 	hourly: OpenMeteoHourlyData;
 }
 
-/** Search result from Nominatim API */
-//export interface NominatimResult {
-/** Unique place identifier */
-//	place_id: number;
-/** Human-readable location name */
-//	display_name: string;
-/** Latitude as string */
-//	lat: string;
-/** Longitude as string */
-//	lon: string;
-//}
-
 /** API caller for Open-Meteo and Nominatim services */
 export class ApiCaller {
 	private axiosInstance: AxiosInstance;
+	private log: ioBroker.Logger;
 
-	/** Initialize the API caller with axios configuration */
-	constructor() {
+	/**
+	 * Initialize the API caller with axios configuration
+	 *
+	 * @param adapter - Adapter instance providing logger access
+	 */
+	constructor(adapter: ioBroker.Adapter) {
+		this.log = adapter.log;
 		this.axiosInstance = axios.create({
 			timeout: 10000,
 		});
@@ -53,7 +55,7 @@ export class ApiCaller {
 	 * @returns Promise with forecast data
 	 */
 	async fetchForecastData(location: Location, forecastDays: number): Promise<OpenMeteoResponse> {
-		const hourlyparam_keys = 'global_tilted_irradiance';
+		const hourlyparam_keys = 'global_tilted_irradiance,cloud_cover,temperature_2m,wind_speed_10m,sunshine_duration';
 		const url = `https://api.open-meteo.com/v1/forecast`;
 
 		try {
@@ -64,46 +66,23 @@ export class ApiCaller {
 					tilt: location.tilt,
 					azimuth: location.azimuth,
 					hourly: hourlyparam_keys,
-					timezone: location.timezone || 'auto', // 'auto' erkennt lokale Zeitzone
-					forecast_days: forecastDays, // Geändert von forecast_hours
+					timezone: location.timezone || 'auto',
+					forecast_days: forecastDays,
 				},
 			});
+
+			// --- DEBUG LOG ---
+			const fullUrl = axios.getUri(response.config);
+			this.log.debug(`[${location.name}] DEBUG: API URL: ${fullUrl}`);
+			// -----------------
 
 			return response.data;
 		} catch (error) {
 			if (axios.isAxiosError(error)) {
+				this.log.error(`Fehler bei URL: ${error.config?.url}`);
 				throw new Error(`Open-Meteo API error: ${error.message}`);
 			}
 			throw error;
 		}
 	}
-
-	/**
-	 * Search for locations using Nominatim API
-	 *
-	 * @param query - Search query (address, city, etc.)
-	 * @returns Promise with search results
-	 */
-	/*async searchLocation(query: string): Promise<NominatimResult[]> {
-		const url = `https://nominatim.openstreetmap.org/search`;
-
-		try {
-			const response = await this.axiosInstance.get<NominatimResult[]>(url, {
-				params: {
-					q: query,
-					format: 'json',
-				},
-				headers: {
-					'User-Agent': 'ioBroker.open-meteo-pv-forecast',
-				},
-			});
-
-			return response.data;
-		} catch (error) {
-			if (axios.isAxiosError(error)) {
-				throw new Error(`Nominatim API error: ${error.message}`);
-			}
-			throw error;
-		}
-	}*/
 }

@@ -7,7 +7,7 @@ import { ApiCaller } from './lib/api_caller';
 import type { Location } from './lib/adapter-config';
 
 class OpenMeteoPvForecast extends utils.Adapter {
-	private apiCaller: ApiCaller;
+	private apiCaller!: ApiCaller;
 	private updateInterval?: NodeJS.Timeout;
 
 	public constructor(options: Partial<utils.AdapterOptions> = {}) {
@@ -18,11 +18,11 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
 		this.on('unload', this.onUnload.bind(this));
-
-		this.apiCaller = new ApiCaller();
 	}
 
 	private async onReady(): Promise<void> {
+		this.apiCaller = new ApiCaller(this);
+
 		this.log.info('Starting open-meteo-pv-forecast adapter');
 
 		if (!this.config.locations || this.config.locations.length === 0) {
@@ -85,6 +85,54 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					},
 					native: {},
 				});
+				await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}.temperature_2m`, {
+					type: 'state',
+					common: {
+						name: { en: 'Temperature 2m', de: 'Temperatur 2m' },
+						type: 'number',
+						role: 'value.temperature',
+						unit: '°C',
+						read: true,
+						write: false,
+					},
+					native: {},
+				});
+				await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}.cloud_cover`, {
+					type: 'state',
+					common: {
+						name: { en: 'Cloud Cover', de: 'Bewölkung' },
+						type: 'number',
+						role: 'value.percent',
+						unit: '%',
+						read: true,
+						write: false,
+					},
+					native: {},
+				});
+				await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}.wind_speed_10m`, {
+					type: 'state',
+					common: {
+						name: { en: 'Wind Speed 10m', de: 'Windgeschwindigkeit 10m' },
+						type: 'number',
+						role: 'value.speed',
+						unit: 'km/h',
+						read: true,
+						write: false,
+					},
+					native: {},
+				});
+				await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}.sunshine_duration`, {
+					type: 'state',
+					common: {
+						name: { en: 'Sunshine Duration', de: 'Sonnenscheindauer' },
+						type: 'number',
+						role: 'value.duration',
+						unit: 'min',
+						read: true,
+						write: false,
+					},
+					native: {},
+				});
 			}
 
 			await this.setObjectNotExistsAsync(`${locationName}.daily-forecast`, {
@@ -135,9 +183,41 @@ class OpenMeteoPvForecast extends utils.Adapter {
 	private async updateLocation(location: Location): Promise<void> {
 		const locationName = this.sanitizeLocationName(location.name);
 
+		// Prüfen ob Latitude/Longitude gesetzt sind, ggf. Systemkonfiguration verwenden
+		const effectiveLocation = { ...location };
+		const latMissing =
+			effectiveLocation.latitude === undefined ||
+			effectiveLocation.latitude === null ||
+			(effectiveLocation.latitude as unknown as string) === '';
+		const lonMissing =
+			effectiveLocation.longitude === undefined ||
+			effectiveLocation.longitude === null ||
+			(effectiveLocation.longitude as unknown as string) === '';
+
+		if (latMissing || lonMissing) {
+			this.log.debug(`[${location.name}] Debug:longitude and/or latitude not set, loading system configuration`);
+
+			const sysConfig = await this.getForeignObjectAsync('system.config');
+			const sysLat = sysConfig?.common?.latitude;
+			const sysLon = sysConfig?.common?.longitude;
+
+			if (sysLat !== undefined && sysLat !== null && sysLon !== undefined && sysLon !== null) {
+				effectiveLocation.latitude = sysLat;
+				effectiveLocation.longitude = sysLon;
+				this.log.info(
+					`[${location.name}] using system latitude: ${effectiveLocation.latitude}, system longitude: ${effectiveLocation.longitude}`,
+				);
+			} else {
+				this.log.error(
+					`[${location.name}] latitude and/or longitude not set and no system coordinates available. Skipping location.`,
+				);
+				return;
+			}
+		}
+
 		try {
 			// Wir übergeben jetzt die Anzahl der TAGE an den ApiCaller
-			const data = await this.apiCaller.fetchForecastData(location, this.config.forecastDays);
+			const data = await this.apiCaller.fetchForecastData(effectiveLocation, this.config.forecastDays);
 
 			if (!data || !data.hourly || !data.hourly.time) {
 				this.log.error(`[${location.name}] API lieferte keine Daten.`);
@@ -206,6 +286,17 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					const apiDate = new Date(data.hourly.time[idx]);
 					const formattedTime = apiDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
 					const powerW = Math.round(data.hourly.global_tilted_irradiance[idx] * kwpFactor);
+					// 1. Hol den Wert (z.B. 3600) und stelle sicher, dass es eine ganze Zahl ist
+					const totalSeconds = Math.round(data.hourly.sunshine_duration[idx] || 0);
+
+					// 2. Berechne die vollen Minuten (3600 / 60 = 60)
+					//const minutes = Math.floor(totalSeconds / 60);
+
+					// 3. Berechne die restlichen Sekunden (3600 % 60 = 0)
+					//const seconds = totalSeconds % 60;
+
+					// 4. Formatierung (Ergebnis: "60:00")
+					//const formattedSunTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
 					await this.setState(`${locationName}.pv-forecast.hour${hour}.time`, {
 						val: formattedTime,
@@ -213,6 +304,22 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					});
 					await this.setState(`${locationName}.pv-forecast.hour${hour}.global_tilted_irradiance`, {
 						val: powerW,
+						ack: true,
+					});
+					await this.setState(`${locationName}.pv-forecast.hour${hour}.temperature_2m`, {
+						val: data.hourly.temperature_2m[idx],
+						ack: true,
+					});
+					await this.setState(`${locationName}.pv-forecast.hour${hour}.cloud_cover`, {
+						val: data.hourly.cloud_cover[idx],
+						ack: true,
+					});
+					await this.setState(`${locationName}.pv-forecast.hour${hour}.wind_speed_10m`, {
+						val: data.hourly.wind_speed_10m[idx],
+						ack: true,
+					});
+					await this.setState(`${locationName}.pv-forecast.hour${hour}.sunshine_duration`, {
+						val: totalSeconds,
 						ack: true,
 					});
 				}
@@ -242,7 +349,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 
 	private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
 		if (state && !state.ack) {
-			this.log.debug(`state ${id} changed: ${state.val}`);
+			this.log.debug(`DEBUG:state ${id} changed: ${state.val}`);
 		}
 	}
 }

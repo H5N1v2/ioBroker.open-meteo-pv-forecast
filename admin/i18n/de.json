@@ -18,5 +18,6 @@
 	"global_tilted_irradiance": "Globalstrahlung auf geneigter Fläche",
 	"interval_15_min": "15 Minuten",
     "interval_30_min": "30 Minuten",
-    "interval_60_min": "60 Minuten"
+    "interval_60_min": "60 Minuten",
+    "autom": "Automatisch (nach Koordinaten)"
 }

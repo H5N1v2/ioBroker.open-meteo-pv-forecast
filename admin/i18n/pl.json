@@ -18,5 +18,6 @@
 	"global_tilted_irradiance": "Globalne Napromieniowanie Nachylone",
 	"interval_15_min": "15 minut",
 	"interval_30_min": "30 minut",
-	"interval_60_min": "60 minut"
+	"interval_60_min": "60 minut",
+	"autom": "Automatyczny (na podstawie współrzędnych)"
 }

@@ -16,8 +16,14 @@ PV Forecast Data
 
 
 ## Changelog
+### **WORK IN PROGRESS**
+* (H5N1v2) Added temperature_2m, cloud_cover, wind_speed_10m, sunshine_duration to hourly forecast.
+* (H5N1v2) feat: Leave latitude and longitude empty to use system coordinates.
+* (H5N1v2) Added URL debug output for API calls.
+* (H5N1v2) Update dev dependencies.
+
 ### 0.1.1-alpha.0 (2026-02-15)
-(H5N1v2) Fix: Daily peak was incorrect, it only recorded the period from the current hour until the end of the day.
+* (H5N1v2) Fix: Daily peak was incorrect, it only recorded the period from the current hour until the end of the day.
 
 ### 0.1.0-alpha.0 (2026-02-13)
 * (H5N1v2) feat: add forecastDays for Sum

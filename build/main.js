@@ -34,9 +34,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
     this.on("ready", this.onReady.bind(this));
     this.on("stateChange", this.onStateChange.bind(this));
     this.on("unload", this.onUnload.bind(this));
-    this.apiCaller = new import_api_caller.ApiCaller();
   }
   async onReady() {
+    this.apiCaller = new import_api_caller.ApiCaller(this);
     this.log.info("Starting open-meteo-pv-forecast adapter");
     if (!this.config.locations || this.config.locations.length === 0) {
       this.log.warn("No locations configured. Please configure at least one location in the adapter settings.");
@@ -88,6 +88,54 @@ class OpenMeteoPvForecast extends utils.Adapter {
           },
           native: {}
         });
+        await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}.temperature_2m`, {
+          type: "state",
+          common: {
+            name: { en: "Temperature 2m", de: "Temperatur 2m" },
+            type: "number",
+            role: "value.temperature",
+            unit: "\xB0C",
+            read: true,
+            write: false
+          },
+          native: {}
+        });
+        await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}.cloud_cover`, {
+          type: "state",
+          common: {
+            name: { en: "Cloud Cover", de: "Bew\xF6lkung" },
+            type: "number",
+            role: "value.percent",
+            unit: "%",
+            read: true,
+            write: false
+          },
+          native: {}
+        });
+        await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}.wind_speed_10m`, {
+          type: "state",
+          common: {
+            name: { en: "Wind Speed 10m", de: "Windgeschwindigkeit 10m" },
+            type: "number",
+            role: "value.speed",
+            unit: "km/h",
+            read: true,
+            write: false
+          },
+          native: {}
+        });
+        await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}.sunshine_duration`, {
+          type: "state",
+          common: {
+            name: { en: "Sunshine Duration", de: "Sonnenscheindauer" },
+            type: "number",
+            role: "value.duration",
+            unit: "min",
+            read: true,
+            write: false
+          },
+          native: {}
+        });
       }
       await this.setObjectNotExistsAsync(`${locationName}.daily-forecast`, {
         type: "channel",
@@ -130,9 +178,31 @@ class OpenMeteoPvForecast extends utils.Adapter {
     }
   }
   async updateLocation(location) {
+    var _a, _b;
     const locationName = this.sanitizeLocationName(location.name);
+    const effectiveLocation = { ...location };
+    const latMissing = effectiveLocation.latitude === void 0 || effectiveLocation.latitude === null || effectiveLocation.latitude === "";
+    const lonMissing = effectiveLocation.longitude === void 0 || effectiveLocation.longitude === null || effectiveLocation.longitude === "";
+    if (latMissing || lonMissing) {
+      this.log.debug(`[${location.name}] Debug:longitude and/or latitude not set, loading system configuration`);
+      const sysConfig = await this.getForeignObjectAsync("system.config");
+      const sysLat = (_a = sysConfig == null ? void 0 : sysConfig.common) == null ? void 0 : _a.latitude;
+      const sysLon = (_b = sysConfig == null ? void 0 : sysConfig.common) == null ? void 0 : _b.longitude;
+      if (sysLat !== void 0 && sysLat !== null && sysLon !== void 0 && sysLon !== null) {
+        effectiveLocation.latitude = sysLat;
+        effectiveLocation.longitude = sysLon;
+        this.log.info(
+          `[${location.name}] using system latitude: ${effectiveLocation.latitude}, system longitude: ${effectiveLocation.longitude}`
+        );
+      } else {
+        this.log.error(
+          `[${location.name}] latitude and/or longitude not set and no system coordinates available. Skipping location.`
+        );
+        return;
+      }
+    }
     try {
-      const data = await this.apiCaller.fetchForecastData(location, this.config.forecastDays);
+      const data = await this.apiCaller.fetchForecastData(effectiveLocation, this.config.forecastDays);
       if (!data || !data.hourly || !data.hourly.time) {
         this.log.error(`[${location.name}] API lieferte keine Daten.`);
         return;
@@ -184,12 +254,29 @@ class OpenMeteoPvForecast extends utils.Adapter {
           const apiDate = new Date(data.hourly.time[idx]);
           const formattedTime = apiDate.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
           const powerW = Math.round(data.hourly.global_tilted_irradiance[idx] * kwpFactor);
+          const totalSeconds = Math.round(data.hourly.sunshine_duration[idx] || 0);
           await this.setState(`${locationName}.pv-forecast.hour${hour}.time`, {
             val: formattedTime,
             ack: true
           });
           await this.setState(`${locationName}.pv-forecast.hour${hour}.global_tilted_irradiance`, {
             val: powerW,
+            ack: true
+          });
+          await this.setState(`${locationName}.pv-forecast.hour${hour}.temperature_2m`, {
+            val: data.hourly.temperature_2m[idx],
+            ack: true
+          });
+          await this.setState(`${locationName}.pv-forecast.hour${hour}.cloud_cover`, {
+            val: data.hourly.cloud_cover[idx],
+            ack: true
+          });
+          await this.setState(`${locationName}.pv-forecast.hour${hour}.wind_speed_10m`, {
+            val: data.hourly.wind_speed_10m[idx],
+            ack: true
+          });
+          await this.setState(`${locationName}.pv-forecast.hour${hour}.sunshine_duration`, {
+            val: totalSeconds,
             ack: true
           });
         }
@@ -212,7 +299,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
   }
   onStateChange(id, state) {
     if (state && !state.ack) {
-      this.log.debug(`state ${id} changed: ${state.val}`);
+      this.log.debug(`DEBUG:state ${id} changed: ${state.val}`);
     }
   }
 }

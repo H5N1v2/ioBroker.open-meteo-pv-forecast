@@ -18,5 +18,6 @@
 	"global_tilted_irradiance": "Global Tilted Irradiance",
 	"interval_15_min": "15 minutes",
     "interval_30_min": "30 minutes",
-    "interval_60_min": "60 minutes"
+    "interval_60_min": "60 minutes",
+    "autom": "Automatic (based on coordinates)"
 }
