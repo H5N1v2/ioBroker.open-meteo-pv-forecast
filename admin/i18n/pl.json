@@ -19,5 +19,7 @@
 	"interval_15_min": "15 minut",
 	"interval_30_min": "30 minut",
 	"interval_60_min": "60 minut",
-	"autom": "Automatyczny (na podstawie współrzędnych)"
+	"autom": "Automatyczny (na podstawie współrzędnych)",
+	"locationsTotal_label": "Utwórz sumę szczytową dla wszystkich lokalizacji",
+	"locationsTotal_help": "Jeśli włączone, zostaną utworzone dodatkowe stany, które sumują wartości wszystkich lokalizacji. Może to być przydatne, jeśli masz wiele lokalizacji i chcesz zobaczyć ogólną prognozę na pierwszy rzut oka."
 }

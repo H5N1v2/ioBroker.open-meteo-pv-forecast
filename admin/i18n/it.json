@@ -19,5 +19,7 @@
 	"interval_15_min": "15 minuti",
 	"interval_30_min": "30 minuti",
 	"interval_60_min": "60 minuti",
-	"autom": "Automatico (in base alle coordinate)"
+	"autom": "Automatico (in base alle coordinate)",
+	"locationsTotal_label": "Crea totale di picco di tutte le posizioni",
+	"locationsTotal_help": "Se abilitato, verranno creati stati aggiuntivi che sommano i valori di tutte le posizioni. Questo può essere utile se hai più posizioni e vuoi vedere la previsione generale a colpo d'occhio."
 }

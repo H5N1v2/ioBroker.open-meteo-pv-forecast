@@ -19,5 +19,7 @@
 	"interval_15_min": "15 minutos",
 	"interval_30_min": "30 minutos",
 	"interval_60_min": "60 minutos",
-	"autom": "Automático (com base nas coordenadas)"
+	"autom": "Automático (com base nas coordenadas)",
+	"locationsTotal_label": "Criar total de pico de todas as localizações",
+	"locationsTotal_help": "Se habilitado, estados adicionais serão criados que somam os valores de todas as localizações. Isso pode ser útil se você tiver várias localizações e quiser ver a previsão geral de relance."
 }

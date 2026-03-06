@@ -19,5 +19,7 @@
 	"interval_15_min": "15分钟",
 	"interval_30_min": "30分钟",
 	"interval_60_min": "60分钟",
-	"autom": "自动（根据坐标）"
+	"autom": "自动（根据坐标）",
+	"locationsTotal_label": "创建所有位置的总峰值",
+	"locationsTotal_help": "如果启用，将创建一个额外的状态，这些状态将总和所有位置的值。这可能对于有多个位置的情况很有用，以便查看总体发电量。"
 }

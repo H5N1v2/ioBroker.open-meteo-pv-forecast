@@ -19,5 +19,7 @@
 	"interval_15_min": "15 minutes",
     "interval_30_min": "30 minutes",
     "interval_60_min": "60 minutes",
-    "autom": "Automatic (based on coordinates)"
+    "autom": "Automatic (based on coordinates)",
+	"locationsTotal_label": "Create peak total of all locations",
+	"locationsTotal_help": "If enabled, additional states will be created that sum up the values of all locations. This can be useful if you have multiple locations and want to see the overall forecast at a glance."
 }

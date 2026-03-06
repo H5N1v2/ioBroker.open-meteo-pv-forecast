@@ -19,5 +19,7 @@
 	"interval_15_min": "15 minuten",
 	"interval_30_min": "30 minuten",
 	"interval_60_min": "60 minuten",
-	"autom": "Automatisch (op basis van coördinaten)"
+	"autom": "Automatisch (op basis van coördinaten)",
+	"locationsTotal_label": "Maak piektotaal van alle locaties",
+	"locationsTotal_help": "Indien ingeschakeld, worden extra statussen gemaakt die de waarden van alle locaties optellen. Dit kan handig zijn als je meerdere locaties hebt en de totale voorspelling in één oogopslag wilt zien."
 }

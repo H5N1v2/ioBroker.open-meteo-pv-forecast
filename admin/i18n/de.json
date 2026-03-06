@@ -19,5 +19,7 @@
 	"interval_15_min": "15 Minuten",
     "interval_30_min": "30 Minuten",
     "interval_60_min": "60 Minuten",
-    "autom": "Automatisch (nach Koordinaten)"
+    "autom": "Automatisch (nach Koordinaten)",
+	"locationsTotal_label": "Gesamtsumme aller Standorte erstellen",
+	"locationsTotal_help": "Wenn aktiviert, werden zusätzliche States erstellt, die die Werte aller Standorte summieren. Dies kann nützlich sein, wenn Sie mehrere Standorte haben und die Gesamtprognose auf einen Blick sehen möchten."
 }

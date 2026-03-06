@@ -19,5 +19,7 @@
 	"interval_15_min": "15 minutes",
     "interval_30_min": "30 minutes",
     "interval_60_min": "60 minutes",
-    "autom": "Automatique (selon les coordonnées)"
+    "autom": "Automatique (selon les coordonnées)",
+	"locationsTotal_label": "Créer un total de pointe de tous les emplacements",
+	"locationsTotal_help": "Si activé, des états supplémentaires seront créés qui additionnent les valeurs de tous les emplacements. Cela peut être utile si vous avez plusieurs emplacements et souhaitez voir la prévision globale en un coup d'œil."
 }

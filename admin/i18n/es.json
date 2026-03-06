@@ -19,5 +19,7 @@
 	"interval_15_min": "15 minutos",
     "interval_30_min": "30 minutos",
     "interval_60_min": "60 minutos",
-    "autom": "Automático (según coordenadas)"
+    "autom": "Automático (según coordenadas)",
+	"locationsTotal_label": "Crear total de pico de todas las ubicaciones",
+	"locationsTotal_help": "Si está habilitado, se crearán estados adicionales que suman los valores de todas las ubicaciones. Esto puede ser útil si tiene varias ubicaciones y desea ver el pronóstico general de un vistazo."
 }
