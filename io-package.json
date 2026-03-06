@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "open-meteo-pv-forecast",
-    "version": "0.2.0-alpha.0",
+    "version": "0.3.0-alpha.0",
     "news": {
+      "0.3.0-alpha.0": {
+        "en": "Added total peak of all locations\nAdded a checkbox for generating a total sum in the settings.\nfix: language used for stateIds and names\nfix: creation of intermediate objects missing\nchore: update dependencies to latest versions\nadded axios in dependencies",
+        "de": "Gesamtspitze aller Standorte hinzugefügt\nEs wurde ein Kontrollkästchen zur Generierung einer Gesamtsumme in den Einstellungen hinzugefügt.\nfix: Sprache für Staat Ids und Namen\nfix: erstellung von zwischenobjekten fehlt\nchore: die abhängigkeiten der neuesten versionen aktualisieren\nzusätzlich axios in abhängigkeiten",
+        "ru": "Добавлен общий пик всех локаций\nДобавлен чекбокс для генерации общей суммы в настройках.\nязык, используемый для государства Ids и имена\nфиксация: создание промежуточных объектов, отсутствующих\nchore: зависимость обновлений от последних версий\nдобавлены аксиосы в зависимости",
+        "pt": "Adicionado pico total de todos os locais\nAdicionado uma caixa de seleção para gerar uma soma total nas configurações.\ncorreção: idioma usado para o estado IDs e nomes\ncorreção: criação de objetos intermediários faltando\ntarefa: atualizar dependências para versões mais recentes\nadicionado axios em dependências",
+        "nl": "Toegevoegd totale piek van alle locaties\nEen selectievakje toegevoegd voor het genereren van een totale som in de instellingen.\nfix: taal gebruikt voor status Identiteiten en namen\nfix: aanmaken van tussenliggende objecten ontbreekt\nklus: update afhankelijkheden van de nieuwste versies\ntoegevoegde axio's in afhankelijkheden",
+        "fr": "Ajout du pic total de tous les emplacements\nAjout d'une case à cocher pour générer une somme totale dans les paramètres.\ncorrectif: langue utilisée pour l'état Id. et noms\ncorrection : création d'objets intermédiaires manquants\ncore: mettre à jour les dépendances aux dernières versions\naxios ajoutés dans les dépendances",
+        "it": "Aggiunto picco totale di tutte le posizioni\nAggiunto una casella di controllo per generare una somma totale nelle impostazioni.\ncorrezione: lingua utilizzata per lo stato Ids e nomi\nfix: creazione di oggetti intermedi mancanti\ncore: aggiornare le dipendenze alle ultime versioni\naggiunto assio in dipendenze",
+        "es": "Aumento total del pico de todas las ubicaciones\nSe agregó una casilla de verificación para generar una suma total en la configuración.\nfijación: idioma utilizado para el estado Ids and names\nfijación: creación de objetos intermedios desaparecidos\ncore: actualizar las dependencias a las últimas versiones\naxios añadidos en dependencias",
+        "pl": "Dodano łączny szczyt wszystkich miejsc\nDodano pole do generowania sumy całkowitej w ustawieniach.\nfix: język używany dla stanu Identyfikatory i nazwy\nfix: tworzenie brakujących obiektów pośrednich\ncore: aktualizacja zależności do najnowszych wersji\ndodano aksjos w zależności",
+        "uk": "Додано загальну вершину всіх населених пунктів\nДодано прапорець для створення загальної суми в налаштуваннях.\nвиправити: мова використовується для держави Ids і імена\nвиправити: створення проміжних об'єктів відсутні\nchore: оновлення залежності до останніх версій\nдодано аксіос в залежності",
+        "zh-cn": "所有地点的总高峰增加\n在设置中添加了生成总和的复选框 .\n修补:用于状态的语言 编号和名称\n修补: 中间对象缺失的创建\n字符串:更新对最新版本的依赖\n在依赖中添加轴"
+      },
       "0.2.0-alpha.0": {
         "en": "Added temperature_2m, cloud_cover, wind_speed_10m, sunshine_duration to hourly forecast.\nfeat: Leave latitude and longitude empty to use system coordinates.\nAdded URL debug output for API calls.\nUpdate dev dependencies.",
         "de": "Hinzugefügt temperatur_2m, cloud_cover, wind_speed_10m, sunshine_duration zu stündlicher Prognose.\nfeat: Lassen Sie Breite und Länge leer, um Systemkoordinaten zu verwenden.\nURL-Debug-Ausgabe für API-Anrufe hinzugefügt.\nAktualisieren von dev Abhängigkeiten.",

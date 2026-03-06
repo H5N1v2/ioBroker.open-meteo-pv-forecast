@@ -16,7 +16,7 @@ PV Forecast Data
 
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 0.3.0-alpha.0 (2026-03-06)
 * (H5N1v2) Added total peak of all locations
 * (H5N1v2) Added a checkbox for generating a total sum in the settings.
 * (H5N1v2) fix: language used for stateIds and names
