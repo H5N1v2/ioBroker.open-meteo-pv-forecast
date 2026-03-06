@@ -35,6 +35,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		this.config.forecastDays = this.config.forecastDays || 7;
 		this.config.updateInterval = this.config.updateInterval || 60;
 
+		await this.cleanupStaleObjects();
 		await this.createStatesForLocations();
 		await this.updateAllLocations();
 
@@ -42,6 +43,35 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		this.updateInterval = setInterval(() => {
 			void this.updateAllLocations();
 		}, intervalMs);
+	}
+
+	private async cleanupStaleObjects(): Promise<void> {
+		// 1. sum_peak_locations löschen falls locationsTotal deaktiviert oder weniger als 2 Locations
+		if (!this.config.locationsTotal || this.config.locations.length <= 1) {
+			const sumObj = await this.getObjectAsync('sum_peak_locations');
+			if (sumObj) {
+				await this.delObjectAsync('sum_peak_locations', { recursive: true });
+				this.log.info(
+					'Deleted sum_peak_locations channel (locationsTotal disabled or insufficient locations).',
+				);
+			}
+		}
+
+		// 2. Verwaiste Location-Channels löschen (Standort wurde aus den Einstellungen entfernt)
+		const configuredNames = new Set(this.config.locations.map(l => this.sanitizeLocationName(l.name)));
+		const allObjects = await this.getAdapterObjectsAsync();
+		for (const fullId of Object.keys(allObjects)) {
+			const localId = fullId.replace(`${this.namespace}.`, '');
+			if (
+				!localId.includes('.') &&
+				allObjects[fullId].type === 'channel' &&
+				localId !== 'sum_peak_locations' &&
+				!configuredNames.has(localId)
+			) {
+				await this.delObjectAsync(localId, { recursive: true });
+				this.log.info(`Deleted stale location channel: ${localId}`);
+			}
+		}
 	}
 
 	private async createStatesForLocations(): Promise<void> {
@@ -56,27 +86,85 @@ class OpenMeteoPvForecast extends utils.Adapter {
 
 			await this.setObjectNotExistsAsync(`${locationName}.pv-forecast`, {
 				type: 'channel',
-				common: { name: 'PV Forecast' },
+				common: {
+					name: {
+						en: 'PV Forecast',
+						de: 'PV Prognose',
+						ru: 'Прогноз PV',
+						pt: 'Previsão PV',
+						nl: 'PV Voorspelling',
+						fr: 'Prévision PV',
+						it: 'Previsione PV',
+						es: 'Pronóstico PV',
+						pl: 'Prognoza PV',
+						uk: 'Прогноз PV',
+						'zh-cn': '光伏预测',
+					},
+				},
 				native: {},
 			});
 
 			for (let hour = 0; hour < this.config.forecastHours; hour++) {
 				await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}`, {
 					type: 'channel',
-					common: { name: `Hour ${hour}` },
+					common: {
+						name: {
+							en: `Hour ${hour}`,
+							de: `Stunde ${hour}`,
+							ru: `Час ${hour}`,
+							pt: `Hora ${hour}`,
+							nl: `Uur ${hour}`,
+							fr: `Heure ${hour}`,
+							it: `Ora ${hour}`,
+							es: `Hora ${hour}`,
+							pl: `Godzina ${hour}`,
+							uk: `Година ${hour}`,
+							'zh-cn': `小时 ${hour}`,
+						},
+					},
 					native: {},
 				});
 
 				await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}.time`, {
 					type: 'state',
-					common: { name: 'Timestamp', type: 'string', role: 'date', read: true, write: false },
+					common: {
+						name: {
+							en: 'Timestamp',
+							de: 'Zeitstempel',
+							ru: 'Метка времени',
+							pt: 'Carimbo de data/hora',
+							nl: 'Tijdstempel',
+							fr: 'Horodatage',
+							it: 'Timestamp',
+							es: 'Marca de tiempo',
+							pl: 'Znacznik czasu',
+							uk: 'Позначка часу',
+							'zh-cn': '时间戳',
+						},
+						type: 'string',
+						role: 'date',
+						read: true,
+						write: false,
+					},
 					native: {},
 				});
 
 				await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}.global_tilted_irradiance`, {
 					type: 'state',
 					common: {
-						name: { en: 'Global Tilted Irradiance', de: 'Globalstrahlung auf geneigter Fläche' },
+						name: {
+							en: 'Global Tilted Irradiance',
+							de: 'Globale Strahlung auf geneigter Fläche',
+							ru: 'Глобальная наклонная освещенность',
+							pt: 'Irradiância Global Inclinada',
+							nl: 'Globale gekantelde instraling',
+							fr: 'Irradiance globale inclinée',
+							it: 'Irradianza inclinata globale',
+							es: 'Irradiancia global inclinada',
+							pl: 'Globalne pochylone natężenie promieniowania',
+							uk: 'Глобальне нахилене випромінювання',
+							'zh-cn': '全球倾斜辐照度',
+						},
 						type: 'number',
 						role: 'value.power',
 						unit: 'Wh',
@@ -88,7 +176,19 @@ class OpenMeteoPvForecast extends utils.Adapter {
 				await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}.temperature_2m`, {
 					type: 'state',
 					common: {
-						name: { en: 'Temperature 2m', de: 'Temperatur 2m' },
+						name: {
+							en: 'Temperature 2m',
+							de: 'Temperatur 2 m',
+							ru: 'Температура 2 м',
+							pt: 'Temperatura 2m',
+							nl: 'Temperatuur 2m',
+							fr: 'Température 2m',
+							it: 'Temperatura 2m',
+							es: 'Temperatura 2m',
+							pl: 'Temperatura 2m',
+							uk: 'Температура 2 м',
+							'zh-cn': '温度 2 米',
+						},
 						type: 'number',
 						role: 'value.temperature',
 						unit: '°C',
@@ -100,7 +200,19 @@ class OpenMeteoPvForecast extends utils.Adapter {
 				await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}.cloud_cover`, {
 					type: 'state',
 					common: {
-						name: { en: 'Cloud Cover', de: 'Bewölkung' },
+						name: {
+							en: 'Cloud Cover',
+							de: 'Wolkenbedeckung',
+							ru: 'Облачность',
+							pt: 'Cobertura de nuvens',
+							nl: 'Bewolking',
+							fr: 'Couverture nuageuse',
+							it: 'Copertura nuvolosa',
+							es: 'Cobertura de nubes',
+							pl: 'Zachmurzenie',
+							uk: 'Хмарний покрив',
+							'zh-cn': '云层覆盖',
+						},
 						type: 'number',
 						role: 'value.percent',
 						unit: '%',
@@ -112,7 +224,19 @@ class OpenMeteoPvForecast extends utils.Adapter {
 				await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}.wind_speed_10m`, {
 					type: 'state',
 					common: {
-						name: { en: 'Wind Speed 10m', de: 'Windgeschwindigkeit 10m' },
+						name: {
+							en: 'Wind Speed 10m',
+							de: 'Windgeschwindigkeit 10 m',
+							ru: 'Скорость ветра 10 м',
+							pt: 'Velocidade do vento 10m',
+							nl: 'Windsnelheid 10 m',
+							fr: 'Vitesse du vent 10 m',
+							it: 'Velocità del vento 10 m',
+							es: 'Velocidad del viento 10m',
+							pl: 'Prędkość wiatru 10m',
+							uk: 'Швидкість вітру 10 м',
+							'zh-cn': '风速 10 米',
+						},
 						type: 'number',
 						role: 'value.speed',
 						unit: 'km/h',
@@ -124,7 +248,19 @@ class OpenMeteoPvForecast extends utils.Adapter {
 				await this.setObjectNotExistsAsync(`${locationName}.pv-forecast.hour${hour}.sunshine_duration`, {
 					type: 'state',
 					common: {
-						name: { en: 'Sunshine Duration', de: 'Sonnenscheindauer' },
+						name: {
+							en: 'Sunshine Duration',
+							de: 'Sonnenscheindauer',
+							ru: 'Продолжительность солнечного сияния',
+							pt: 'Duração da luz solar',
+							nl: 'Zonneschijnduur',
+							fr: "Durée d'ensoleillement",
+							it: 'Durata del sole',
+							es: 'Duración de la luz solar',
+							pl: 'Czas trwania nasłonecznienia',
+							uk: 'Тривалість сонячного світла',
+							'zh-cn': '日照时长',
+						},
 						type: 'number',
 						role: 'value.duration',
 						unit: 'min',
@@ -137,27 +273,154 @@ class OpenMeteoPvForecast extends utils.Adapter {
 
 			await this.setObjectNotExistsAsync(`${locationName}.daily-forecast`, {
 				type: 'channel',
-				common: { name: 'Daily Forecast' },
+				common: {
+					name: {
+						en: 'Daily Forecast',
+						de: 'Tägliche Prognose',
+						ru: 'Ежедневный прогноз',
+						pt: 'Previsão diária',
+						nl: 'Dagelijkse voorspelling',
+						fr: 'Prévision quotidienne',
+						it: 'Previsione giornaliera',
+						es: 'Pronóstico diario',
+						pl: 'Prognoza dzienna',
+						uk: 'Щоденний прогноз',
+						'zh-cn': '每日预测',
+					},
+				},
 				native: {},
 			});
 
 			for (let day = 0; day < this.config.forecastDays; day++) {
 				await this.setObjectNotExistsAsync(`${locationName}.daily-forecast.day${day}`, {
 					type: 'channel',
-					common: { name: `Day ${day}` },
+					common: {
+						name: {
+							en: `Day ${day}`,
+							de: `Tag ${day}`,
+							ru: `День ${day}`,
+							pt: `Dia ${day}`,
+							nl: `Dag ${day}`,
+							fr: `Jour ${day}`,
+							it: `Giorno ${day}`,
+							es: `Día ${day}`,
+							pl: `Dzień ${day}`,
+							uk: `День ${day}`,
+							'zh-cn': `天 ${day}`,
+						},
+					},
 					native: {},
 				});
 
 				await this.setObjectNotExistsAsync(`${locationName}.daily-forecast.day${day}.Date`, {
 					type: 'state',
-					common: { name: 'Date', type: 'string', role: 'date', read: true, write: false },
+					common: {
+						name: {
+							en: 'Date',
+							de: 'Datum',
+							ru: 'Дата',
+							pt: 'Data',
+							nl: 'Datum',
+							fr: 'Date',
+							it: 'Data',
+							es: 'Fecha',
+							pl: 'Data',
+							uk: 'Дата',
+							'zh-cn': '日期',
+						},
+						type: 'string',
+						role: 'date',
+						read: true,
+						write: false,
+					},
 					native: {},
 				});
 
 				await this.setObjectNotExistsAsync(`${locationName}.daily-forecast.day${day}.Peak_day`, {
 					type: 'state',
 					common: {
-						name: { en: 'Daily Peak Energy', de: 'Täglicher Spitzenertrag' },
+						name: {
+							en: 'Daily Peak Energy',
+							de: 'Tägliche Spitzenenergie',
+							ru: 'Ежедневный пик энергии',
+							pt: 'Energia de pico diária',
+							nl: 'Dagelijkse piekenergie',
+							fr: 'Énergie maximale quotidienne',
+							it: 'Energia di picco giornaliera',
+							es: 'Energía máxima diaria',
+							pl: 'Dzienny szczyt energetyczny',
+							uk: 'Добовий піковий енергоспоживання',
+							'zh-cn': '每日峰值能量',
+						},
+						type: 'number',
+						role: 'value.power.consumption',
+						unit: 'Wh',
+						read: true,
+						write: false,
+					},
+					native: {},
+				});
+			}
+		}
+
+		if (this.config.locationsTotal && this.config.locations.length > 1) {
+			await this.setObjectNotExistsAsync('sum_peak_locations', {
+				type: 'channel',
+				common: {
+					name: {
+						en: 'Sum Peak from Locations',
+						de: 'Summe der Spitzenwerte von Standorten',
+						ru: 'Суммарный пик из разных мест',
+						pt: 'Soma dos Picos a partir de Localizações',
+						nl: 'Som van pieken vanaf locaties',
+						fr: 'Somme des sommets depuis les emplacements',
+						it: 'Somma Picco da Posizioni',
+						es: 'Sum Peak desde Ubicaciones',
+						pl: 'Sum Peak z lokalizacji',
+						uk: 'Сума Пік з місць розташування',
+						'zh-cn': '从位置上看，Sum Peak',
+					},
+				},
+				native: {},
+			});
+
+			for (let day = 0; day < this.config.forecastDays; day++) {
+				await this.setObjectNotExistsAsync(`sum_peak_locations.day${day}`, {
+					type: 'channel',
+					common: {
+						name: {
+							en: `Day ${day}`,
+							de: `Tag ${day}`,
+							ru: `День ${day}`,
+							pt: `Dia ${day}`,
+							nl: `Dag ${day}`,
+							fr: `Jour ${day}`,
+							it: `Giorno ${day}`,
+							es: `Día ${day}`,
+							pl: `Dzień ${day}`,
+							uk: `День ${day}`,
+							'zh-cn': `天 ${day}`,
+						},
+					},
+					native: {},
+				});
+
+				await this.setObjectNotExistsAsync(`sum_peak_locations.day${day}.sum_locations`, {
+					type: 'state',
+					common: {
+						name: {
+							en: 'Sum of all locations',
+							de: 'Summe aller Standorte',
+							ru: 'Сумма всех мест',
+							pt: 'Soma de todas as localizações',
+							nl: 'Som van alle locaties',
+							fr: 'Somme de tous les emplacements',
+							it: 'Somma di tutte le posizioni',
+							es: 'Suma de todas las ubicaciones',
+							pl: 'Suma wszystkich lokalizacji',
+							uk: 'Сума всіх місць розташування',
+							'zh-cn': '所有位置的总和',
+						},
 						type: 'number',
 						role: 'value.power.consumption',
 						unit: 'Wh',
@@ -177,6 +440,25 @@ class OpenMeteoPvForecast extends utils.Adapter {
 			} catch (error) {
 				this.log.error(`Error updating location ${location.name}: ${(error as Error).message}`);
 			}
+		}
+		await this.updateSumLocations();
+	}
+
+	private async updateSumLocations(): Promise<void> {
+		if (!this.config.locationsTotal || this.config.locations.length <= 1) {
+			return;
+		}
+
+		for (let day = 0; day < this.config.forecastDays; day++) {
+			let sum = 0;
+			for (const location of this.config.locations) {
+				const locationName = this.sanitizeLocationName(location.name);
+				const state = await this.getStateAsync(`${locationName}.daily-forecast.day${day}.Peak_day`);
+				if (state && state.val !== null && state.val !== undefined) {
+					sum += state.val as number;
+				}
+			}
+			await this.setState(`sum_peak_locations.day${day}.sum_locations`, { val: sum, ack: true });
 		}
 	}
 
