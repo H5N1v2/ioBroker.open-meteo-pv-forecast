@@ -18,6 +18,7 @@ declare global {
 			forecastHours: number;
 			forecastDays: number;
 			updateInterval: number;
+			locationsTotal: boolean;
 		}
 	}
 }
