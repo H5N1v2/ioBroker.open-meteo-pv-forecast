@@ -190,6 +190,14 @@
 				"fontSize": "smaller",
 				"fontStyle": "italic"
 			}
-		}
+		},
+		"locationsTotal": {
+			"type": "checkbox",
+			"label": "locationsTotal_label",
+			"default": false,
+			"help": "locationsTotal_help",
+			"hidden": "!data.locations || data.locations.length < 2",
+			"xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3
+        }
 	}
 }
