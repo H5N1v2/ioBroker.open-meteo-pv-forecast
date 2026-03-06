@@ -16,6 +16,14 @@ PV Forecast Data
 
 
 ## Changelog
+### **WORK IN PROGRESS**
+* (H5N1v2) Added total peak of all locations
+* (H5N1v2) Added a checkbox for generating a total sum in the settings.
+* (H5N1v2) fix: language used for stateIds and names
+* (H5N1v2) fix: creation of intermediate objects missing
+* (H5N1v2) chore: update dependencies to latest versions
+* (H5N1v2) added axios in dependencies
+
 ### 0.2.0-alpha.0 (2026-02-19)
 * (H5N1v2) Added temperature_2m, cloud_cover, wind_speed_10m, sunshine_duration to hourly forecast.
 * (H5N1v2) feat: Leave latitude and longitude empty to use system coordinates.
