@@ -1,24 +1,23 @@
+# Dependabot prüft nun jeden 5. des Monats
+# 02:06 UTC entspricht 03:06 Uhr deutscher Zeit (Winterzeit/CET)
 version: 2
 updates:
-  - package-ecosystem: npm
-    directory: "/"
-    schedule:
-      interval: monthly
-      day: 10
-      time: "00:05"
-      timezone: Europe/Berlin
-    open-pull-requests-limit: 5
-    assignees:
-      - H5N1v2
-    versioning-strategy: increase
 
-  - package-ecosystem: github-actions
+  - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: monthly
-      day: 10
-      time: "00:05"
-      timezone: Europe/Berlin
-    open-pull-requests-limit: 5
+      interval: "cron"
+      cronjob: "6 2 5 * *"
+    open-pull-requests-limit: 15
     assignees:
-      - H5N1v2
+      - "H5N1v2"
+    versioning-strategy: "increase"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "cron"
+      cronjob: "6 2 5 * *"
+    open-pull-requests-limit: 15
+    assignees:
+      - "H5N1v2"
