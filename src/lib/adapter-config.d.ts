@@ -19,6 +19,10 @@ declare global {
 			forecastDays: number;
 			updateInterval: number;
 			locationsTotal: boolean;
+			locationsTotal_hourly: boolean;
+			hourlyUpdate: number;
+			minutes_15: boolean;
+			locationsTotal_minutely: boolean;
 		}
 	}
 }
