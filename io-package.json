@@ -2,73 +2,7 @@
   "common": {
     "name": "open-meteo-pv-forecast",
     "version": "0.3.0-alpha.0",
-    "news": {
-      "0.3.0-alpha.0": {
-        "en": "Added total peak of all locations\nAdded a checkbox for generating a total sum in the settings.\nfix: language used for stateIds and names\nfix: creation of intermediate objects missing\nchore: update dependencies to latest versions\nadded axios in dependencies",
-        "de": "Gesamtspitze aller Standorte hinzugefügt\nEs wurde ein Kontrollkästchen zur Generierung einer Gesamtsumme in den Einstellungen hinzugefügt.\nfix: Sprache für Staat Ids und Namen\nfix: erstellung von zwischenobjekten fehlt\nchore: die abhängigkeiten der neuesten versionen aktualisieren\nzusätzlich axios in abhängigkeiten",
-        "ru": "Добавлен общий пик всех локаций\nДобавлен чекбокс для генерации общей суммы в настройках.\nязык, используемый для государства Ids и имена\nфиксация: создание промежуточных объектов, отсутствующих\nchore: зависимость обновлений от последних версий\nдобавлены аксиосы в зависимости",
-        "pt": "Adicionado pico total de todos os locais\nAdicionado uma caixa de seleção para gerar uma soma total nas configurações.\ncorreção: idioma usado para o estado IDs e nomes\ncorreção: criação de objetos intermediários faltando\ntarefa: atualizar dependências para versões mais recentes\nadicionado axios em dependências",
-        "nl": "Toegevoegd totale piek van alle locaties\nEen selectievakje toegevoegd voor het genereren van een totale som in de instellingen.\nfix: taal gebruikt voor status Identiteiten en namen\nfix: aanmaken van tussenliggende objecten ontbreekt\nklus: update afhankelijkheden van de nieuwste versies\ntoegevoegde axio's in afhankelijkheden",
-        "fr": "Ajout du pic total de tous les emplacements\nAjout d'une case à cocher pour générer une somme totale dans les paramètres.\ncorrectif: langue utilisée pour l'état Id. et noms\ncorrection : création d'objets intermédiaires manquants\ncore: mettre à jour les dépendances aux dernières versions\naxios ajoutés dans les dépendances",
-        "it": "Aggiunto picco totale di tutte le posizioni\nAggiunto una casella di controllo per generare una somma totale nelle impostazioni.\ncorrezione: lingua utilizzata per lo stato Ids e nomi\nfix: creazione di oggetti intermedi mancanti\ncore: aggiornare le dipendenze alle ultime versioni\naggiunto assio in dipendenze",
-        "es": "Aumento total del pico de todas las ubicaciones\nSe agregó una casilla de verificación para generar una suma total en la configuración.\nfijación: idioma utilizado para el estado Ids and names\nfijación: creación de objetos intermedios desaparecidos\ncore: actualizar las dependencias a las últimas versiones\naxios añadidos en dependencias",
-        "pl": "Dodano łączny szczyt wszystkich miejsc\nDodano pole do generowania sumy całkowitej w ustawieniach.\nfix: język używany dla stanu Identyfikatory i nazwy\nfix: tworzenie brakujących obiektów pośrednich\ncore: aktualizacja zależności do najnowszych wersji\ndodano aksjos w zależności",
-        "uk": "Додано загальну вершину всіх населених пунктів\nДодано прапорець для створення загальної суми в налаштуваннях.\nвиправити: мова використовується для держави Ids і імена\nвиправити: створення проміжних об'єктів відсутні\nchore: оновлення залежності до останніх версій\nдодано аксіос в залежності",
-        "zh-cn": "所有地点的总高峰增加\n在设置中添加了生成总和的复选框 .\n修补:用于状态的语言 编号和名称\n修补: 中间对象缺失的创建\n字符串:更新对最新版本的依赖\n在依赖中添加轴"
-      },
-      "0.2.0-alpha.0": {
-        "en": "Added temperature_2m, cloud_cover, wind_speed_10m, sunshine_duration to hourly forecast.\nfeat: Leave latitude and longitude empty to use system coordinates.\nAdded URL debug output for API calls.\nUpdate dev dependencies.",
-        "de": "Hinzugefügt temperatur_2m, cloud_cover, wind_speed_10m, sunshine_duration zu stündlicher Prognose.\nfeat: Lassen Sie Breite und Länge leer, um Systemkoordinaten zu verwenden.\nURL-Debug-Ausgabe für API-Anrufe hinzugefügt.\nAktualisieren von dev Abhängigkeiten.",
-        "ru": "Добавлена температура_2 м, облачность_покрытие, ветер_скорость_10 м, солнечный свет_продолжительность к почасовому прогнозу.\nоставьте широту и долготу пустыми для использования системных координат.\nДобавлен вывод отладки URL для вызовов API.\nОбновление зависимостей dev.",
-        "pt": "Adicionado temperatura_2m, nuvem_cover, vento_velocidade_10m, sol_duração à previsão horária.\nfeat: Deixe a latitude e longitude vazias para usar as coordenadas do sistema.\nSaída de depuração de URL adicionada para chamadas de API.\nAtualizar dependências dev.",
-        "nl": "Toegevoegd temperatuur_2m, cloud_cover, wind_speed_10m, sunshine_duration aan uurvoorspelling.\nfeat: Laat breedte- en lengtegraad leeg om systeemcoördinaten te gebruiken.\nToegevoegd URL debug uitvoer voor API oproepen.\nBijwerken van afhankelijkheden.",
-        "fr": "Ajout de temperature_2m, cloud_cover, wind_speed_10m, sunny_duration à la prévision horaire.\nexploit : laisser la latitude et la longitude vides pour utiliser les coordonnées du système.\nAjout de la sortie URL debug pour les appels API.\nMettre à jour les dépendances.",
-        "it": "Aggiunta temperatura_2m, cloud_cover, wind_speed_10m, sun_duration a previsioni orarie.\nfeat: Lasciare latitudine e longitudine vuota per usare le coordinate di sistema.\nAggiunto URL debug output per le chiamate API.\nAggiornare le dipendenze dev.",
-        "es": "Temperatura agregada_2m, cloud_cover, wind_speed_10m, sun_duration a hora de previsión.\nhaz: Dejar la latitud y la longitud vacías para usar las coordenadas del sistema.\nAñadido URL depurar salida para llamadas API.\nActualizar las dependencias dev.",
-        "pl": "Dodano temperaturę _ 2m, chmurę _ cover, wiatr _ speed _ 10m, czas trwania słońca do godzinowej prognozy.\nfeat: pozostawić szerokość geograficzną i długość geograficzną pustą, aby użyć współrzędnych systemowych.\nDodano wyjście debugowania URL dla połączeń API.\nAktualizuj zależności dev.",
-        "uk": "Додано температуру_2m, Cloud_cover, Wind_speed_10m, sunshine_durations to Hourly прогнозування.\nfeat: Залишити широтість і довготи порожній для використання системних координат.\nДодано вихід URL-адреси для викликів API.\nОновити залежності dev.",
-        "zh-cn": "加入温度_2m,云_覆盖,风_速度_10m,阳光_持续时间为小时预报.\n功绩:留经纬度和经度空用系统坐标.\n为API调用添加了 URL 调试输出.\n更新非依赖性 ."
-      },
-      "0.1.1-alpha.0": {
-        "en": "(H5N1v2) Fix: Daily peak was incorrect, it only recorded the period from the current hour until the end of the day.",
-        "de": "(H5N1v2) Fix: Der Tagesgipfel war falsch, er erfasste nur die Zeit von der aktuellen Stunde bis zum Ende des Tages.",
-        "ru": "(H5N1v2) Исправить: Ежедневный пик был неверным, он фиксировал только период с текущего часа до конца дня.",
-        "pt": "(H5N1v2) Correcção: O pico diário estava incorreto, registrando apenas o período da hora atual até o final do dia.",
-        "nl": "(H5N1v2) Fix: De dagelijkse piek was onjuist, het heeft alleen de periode van het huidige uur tot het einde van de dag geregistreerd.",
-        "fr": "(H5N1v2) Correction: Le pic quotidien était incorrect, il n'enregistrait que la période de l'heure actuelle jusqu'à la fin de la journée.",
-        "it": "(H5N1v2) Correzione: Il picco giornaliero era errato, ha registrato solo il periodo dall'ora corrente fino alla fine della giornata.",
-        "es": "(H5N1v2) Fijar: El pico diario era incorrecto, sólo registró el período desde la hora actual hasta el final del día.",
-        "pl": "(H5N1v2) Dzienny szczyt był nieprawidłowy, zarejestrowano tylko okres od bieżącej godziny do końca dnia.",
-        "uk": "(H5N1v2) Фіксація: Щоденний пік був некоректним, він тільки записав період з поточного години до закінчення дня.",
-        "zh-cn": "(H5N1v2) 修补: 每日高峰不正确,只记录了从现时到末日的期间."
-      },
-      "0.1.0-alpha.0": {
-        "en": "feat: add forecastDays for Sum\nModified the fetching logic to retrieve enough hourly data to cover both hourly and daily forecasts.\nImplemented a new method to calculate and update daily forecast data based on hourly data.\nAdjusted the time format for hourly forecast states to display only HH:mm.",
-        "de": "feat: Prognose hinzufügen Tage für Sum\nModifizierte die fetching-Logik, um genügend stündliche Daten abzurufen, um sowohl stündliche als auch tägliche Prognosen abzudecken.\nErgänzte eine neue Methode zur Berechnung und Aktualisierung von Tagesprognosendaten basierend auf Stundendaten.\nDas Zeitformat für Stundenprognosen wurde angepasst, um nur HH:mm anzuzeigen.",
-        "ru": "исполнитель: Add forecast Дни для Sum\nИзменили логику извлечения, чтобы получить достаточное количество почасовых данных для покрытия как почасовых, так и ежедневных прогнозов.\nВнедрен новый метод расчета и обновления ежедневных прогнозных данных на основе почасовых данных.\nСкорректированный формат времени для почасовых прогнозных состояний для отображения только HH:mm.",
-        "pt": "façanha: adicionar previsão Dias para a soma\nModificou a lógica de busca para recuperar dados horários suficientes para cobrir previsões horárias e diárias.\nImplementou um novo método para calcular e atualizar dados de previsão diária com base em dados horários.\nAjustei o formato de hora para os estados de previsão horária para exibir apenas HH:mm.",
-        "nl": "feat: voorspelling toevoegen Dagen voor de som\nModified de ophalende logica om voldoende uurgegevens op te halen voor zowel uur- als dagvoorspellingen.\nImplementeerde een nieuwe methode om dagelijkse prognosegegevens te berekenen en bij te werken op basis van uurgegevens.\nHet tijdformaat voor de uurvoorspelling staat aangepast om alleen HH:mm weer te geven.",
-        "fr": "exploit : ajouter des prévisions Jours pour la somme\nModification de la logique de récupération pour récupérer suffisamment de données horaires pour couvrir les prévisions horaires et quotidiennes.\nMise en oeuvre d'une nouvelle méthode de calcul et de mise à jour des prévisions quotidiennes à partir de données horaires.\nAjusté le format de temps pour les états de prévision horaires pour afficher uniquement HH:mm.",
-        "it": "feat: aggiungi previsioni Giorni per Sum\nModificata la logica di acquisizione per recuperare abbastanza dati orali per coprire le previsioni orarie e quotidiane.\nHo implementato un nuovo metodo per calcolare e aggiornare i dati di previsione giornalieri in base ai dati orari.\nRegolato il formato di tempo per gli stati di previsione oraria per visualizzare solo HH:mm.",
-        "es": "hazaña: añadir pronóstico Días para Sum\nModificó la lógica de búsqueda para recuperar suficientes datos por hora para cubrir pronósticos tanto por hora como por día.\nImplementó un nuevo método para calcular y actualizar los datos de pronóstico diario basados en datos por hora.\nAjuste el formato de tiempo para los estados de pronóstico por hora para mostrar sólo HH:mm.",
-        "pl": "feat: dodać prognozę Dni dla Sum\nZmodyfikowano logikę pobierania, aby uzyskać wystarczającą ilość danych godzinowych, aby pokryć zarówno prognozy godzinowe, jak i dzienne.\nWdrożenie nowej metody obliczania i aktualizacji dziennych danych prognozowanych na podstawie danych godzinowych.\nDostosowana format czasu dla stanów prognozy godzinowej, aby wyświetlić tylko HH: mm.",
-        "uk": "feat: додати прогноз Днів на суму\nЗмінено логіку fetching для отримання достатньо часових даних, щоб покрити одночасно та добові прогнози.\nРеалізовано новий метод обчислення та оновлення добових даних прогнозів на основі даних годин.\nРегульований формат часу на часові прогнозні стани для відображення тільки HH:mm.",
-        "zh-cn": "功绩: 添加预测 总计天数\n修改了采集逻辑,以获取足够的小时数据,涵盖小时和每日预测.\n采用新方法,根据小时数据计算和更新每日预报数据.\n调整了小时预测状态的时间格式,只显示 HH:mm."
-      },
-      "0.0.1-alpha.0": {
-        "en": "initial release",
-        "de": "erstausstrahlung",
-        "ru": "первоначальное освобождение",
-        "pt": "libertação inicial",
-        "nl": "eerste release",
-        "fr": "libération initiale",
-        "it": "rilascio iniziale",
-        "es": "liberación inicial",
-        "pl": "początkowe zwolnienie",
-        "uk": "початковий реліз",
-        "zh-cn": "初步释放"
-      }
-    },
+    "news": {},
     "titleLang": {
       "en": "Open Meteo PV Forecast",
       "de": "Open Meteo PV-Vorhersage",
