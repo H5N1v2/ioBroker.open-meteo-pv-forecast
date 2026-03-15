@@ -143,7 +143,8 @@
     "latitude": "",
     "longitude": "",
     "forecastDays": 7,
-    "locationsTotal": false
+    "locationsTotal": false,
+    "locationsTotal_hourly": false
   },
   "objects": [],
   "instanceObjects": []
