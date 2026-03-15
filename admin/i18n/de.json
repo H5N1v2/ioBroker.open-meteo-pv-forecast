@@ -4,7 +4,7 @@
 	"forecastHours": "Vorhersagestunden",
 	"forecastDays": "Vorhersagetage",
 	"updateInterval": "Aktualisierungsintervall (Minuten)",
-	"updateInterval_help": "Wie oft sollen die Daten abgerufen werden (in Minuten)",
+	"updateInterval_help": "Wie oft sollen die Daten abgerufen werden (in Minuten)? Achtung!!! Wenn diese Option deaktiviert ist, müssen Sie selbst einen Cronjob für die Instanz erstellen.",
 	"locations_header": "Standorte",
 	"locations": "PV-Standorte",
 	"name": "Name",

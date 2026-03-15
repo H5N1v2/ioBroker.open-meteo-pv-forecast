@@ -4,7 +4,7 @@
 	"forecastHours": "Horas de Pronóstico",
 	"forecastDays": "Días de Pronóstico",
 	"updateInterval": "Intervalo de Actualización (minutos)",
-	"updateInterval_help": "Con qué frecuencia obtener datos (en minutos)",
+	"updateInterval_help": "Con qué frecuencia se deben obtener los datos (en minutos), ¡Atención! Si está deshabilitado, deberá crear usted mismo una tarea programada (cron job) para la instancia.",
 	"locations_header": "Ubicaciones",
 	"locations": "Ubicaciones FV",
 	"name": "Nombre",

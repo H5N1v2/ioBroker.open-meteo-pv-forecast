@@ -4,7 +4,7 @@
 	"forecastHours": "Voorspellingsuren",
 	"forecastDays": "Voorspellingsdagen",
 	"updateInterval": "Update-interval (minuten)",
-	"updateInterval_help": "Hoe vaak gegevens ophalen (in minuten)",
+	"updateInterval_help": "Hoe vaak moeten gegevens worden opgehaald (in minuten)? Let op!!! Als deze optie is uitgeschakeld, moet u zelf een cronjob voor de instantie aanmaken.",
 	"locations_header": "Locaties",
 	"locations": "PV-locaties",
 	"name": "Naam",

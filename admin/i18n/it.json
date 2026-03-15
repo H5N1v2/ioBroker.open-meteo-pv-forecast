@@ -4,7 +4,7 @@
 	"forecastHours": "Ore di Previsione",
 	"forecastDays": "Giorni di Previsione",
 	"updateInterval": "Intervallo di Aggiornamento (minuti)",
-	"updateInterval_help": "Frequenza di recupero dati (in minuti)",
+	"updateInterval_help": "Frequenza di recupero dei dati (in minuti), Attenzione!!! Se disabilitato, dovrai creare manualmente un'attività pianificata (cron job) per l'istanza.",
 	"locations_header": "Posizioni",
 	"locations": "Posizioni FV",
 	"name": "Nome",

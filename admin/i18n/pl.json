@@ -4,7 +4,7 @@
 	"forecastHours": "Godziny Prognozy",
 	"forecastDays": "Dni Prognozy",
 	"updateInterval": "Interwał Aktualizacji (minuty)",
-	"updateInterval_help": "Jak często pobierać dane (w minutach)",
+	"updateInterval_help": "Jak często pobierać dane (w minutach)? Uwaga!!! Jeśli wyłączone, musisz samodzielnie utworzyć zadanie cron dla instancji.",
 	"locations_header": "Lokalizacje",
 	"locations": "Lokalizacje PV",
 	"name": "Nazwa",

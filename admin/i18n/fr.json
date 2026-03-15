@@ -4,7 +4,7 @@
 	"forecastHours": "Heures de Prévision",
 	"forecastDays": "Jours de Prévision",
 	"updateInterval": "Intervalle de Mise à Jour (minutes)",
-	"updateInterval_help": "Fréquence de récupération des données (en minutes)",
+	"updateInterval_help": "Fréquence de récupération des données (en minutes), Attention ! Si cette option est désactivée, vous devrez créer vous-même une tâche cron pour l’instance.",
 	"locations_header": "Emplacements",
 	"locations": "Emplacements PV",
 	"name": "Nom",

@@ -4,7 +4,7 @@
 	"forecastHours": "Forecast Hours",
 	"forecastDays": "Forecast Days",
 	"updateInterval": "Update Interval (minutes)",
-	"updateInterval_help": "How often to fetch data (in minutes)",
+	"updateInterval_help": "How often to fetch data (in minutes), Attention!!! If disabled, you will need to create a cron job for the instance yourself",
 	"locations_header": "Locations",
 	"locations": "PV Locations",
 	"name": "Name",

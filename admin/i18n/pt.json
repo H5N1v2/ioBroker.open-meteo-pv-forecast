@@ -4,7 +4,7 @@
 	"forecastHours": "Horas de Previsão",
 	"forecastDays": "Dias de Previsão",
 	"updateInterval": "Intervalo de Atualização (minutos)",
-	"updateInterval_help": "Frequência de busca de dados (em minutos)",
+	"updateInterval_help": "Frequência de busca de dados (em minutos). Atenção!!! Se desativado, você precisará criar uma tarefa cron para a instância manualmente.",
 	"locations_header": "Localizações",
 	"locations": "Localizações FV",
 	"name": "Nome",

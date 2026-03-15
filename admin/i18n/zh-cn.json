@@ -4,7 +4,7 @@
 	"forecastHours": "预测小时",
 	"forecastDays": "预测天数",
 	"updateInterval": "更新间隔（分钟）",
-	"updateInterval_help": "获取数据的频率（以分钟为单位）",
+	"updateInterval_help": "数据获取频率（以分钟为单位），注意！！！如果禁用此选项，您需要自行为实例创建定时任务。",
 	"locations_header": "位置",
 	"locations": "PV 位置",
 	"name": "名称",
