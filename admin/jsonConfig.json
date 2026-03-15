@@ -2,17 +2,33 @@
 	"i18n": true,
 	"type": "panel",
 	"items": {
-		"_info": {
-			"type": "header",
-			"text": "info_header",
-			"size": 3
-		},
+    "help_logo": {
+            "type": "staticImage",
+            "src": "img/doc.png",
+			"xs": 12, "sm": 12, "md": 12, "lg": 12, "xl": 12,
+			"style": {
+					"width": "800px",
+					"height": "436px",
+					"marginBottom": "20px",
+					"display": "block",
+					"marginLeft": "auto",
+					"marginRight": "auto"
+				}
+        },
+        "_info": {
+            "type": "header",
+            "text": "info_header",
+            "size": 3,
+			"xs": 12, "sm": 12, "md": 12, "lg": 12, "xl": 12
+        },
 		"forecastHours": {
 			"type": "select",
 			"label": "forecastHours",
+			"xs": 12,
 			"sm": 12,
 			"md": 6,
 			"lg": 4,
+			"xl": 4,
 			"options": [
 				{"label": "3", "value": 3},
 				{"label": "6", "value": 6},
@@ -25,9 +41,11 @@
 		"forecastDays": {
 			"type": "select",
 			"label": "forecastDays",
+			"xs": 12,
 			"sm": 12,
 			"md": 6,
 			"lg": 4,
+			"xl": 4,
 			"default": 7,
 			"options": [
 				{"label": "3", "value": 3},
@@ -39,20 +57,159 @@
 		"updateInterval": {
 			"type": "select",
 			"label": "updateInterval",
+			"xs": 12,
 			"sm": 12,
 			"md": 6,
 			"lg": 4,
+			"xl": 4,
 			"default": 15,
 			"options": [
 				{ "value": 15, "label": "interval_15_min" },
 				{ "value": 30, "label": "interval_30_min" },
-				{ "value": 60, "label": "interval_60_min" }
+				{ "value": 60, "label": "interval_60_min" },
+				{ "value": 0, "label": {
+										"en": "Disabled",
+										"de": "Deaktiviert",
+										"ru": "Неполноценный",
+										"pt": "Desabilitado",
+										"nl": "Gehandicapt",
+										"fr": "Désactivé",
+										"it": "Disabile",
+										"es": "Desactivado",
+										"pl": "Wyłączony",
+										"uk": "Інвалід",
+										"zh-cn": "已禁用"
+										} 
+									}
 			],
 			"help": "updateInterval_help"
+		},
+			"_settingsHeader": {
+			"type": "header",
+			"text": {
+					"en": "Data points settings",
+					"de": "Datenpunkteinstellungen",
+					"ru": "Настройки точек данных",
+					"pt": "Configurações de pontos de dados",
+					"nl": "Instellingen voor gegevenspunten",
+					"fr": "Paramètres des points de données",
+					"it": "Impostazioni dei punti dati",
+					"es": "Configuración de puntos de datos",
+					"pl": "Ustawienia punktów danych",
+					"uk": "Налаштування точок даних",
+					"zh-cn": "数据点设置"
+					},
+			"xs": 12,
+			"sm": 12,
+			"md": 6,
+			"lg": 4,
+			"xl": 4,			
+			"size": 3,
+			"newLine": true
+		},
+			"hourlyUpdate": {
+			"type": "select",
+			"label": {
+					"en": "Rolling or Fixed Hours",
+					"de": "Rollierende oder feste Stunden",
+					"ru": "Скользящие или фиксированные часы",
+					"pt": "Horário contínuo ou fixo",
+					"nl": "Rollende of vaste uren",
+					"fr": "Heures mobiles ou fixes",
+					"it": "Orario continuo o fisso",
+					"es": "Horas móviles o fijas",
+					"pl": "Ruchome lub stałe godziny pracy",
+					"uk": "Змінний або фіксований графік роботи",
+					"zh-cn": "Rolling or Fixed Hours"
+					},
+			"xs": 12,
+			"sm": 12,
+			"md": 6,
+			"lg": 4,
+			"xl": 4,
+			"default": 0,
+			"options": [
+				{ "value": 0, "label": {
+										"en": "Rolling Hours",
+										"de": "Rollende Stunden",
+										"ru": "Часы работы в режиме реального времени",
+										"pt": "Horas de funcionamento",
+										"nl": "Rollende uren",
+										"fr": "Heures glissantes",
+										"it": "Orario continuato",
+										"es": "Horas móviles",
+										"pl": "Godziny pracy",
+										"uk": "Годинникова стрілка",
+										"zh-cn": "Rolling Hours"
+										} 
+									},
+				{ "value": 1, "label": {
+										"en": "Fixed Hours",
+										"de": "Feste Stunden",
+										"ru": "Фиксированные часы",
+										"pt": "Horas fixas",
+										"nl": "Vaste uren",
+										"fr": "Heures fixes",
+										"it": "Ore fisse",
+										"es": "Horas fijas",
+										"pl": "Stałe godziny",
+										"uk": "Фіксовані години",
+										"zh-cn": "Fixed Hours"
+										} 
+									}
+			],
+			"help": { "en": "If 'Rolling Hours' is selected, the hourly forecast will always show the next hours starting from the current hour. If 'Fixed Hours' is selected, the hourly forecast will show fixed time intervals (e.g., 00:00-23:00) regardless of the current time.",
+					  "de": "Wenn 'Rollende Stunden' ausgewählt ist, zeigt die stündliche Prognose immer die nächsten Stunden ab der aktuellen Stunde an. Wenn 'Feste Stunden' ausgewählt ist, zeigt die stündliche Prognose feste Zeitintervalle (z.B. 00:00-23:00) unabhängig von der aktuellen Uhrzeit an.",
+					  "ru": "Если выбрано 'Часы работы в режиме реального времени', почасовой прогноз всегда будет показывать следующие часа, начиная с текущего часа. Если выбрано 'Фиксированные часы', почасовой прогноз будет показывать фиксированные интервалы времени (например, 00:00-23:00) независимо от текущего времени.",
+					  "pt": "Se 'Horas contínuas' for selecionado, a previsão horária sempre mostrará as próximas horas a partir da hora atual. Se 'Horas fixas' for selecionado, a previsão horária mostrará intervalos de tempo fixos (por exemplo, 00:00-23:00) independentemente da hora atual.",
+					  "nl": "Als 'Rollende uren' is geselecteerd, toont de uurlijkse voorspelling altijd de volgende uur vanaf het huidige uur. Als 'Vaste uren' is geselecteerd, toont de uurlijkse voorspelling vaste tijdsintervallen (bijv. 00:00-23:00) ongeacht de huidige tijd.",
+					  "fr": "Si 'Heures glissantes' est sélectionné, la prévision horaire affichera toujours les prochaines heures à partir de l'heure actuelle. Si 'Heures fixes' est sélectionné, la prévision horaire affichera des intervalles de temps fixes (par exemple, 00:00-23:00) indépendamment de l'heure actuelle.",
+					  "it": "Se è selezionato 'Ore continue', la previsione oraria mostrerà sempre le prossime ore a partire dall'ora corrente. Se è selezionato 'Ore fisse', la previs ione oraria mostrerà intervalli di tempo fissi (ad esempio, 00:00-23:00) indipendentemente dall'ora corrente.",
+					  "es": "Si se selecciona 'Horas móviles', el pronóstico por hora siempre mostrará las próximas horas a partir de la hora actual. Si se selecciona 'Horas fijas', el pronóstico por hora mostrará intervalos de tiempo fijos (por ejemplo, 00:00-23:00) independientemente de la hora actual.",
+					  "pl": "Jeśli wybrano 'Godziny pracy', prognoza godzinowa zawsze będzie pokazywać następne godziny od bieżącej godziny. Jeśli wybrano 'Stałe godziny', prognoza godzinowa będzie pokazywać stałe przedziały czasowe (np. 00:00-23:00) niezależnie od bieżącego czasu.",
+					  "uk": "Якщо вибрано 'Годинникова стрілка', погодинний прогноз завжди показуватиме наступні години, починаючи з поточного часу. Якщо вибрано 'Фіксовані години', погодинний прогноз показуватиме фиксированные интервалы времени (например, 00:00-23:00) независимо от текущего времени.",
+					  "zh-cn": "如果选择“滚动小时”，每小时的预测将始终显示从当前小时开始的下一个小时。如果选择“固定小时”，每小时的预测将显示固定的时间间隔（例如，00:00-23:00），而不考虑当前时间。"
+					}
+		},
+		"minutes_15": {
+			"type": "checkbox",
+			"label": {
+					"en": "Create 15-minutes Forecast (Max. 24 hours)",
+					"de": "15-Minuten-Prognose erstellen (max. 24 Stunden)",
+					"ru": "Создание 15-минутного прогноза (максимум на 24 часа)",
+					"pt": "Criar uma previsão de 15 minutos (máx. 24 horas)",
+					"nl": "15-minuten voorspelling maken (max. 24 uur)",
+					"fr": "Créer des prévisions à 15 minutes (Max. 24 heures)",
+					"it": "Creare previsioni a 15 minuti (massimo 24 ore)",
+					"es": "Crear previsión de 15 minutos (máx. 24 horas)",
+					"pl": "Utwórz 15-minutową prognozę (maks. 24 godziny)",
+					"uk": "Створити 15-хвилинний прогноз (макс. 24 години)",
+					"zh-cn": "创建15分钟预测（最多24小时）"
+					},
+			"help": {
+					"en": "If enabled, additional states will be created for a 15-minute forecast (up to 24 hours for the current day). Please note that 15-minute data availability depends on the Open-Meteo API and may vary by location or time.",
+					"de": "Wenn aktiviert, werden zusätzliche Zustände für eine 15-Minuten-Vorhersage (bis zu 24 Stunden für den aktuellen Tag) erstellt. Bitte beachten Sie, dass die Verfügbarkeit von 15-Minuten-Daten von der Open-Meteo-API abhängt und je nach Ort oder Zeit variieren kann.",
+					"ru": "Если эта функция включена, будут созданы дополнительные состояния для 15-минутного прогноза (до 24 часов для текущего дня). Обратите внимание, что доступность 15-минутных данных зависит от API Open-Meteo и может меняться в зависимости от местоположения или времени.",
+					"pt": "Se ativado, serão criados estados adicionais para uma previsão de 15 minutos (até 24 horas para o dia atual). Tenha em atenção que a disponibilidade de dados de 15 minutos depende da API Open-Meteo e pode variar consoante o local ou a hora.",
+					"nl": "Indien ingeschakeld, worden extra staten aangemaakt voor een 15-minutenvoorspelling (tot 24 uur voor de huidige dag). Houd er rekening mee dat de beschikbaarheid van 15-minuten gegevens afhankelijk is van de Open-Meteo API en kan variëren per locatie of tijd.",
+					"fr": "Si cette option est activée, des états supplémentaires seront créés pour une prévision à 15 minutes (jusqu'à 24 heures pour le jour en cours). Veuillez noter que la disponibilité des données à 15 minutes dépend de l'API Open-Meteo et peut varier en fonction du lieu ou de l'heure.",
+					"it": "Se abilitato, verranno creati stati aggiuntivi per una previsione di 15 minuti (fino a 24 ore per il giorno corrente). Si noti che la disponibilità dei dati a 15 minuti dipende dall'API Open-Meteo e può variare in base alla località o all'ora.",
+					"es": "Si se activa, se crearán estados adicionales para una previsión de 15 minutos (hasta 24 horas para el día actual). Tenga en cuenta que la disponibilidad de datos de 15 minutos depende de la API Open-Meteo y puede variar según la ubicación o la hora.",
+					"pl": "Jeśli opcja ta jest włączona, utworzone zostaną dodatkowe stany dla prognozy 15-minutowej (do 24 godzin dla bieżącego dnia). Należy pamiętać, że dostępność danych 15-minutowych zależy od interfejsu API Open-Meteo i może się różnić w zależności od lokalizacji lub czasu.",
+					"uk": "Якщо увімкнено, будуть створені додаткові стани для 15-хвилинного прогнозу (до 24 годин для поточного дня). Зверніть увагу, що доступність 15-хвилинних даних залежить від Open-Meteo API і може змінюватися в залежності від місцезнаходження або часу.",
+					"zh-cn": "如果启用，将为15分钟预测创建额外的状态（当前日期最多24小时）。请注意，15分钟数据的可用性取决于Open-Meteo API，并可能因位置或时间而异。"
+					},
+			"default": false,
+			"xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3
 		},
 		"_locationsHeader": {
 			"type": "header",
 			"text": "locations_header",
+			"xs": 12,
+			"sm": 12,
+			"md": 6,
+			"lg": 4,
+			"xl": 4,			
 			"size": 3,
 			"newLine": true
 		},
@@ -186,18 +343,84 @@
 			"type": "staticText",
 			"text": "location_help",
 			"newLine": true,
+			"xs": 12, "sm": 12, "md": 12, "lg": 12, "xl": 12,
 			"style": {
 				"fontSize": "smaller",
 				"fontStyle": "italic"
-			}
+			}		
 		},
 		"locationsTotal": {
 			"type": "checkbox",
-			"label": "locationsTotal_label",
+			"label": {
+					"en": "(Daily) Create peak total of all locations",
+					"de": "(Täglich) Höchstsumme aller Standorte erstellen",
+					"ru": "(Ежедневно) Создать суммарное значение пикового значения для всех местоположений.",
+					"pt": "(Diariamente) Gere o pico total de todas as localizações",
+					"nl": "(Dagelijks) Creëer het piektotaal van alle locaties",
+					"fr": "(Quotidien) Calculer le total maximal de tous les emplacements",
+					"it": "(Giornaliero) Crea il picco totale di tutte le posizioni",
+					"es": "(Diariamente) Crear total máximo de todas las ubicaciones",
+					"pl": "(Codziennie) Utwórz sumę szczytową wszystkich lokalizacji",
+					"uk": "(Щоденно) Створити пікову суму всіх локацій",
+					"zh-cn": "（每日）创建所有位置的峰值总数"
+					},
+			"disabled": "data.locations.length < 2",		
 			"default": false,
-			"help": "locationsTotal_help",
+			"help": {
+					"en": "If enabled, additional states will be created that sum up the values of all locations. This can be useful if you have multiple locations and want to see the overall forecast at a glance.",
+					"de": "Ist diese Option aktiviert, werden zusätzliche Zustände erstellt, die die Werte aller Standorte summieren. Dies kann hilfreich sein, wenn Sie mehrere Standorte haben und die Gesamtprognose auf einen Blick sehen möchten.",
+					"ru": "Если эта функция включена, будут созданы дополнительные состояния, суммирующие значения всех местоположений. Это может быть полезно, если у вас несколько местоположений и вы хотите быстро увидеть общий прогноз.",
+					"pt": "Se ativada, essa opção criará estados adicionais que somam os valores de todas as localizações. Isso pode ser útil se você tiver várias localizações e quiser visualizar a previsão geral rapidamente.",
+					"nl": "Indien ingeschakeld, worden er extra staten aangemaakt die de waarden van alle locaties optellen. Dit kan handig zijn als u meerdere locaties heeft en in één oogopslag de algehele voorspelling wilt zien.",
+					"fr": "Si cette option est activée, des états supplémentaires seront créés, additionnant les valeurs de tous les emplacements. Cela peut s'avérer utile si vous gérez plusieurs emplacements et souhaitez consulter les prévisions globales en un coup d'œil.",
+					"it": "Se abilitata, verranno creati stati aggiuntivi che sommano i valori di tutte le località. Questo può essere utile se si hanno più località e si desidera visualizzare le previsioni complessive a colpo d'occhio.",
+					"es": "Si se habilita, se crearán estados adicionales que suman los valores de todas las ubicaciones. Esto puede ser útil si tiene varias ubicaciones y desea ver el pronóstico general de un vistazo.",
+					"pl": "Po włączeniu tej opcji zostaną utworzone dodatkowe stany, które sumują wartości wszystkich lokalizacji. Może to być przydatne, jeśli masz wiele lokalizacji i chcesz zobaczyć ogólną prognozę na pierwszy rzut oka.",
+					"uk": "Якщо ввімкнено, будуть створені додаткові стани, які підсумовують значення всіх локацій. Це може бути корисним, якщо у вас є кілька локацій і ви хочете побачити загальний прогноз з першого погляду.",
+					"zh-cn": "启用此功能后，系统将创建额外的状态，汇总所有位置的值。如果您有多个位置，并希望一目了然地查看整体预测，这将非常有用。"
+					},
 			"hidden": "!data.locations || data.locations.length < 2",
 			"xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3
-        }
+        },
+		"locationsTotal_hourly": {
+			"type": "checkbox",
+			"label": {
+					"en": "(Hourly) Create peak total of all locations",
+					"de": "(Stündlich) Höchstsumme aller Standorte erstellen",
+					"ru": "(Почасовая оплата) Создать суммарное значение пиковой нагрузки для всех местоположений.",
+					"pt": "(Por hora) Calcule o pico total de todos os locais",
+					"nl": "(Uurlijks) Bereken het piektotaal van alle locaties",
+					"fr": "(Horaire) Calculer le total maximal de tous les emplacements",
+					"it": "(Ogni ora) Crea il picco totale di tutte le posizioni",
+					"es": "(Cada hora) Crear total pico de todas las ubicaciones",
+					"pl": "(Godzinowo) Utwórz sumę szczytową wszystkich lokalizacji",
+					"uk": "(Щогодинно) Створити пікову суму всіх локацій",
+					"zh-cn": "（按小时）计算所有地点的峰值总数"
+				},
+			"disabled": "data.locations.length < 2",	
+			"default": false,
+			"hidden": "!data.locations || data.locations.length < 2",
+			"xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3
+        },
+		"locationsTotal_minutely": {
+			"type": "checkbox",
+			"label": {
+					"en": "(Minutely) Create peak total of all locations",
+					"de": "(Minütlich) Höchstsumme aller Standorte erstellen",
+					"ru": "(Поминутно) Создать суммарное значение пиковой нагрузки для всех местоположений.",
+					"pt": "(Minuto a minuto) Calcule o pico total de todos os locais",
+					"nl": "(Minuutelijks) Bereken het piektotaal van alle locaties",
+					"fr": "(Minute par minute) Calculer le total maximal de tous les emplacements",
+					"it": "(Minuto per minuto) Crea il picco totale di tutte le posizioni",
+					"es": "(Minuto a minuto) Crear total pico de todas las ubicaciones",
+					"pl": "(Minuta po minucie) Utwórz sumę szczytową wszystkich lokalizacji",
+					"uk": "(Щохвилинно) Створити пікову суму всіх локацій",
+					"zh-cn": "（按分钟）计算所有地点的峰值总数"
+				},
+			"disabled": "!data.minutes_15",	
+			"default": false,
+			"hidden": "!data.minutes_15 || !data.locations || data.locations.length < 2",
+			"xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3
+        }		
 	}
 }
