@@ -56,6 +56,8 @@ export class ApiCaller {
 	 */
 	async fetchForecastData(location: Location, forecastDays: number): Promise<OpenMeteoResponse> {
 		const hourlyparam_keys = 'global_tilted_irradiance,cloud_cover,temperature_2m,wind_speed_10m,sunshine_duration';
+		const minutlyparam_keys =
+			'global_tilted_irradiance,cloud_cover,temperature_2m,wind_speed_10m,sunshine_duration';
 		const url = `https://api.open-meteo.com/v1/forecast`;
 
 		try {
@@ -68,6 +70,7 @@ export class ApiCaller {
 					hourly: hourlyparam_keys,
 					timezone: location.timezone || 'auto',
 					forecast_days: forecastDays,
+					minutely_15: minutlyparam_keys,
 				},
 			});
 

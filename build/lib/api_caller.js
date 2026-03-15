@@ -56,6 +56,7 @@ class ApiCaller {
   async fetchForecastData(location, forecastDays) {
     var _a;
     const hourlyparam_keys = "global_tilted_irradiance,cloud_cover,temperature_2m,wind_speed_10m,sunshine_duration";
+    const minutlyparam_keys = "global_tilted_irradiance,cloud_cover,temperature_2m,wind_speed_10m,sunshine_duration";
     const url = `https://api.open-meteo.com/v1/forecast`;
     try {
       const response = await this.axiosInstance.get(url, {
@@ -66,7 +67,8 @@ class ApiCaller {
           azimuth: location.azimuth,
           hourly: hourlyparam_keys,
           timezone: location.timezone || "auto",
-          forecast_days: forecastDays
+          forecast_days: forecastDays,
+          minutely_15: minutlyparam_keys
         }
       });
       const fullUrl = import_axios.default.getUri(response.config);
