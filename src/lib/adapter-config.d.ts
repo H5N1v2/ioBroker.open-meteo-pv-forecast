@@ -23,6 +23,10 @@ declare global {
 			hourlyUpdate: number;
 			minutes_15: boolean;
 			locationsTotal_minutely: boolean;
+			minutes_15_json: boolean;
+			locationsTotal_minutely_json: boolean;
+			hours_json: boolean;
+			locationsTotal_hourly_json: boolean;
 		}
 	}
 }
