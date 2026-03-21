@@ -18,7 +18,7 @@
         "_info": {
             "type": "header",
             "text": "info_header",
-            "size": 3,
+            "size": 1,
 			"xs": 12, "sm": 12, "md": 12, "lg": 12, "xl": 12
         },
 		"forecastHours": {
@@ -53,7 +53,7 @@
 				{"label": "7", "value": 7},
 				{"label": "14", "value": 14}
 			]
-		},
+		},		
 		"updateInterval": {
 			"type": "select",
 			"label": "updateInterval",
@@ -104,7 +104,7 @@
 			"md": 6,
 			"lg": 4,
 			"xl": 4,			
-			"size": 3,
+			"size": 1,
 			"newLine": true
 		},
 			"hourlyUpdate": {
@@ -170,21 +170,21 @@
 					  "uk": "Якщо вибрано 'Годинникова стрілка', погодинний прогноз завжди показуватиме наступні години, починаючи з поточного часу. Якщо вибрано 'Фіксовані години', погодинний прогноз показуватиме фиксированные интервалы времени (например, 00:00-23:00) независимо от текущего времени.",
 					  "zh-cn": "如果选择“滚动小时”，每小时的预测将始终显示从当前小时开始的下一个小时。如果选择“固定小时”，每小时的预测将显示固定的时间间隔（例如，00:00-23:00），而不考虑当前时间。"
 					}
-		},
+		},		
 		"minutes_15": {
 			"type": "checkbox",
 			"label": {
-					"en": "Create 15-minutes Forecast (Max. 24 hours)",
-					"de": "15-Minuten-Prognose erstellen (max. 24 Stunden)",
-					"ru": "Создание 15-минутного прогноза (максимум на 24 часа)",
-					"pt": "Criar uma previsão de 15 minutos (máx. 24 horas)",
-					"nl": "15-minuten voorspelling maken (max. 24 uur)",
-					"fr": "Créer des prévisions à 15 minutes (Max. 24 heures)",
-					"it": "Creare previsioni a 15 minuti (massimo 24 ore)",
-					"es": "Crear previsión de 15 minutos (máx. 24 horas)",
-					"pl": "Utwórz 15-minutową prognozę (maks. 24 godziny)",
-					"uk": "Створити 15-хвилинний прогноз (макс. 24 години)",
-					"zh-cn": "创建15分钟预测（最多24小时）"
+					"en": "Create 15-minutes Forecast (24 hours/current day)",
+					"de": "15-Minuten-Prognose erstellen (24 Stunden/aktueller Tag)",
+					"ru": "Создание 15-минутного прогноза (24 часа/текущий день)",
+					"pt": "Criar uma previsão de 15 minutos (24 horas/dia atual)",
+					"nl": "15-minuten voorspelling maken (24 uur/huidige dag)",
+					"fr": "Créer des prévisions à 15 minutes (24 heures/jour en cours)",
+					"it": "Creare previsioni a 15 minuti (24 ore/giorno corrente)",
+					"es": "Crear previsión de 15 minutos (24 horas/día actual)",
+					"pl": "Utwórz 15-minutową prognozę (24 godziny/bieżący dzień)",
+					"uk": "Створити 15-хвилинний прогноз (24 години/поточний день)",
+					"zh-cn": "创建15分钟预测（24小时/当前日期）"
 					},
 			"help": {
 					"en": "If enabled, additional states will be created for a 15-minute forecast (up to 24 hours for the current day). Please note that 15-minute data availability depends on the Open-Meteo API and may vary by location or time.",
@@ -201,6 +201,68 @@
 					},
 			"default": false,
 			"xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3
+		},		
+			"hours_json": {
+			"type": "checkbox",
+			"label": {
+					"en": "Create json-file for hourly forecast",
+					"de": "JSON-Datei für stündliche Vorhersage erstellen",
+					"ru": "Создайте JSON-файл для почасового прогноза погоды.",
+					"pt": "Criar arquivo JSON para previsão horária",
+					"nl": "Maak een JSON-bestand aan voor de uurlijkse voorspelling.",
+					"fr": "Créer un fichier JSON pour les prévisions horaires",
+					"it": "Crea un file JSON per le previsioni orarie",
+					"es": "Crear archivo JSON para el pronóstico por hora",
+					"pl": "Utwórz plik json dla prognozy godzinowej",
+					"uk": "Створити json-файл для погодинного прогнозу",
+					"zh-cn": "创建用于预测未来每小时的 JSON 文件"
+					},
+			"help": {
+					"en": "When enabled, a JSON file is created for each location for the hourly forecast. (Forecast hours same as selected in Forecast Hours setting, but only fixed hours)",
+					"de": "Wenn aktiviert, wird pro Ort eine JSON-Datei für die Stundenprognose erstellt. (Vorhersagestunden gleich wie in den Einstellungen für Vorhersagestunden ausgewählt, aber nur feste Stunden)",
+					"ru": "Если этот параметр включен, для каждого местоположения создается файл JSON для ежечасного прогноза. (Прогнозировать часы такие же, как выбраны в настройках Прогнозировать часы, но только фиксированные часы)",
+					"pt": "Se ativado, um arquivo JSON é criado para cada local da previsão horária. (As horas de previsão são as mesmas selecionadas na configuração de Horas de Previsão, mas apenas horas fixas)",
+					"nl": "Indien ingeschakeld, wordt voor elke locatie een JSON-bestand aangemaakt voor de voorspelling per uur. (Voorspellingsuren hetzelfde als geselecteerd in de instellingen voor voorspellingsuren, maar alleen vaste uren)",
+					"fr": "Lorsque cette option est activée, un fichier JSON est créé pour les prévisions horaires. (Les heures de prévision sont les mêmes que celles sélectionnées dans les paramètres des heures de prévision, mais uniquement les heures fixes)",
+					"it": "Se abilitato, crea un file JSON per ogni sede per la previsione oraria. (Le ore di previsione sono le stesse selezionate nelle impostazioni delle ore di previsione, ma solo ore fisse)",
+					"es": "Si se activa, se crea un archivo JSON en cada ubicación para la previsión horaria. (Las horas de previsión son las mismas que las seleccionadas en la configuración de Horas de Previsión, pero solo horas fijas)",
+					"pl": "Po włączeniu plik JSON jest tworzony dla każdej lokalizacji dla prognozy godzinowej. (Godziny prognozy są takie same jak wybrane w ustawieniach Godziny prognozy, ale tylko stałe godziny)",
+					"uk": "Якщо увімкнено, файл JSON створюється для кожного місця для погодинного прогнозу (години прогнозу такі ж, як вибрані в налаштуваннях Години прогнозу, але тільки фіксовані години)",
+					"zh-cn": "启用后，将为每个位置创建一个 JSON 文件以进行每小时预测（预测小时与“预测小时”设置中选择的相同，但仅限固定小时）。"
+					},
+			"default": false,
+			"xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3
+		},		
+			"minutes_15_json": {
+			"type": "checkbox",
+			"label": {
+					"en": "Create json-file for 15-minutes forecast ",
+					"de": "JSON-Datei für 15-Minuten-Vorhersage erstellen",
+					"ru": "Создайте JSON-файл для прогноза погоды на 15 минут.",
+					"pt": "Criar arquivo JSON para previsão de 15 minutos",
+					"nl": "Maak een JSON-bestand aan voor de 15-minutenvoorspelling.",
+					"fr": "Créer un fichier JSON pour les prévisions à 15 minutes",
+					"it": "Crea un file JSON per le previsioni a 15 minuti",
+					"es": "Crear archivo JSON para el pronóstico de 15 minutos",
+					"pl": "Utwórz plik json dla prognozy 15-minutowej",
+					"uk": "Створити json-файл для 15-хвилинного прогнозу",
+					"zh-cn": "创建用于预测未来 15 分钟的 JSON 文件"
+					},
+			"help": {
+					"en": "When enabled, a JSON file is created for each location for the 15-minute forecast.",
+					"de": "Wenn diese Funktion aktiviert ist, wird für jeden Standort eine JSON-Datei mit der 15-Minuten-Vorhersage erstellt.",
+					"ru": "При включении этой функции для каждого местоположения создается JSON-файл с 15-минутным прогнозом погоды.",
+					"pt": "Quando ativada, essa opção cria um arquivo JSON para cada local com a previsão de 15 minutos.",
+					"nl": "Indien ingeschakeld, wordt voor elke locatie een JSON-bestand aangemaakt met de weersverwachting voor de komende 15 minuten.",
+					"fr": "Lorsqu'elle est activée, cette fonction crée un fichier JSON pour chaque emplacement, pour les prévisions sur 15 minutes.",
+					"it": "Quando abilitata, viene creato un file JSON per ogni località per le previsioni a 15 minuti.",
+					"es": "Cuando está habilitada, se crea un archivo JSON para cada ubicación con el pronóstico a 15 minutos.",
+					"pl": "Po włączeniu tej opcji dla każdej lokalizacji tworzony jest plik JSON zawierający 15-minutową prognozę pogody.",
+					"uk": "Якщо цю функцію ввімкнено, для кожного місця розташування створюється файл JSON для 15-хвилинного прогнозу.",
+					"zh-cn": "启用后，将为每个位置创建一个 JSON 文件，用于生成 15 分钟的天气预报。"
+					},
+			"default": false,
+			"xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3
 		},
 		"_locationsHeader": {
 			"type": "header",
@@ -210,7 +272,7 @@
 			"md": 6,
 			"lg": 4,
 			"xl": 4,			
-			"size": 3,
+			"size": 1,
 			"newLine": true
 		},
 		"locations": {
@@ -349,6 +411,29 @@
 				"fontStyle": "italic"
 			}		
 		},
+			"_settingsHeader_sum": {
+			"type": "header",
+			"text": {
+					"en": "Setting for the total of all locations. (Only editable if multiple locations are configured!",
+					"de": "Einstellung für die Summe aller Orte. (Nur einstellbar, wenn mehrere Orte konfiguriert sind!",
+					"ru": "Настройка для общего количества всех локаций. (Редактируется только в том случае, если настроено несколько местоположений!",
+					"pt": "Defina o total de todos os locais. (Só editável se vários locais forem configurados!",
+					"nl": "Instelling voor het totaal van alle locaties. (Alleen bewerkbaar als er meerdere locaties zijn geconfigureerd!",
+					"fr": "Paramètre pour le total de tous les sites. (Modifiable uniquement si plusieurs lieux sont configurés !",
+					"it": "Impostazione per il totale di tutte le sedi (Modificabile solo se sono configurate più sedi!",
+					"es": "Fijando el total de todos los lugares. (¡Solo se puede editar si hay varias ubicaciones!",
+					"pl": "Ustawianie sumy wszystkich lokalizacji. (Możliwość edycji tylko wtedy, gdy skonfigurowanych jest wiele lokalizacji!",
+					"uk": "Налаштування загальної кількості всіх локацій. (Можна редагувати лише в тому випадку, якщо налаштовано декілька місць!",
+					"zh-cn": "设置所有地点的总数。（只有在配置了多个位置时才可编辑！"
+					},
+			"xs": 12,
+			"sm": 12,
+			"md": 6,
+			"lg": 4,
+			"xl": 4,			
+			"size": 1,
+			"newLine": true
+		},
 		"locationsTotal": {
 			"type": "checkbox",
 			"label": {
@@ -364,7 +449,7 @@
 					"uk": "(Щоденно) Створити пікову суму всіх локацій",
 					"zh-cn": "（每日）创建所有位置的峰值总数"
 					},
-			"disabled": "data.locations.length < 2",		
+			"disabled": "!data.locations || data.locations.length < 2",		
 			"default": false,
 			"help": {
 					"en": "If enabled, additional states will be created that sum up the values of all locations. This can be useful if you have multiple locations and want to see the overall forecast at a glance.",
@@ -379,7 +464,6 @@
 					"uk": "Якщо ввімкнено, будуть створені додаткові стани, які підсумовують значення всіх локацій. Це може бути корисним, якщо у вас є кілька локацій і ви хочете побачити загальний прогноз з першого погляду.",
 					"zh-cn": "启用此功能后，系统将创建额外的状态，汇总所有位置的值。如果您有多个位置，并希望一目了然地查看整体预测，这将非常有用。"
 					},
-			"hidden": "!data.locations || data.locations.length < 2",
 			"xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3
         },
 		"locationsTotal_hourly": {
@@ -397,30 +481,79 @@
 					"uk": "(Щогодинно) Створити пікову суму всіх локацій",
 					"zh-cn": "（按小时）计算所有地点的峰值总数"
 				},
-			"disabled": "data.locations.length < 2",	
+			"disabled": "!data.locations || data.locations.length < 2",	
 			"default": false,
-			"hidden": "!data.locations || data.locations.length < 2",
 			"xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3
         },
 		"locationsTotal_minutely": {
 			"type": "checkbox",
 			"label": {
-					"en": "(Minutely) Create peak total of all locations",
-					"de": "(Minütlich) Höchstsumme aller Standorte erstellen",
-					"ru": "(Поминутно) Создать суммарное значение пиковой нагрузки для всех местоположений.",
-					"pt": "(Minuto a minuto) Calcule o pico total de todos os locais",
-					"nl": "(Minuutelijks) Bereken het piektotaal van alle locaties",
-					"fr": "(Minute par minute) Calculer le total maximal de tous les emplacements",
-					"it": "(Minuto per minuto) Crea il picco totale di tutte le posizioni",
-					"es": "(Minuto a minuto) Crear total pico de todas las ubicaciones",
-					"pl": "(Minuta po minucie) Utwórz sumę szczytową wszystkich lokalizacji",
-					"uk": "(Щохвилинно) Створити пікову суму всіх локацій",
-					"zh-cn": "（按分钟）计算所有地点的峰值总数"
+					"en": "(Every 15 minutes) Create peak total of all locations",
+					"de": "(Alle 15 Minuten) Höchstsumme aller Standorte ermitteln",
+					"ru": "(Каждые 15 минут) Сгенерировать суммарное значение пиковых значений для всех местоположений.",
+					"pt": "(A cada 15 minutos) Calcule o pico total de todos os locais.",
+					"nl": "(Elke 15 minuten) Bereken het piektotaal van alle locaties",
+					"fr": "(Toutes les 15 minutes) Calculer le total maximal de tous les emplacements",
+					"it": "(Ogni 15 minuti) Calcola il totale massimo di tutte le posizioni",
+					"es": "(Cada 15 minutos) Calcular el total máximo de todas las ubicaciones",
+					"pl": "(Co 15 minut) Utwórz sumę szczytową wszystkich lokalizacji",
+					"uk": "(Кожні 15 хвилин) Створити пікову суму всіх локацій",
+					"zh-cn": "（每 15 分钟）计算所有位置的峰值总数"
 				},
-			"disabled": "!data.minutes_15",	
+			"disabled": "!data.minutes_15 || !data.locations || data.locations.length < 2",	
 			"default": false,
-			"hidden": "!data.minutes_15 || !data.locations || data.locations.length < 2",
 			"xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3
-        }		
+        },
+			"locationsTotal_minutely_json": {
+			"type": "checkbox",
+			"label": {
+					"en": "(JSON every 15 minutes) Create peak total of all locations",
+					"de": "(JSON alle 15 Minuten) Höchstsumme aller Standorte erstellen",
+					"ru": "(JSON каждые 15 минут) Создать суммарное значение пиковых значений для всех местоположений.",
+					"pt": "(JSON a cada 15 minutos) Criar total de pico de todos os locais",
+					"nl": "(JSON elke 15 minuten) Bereken het piektotaal van alle locaties",
+					"fr": "(JSON toutes les 15 minutes) Calculer le total maximal de tous les emplacements",
+					"it": "(JSON ogni 15 minuti) Calcola il picco totale di tutte le posizioni",
+					"es": "(JSON cada 15 minutos) Calcular el total máximo de todas las ubicaciones",
+					"pl": "(JSON co 15 minut) Utwórz szczytową sumę wszystkich lokalizacji",
+					"uk": "(JSON кожні 15 хвилин) Створити пікову суму всіх локацій",
+					"zh-cn": "（每 15 分钟生成一次 JSON）计算所有位置的峰值总数"
+				},
+			"disabled": "!data.minutes_15 || !data.locations || data.locations.length < 2",	
+			"default": false,
+			"xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3
+        },
+			"locationsTotal_hourly_json": {
+			"type": "checkbox",
+			"label": {
+					"en": "(JSON hourly) Create peak total of all locations",
+					"de": "(JSON Stündlich) Höchstsumme aller Standorte erstellen",
+					"ru": "(JSON каждый час) Создать суммарное значение пиковых значений для всех местоположений.",
+					"pt": "(JSON por hora) Criar total de pico de todos os locais",
+					"nl": "(JSON uurlijks) Bereken het piektotaal van alle locaties",
+					"fr": "(JSON horaire) Calculer le total maximal de tous les emplacements",
+					"it": "(JSON ogni ora) Calcola il picco totale di tutte le posizioni",
+					"es": "(JSON cada hora) Calcular el total máximo de todas las ubicaciones",
+					"pl": "(JSON co godzinę) Utwórz szczytową sumę wszystkich lokalizacji",
+					"uk": "(JSON щогодинно) Створити пікову суму всіх локацій",
+					"zh-cn": "（每小时生成一次 JSON）计算所有位置的峰值总数"
+				},
+			"disabled": "!data.locations || data.locations.length < 2",	
+			"default": false,
+			"help": {
+					"en": "Depending on the settings, hours are recorded either as rolling hours or as a fixed amount.",
+					"de": "Je nach Einstellung werden Stunden fortlaufend oder fest erfasst.",
+					"ru": "В зависимости от настроек часы записываются либо в виде скользящих часов, либо в виде фиксированной суммы.",
+					"pt": "Dependendo das configurações, as horas são registradas como horas contínuas ou fixas.",
+					"nl": "Afhankelijk van de instellingen worden de uren ofwel als voortschrijdende uren ofwel als een vast bedrag geregistreerd.",
+					"fr": "Selon les réglages, les heures sont enregistrées en heures continues ou fixes.",
+					"it": "A seconda delle impostazioni, le ore sono registrate come ore continue o fisse.",
+					"es": "Según la configuración, las horas se registran como horas acumuladas o como cantidad fija.",
+					"pl": "W zależności od ustawień godziny są rejestrowane jako godziny toczne lub jako stała kwota.",
+					"uk": "Залежно від налаштувань, години записуються або як рухомі години, або як фіксована сума.",
+					"zh-cn": "视设置而定，小时将记录为滚动小时数或固定金额。"
+					},
+			"xs": 12, "sm": 6, "md": 4, "lg": 3, "xl": 3
+        }			
 	}
 }
