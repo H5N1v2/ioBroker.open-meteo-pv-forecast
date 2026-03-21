@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "open-meteo-pv-forecast",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "news": {
+      "1.1.0": {
+        "en": "Added checkboxes in instance settings to create different JSON datapoints for echarts \nAdded 15-minute sum json, hourly sum json, 15-minute json for locations, hourly json for locations\nfix: doc image, wrong pv directions",
+        "de": "Hinzugefügt Checkboxen in Beispieleinstellungen, um verschiedene JSON-Datenpunkte für echarts zu erstellen\nHinzugefügt 15-minütige Summe json, stündliche Summe json, 15-Minuten-Json für Orte, stündliche json für Orte\nfix: doc bild, falsche pv richtungen",
+        "ru": "Добавлены флажки в настройках экземпляров для создания различных точек данных JSON для диаграмм\nДобавлена 15-минутная сумма json, почасовая сумма json, 15-минутная json для локаций, почасовая json для локаций\nисправление: изображение doc, неправильные направления pv",
+        "pt": "Caixas de seleção adicionadas em configurações de instância para criar diferentes pontos de dados JSON para echarts\nSoma de 15 minutos adicionada json, soma horária json, json 15 minutos para locais, json hora para locais\ncorreção: imagem doc, direções pv erradas",
+        "nl": "Controlevakken in instantie-instellingen toegevoegd om verschillende JSON-datapunten voor echarts aan te maken\nToegevoegd 15 minuten sum json, uur sum json, 15 minuten json voor locaties, uur json voor locaties\nfix: doc image, verkeerde pv directions",
+        "fr": "Ajout de cases à cocher dans les paramètres d'instance pour créer différents points de données JSON pour les écharts\nAjouté 15 minutes somme json, heure somme json, 15 minutes json pour les emplacements, heure json pour les emplacements\ncorrection : image doc, mauvaise direction pv",
+        "it": "Aggiunte caselle di controllo nelle impostazioni di istanza per creare diversi datapoint JSON per echarts\nAggiunto 15 minuti somma json, ora somma json, 15 minuti json per le posizioni, ora json per le posizioni\nfix: immagine doc, direzioni pv sbagliate",
+        "es": "Añadido casillas de verificación en la configuración de instancia para crear diferentes puntos de datos JSON para echarts\nSuma de 15 minutos json, horaria suma json, 15 minutos json para ubicaciones, hora json para ubicaciones\nfijar: imagen doc, direcciones pv incorrectas",
+        "pl": "Dodano pola kontrolne na przykład ustawienia do tworzenia różnych punktów danych JSON dla echartów\nDodano 15-minutowy sum json, godzinowy sum json, 15-minutowy json dla lokalizacji, godzinowy json dla miejsc\nfix: doc image, błędne kierunki pv",
+        "uk": "Додано прапорці в налаштуваннях екземпляра для створення різних точок даних JSON для echarts\nДодано 15-хвилинну сумку json, часову сумку json, 15-хвилинний json для локацій, часовий json для локацій\nвиправити: doc зображення, неправильні v напрямки",
+        "zh-cn": "为 echarts 创建不同的 JSON 数据点\n增加15分钟Json、小时Json、地点15分钟Json、地点每小时Json\n固定: doc 图像, pv 方向错误"
+      },
       "1.0.0": {
         "en": "Added checkboxes in instance settings for daily, hourly and 15-minutely totals (only visible if multiple locations are configured).\nAdded hourlyUpdate configuration for rolling vs. fixed hour selection.\nAdded 15-minute high-resolution forecast data (96 intervals per day).\nAdded automated sum calculations for 15-minute intervals across all locations.\nImproved updateInterval logic to allow manual/cron execution when set to 0 (Disabled).\nAdded a new datapoint `pv_temperature` to the hourly location forecast, based on the Faiman model.",
         "de": "Hinzugefügt Checkboxen in Beispiel Einstellungen für tägliche, stündliche und 15-minütige Summen (nur sichtbar, wenn mehrere Standorte konfiguriert sind).\nStündlich Update-Konfiguration für das Walzen vs. fester Stunde Auswahl.\nHinzugefügt 15-minütige hochauflösende Prognosedaten (96 Intervalle pro Tag).\nAutomatisierte Summenberechnungen für 15-minütige Intervalle an allen Standorten hinzugefügt.\nVerbesserte UpdateInterval-Logik, um die manuelle/cron-Ausführung zu ermöglichen, wenn sie auf 0 gesetzt ist (Disabled).\nAuf Basis des Faiman-Modells wurde ein neuer Datenpunkt `pv_temperature` zur stündlichen Standortprognose hinzugefügt.",

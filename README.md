@@ -140,10 +140,10 @@ Upon restart or configuration changes, the adapter automatically removes stale d
 
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 1.1.0 (2026-03-21)
 * (H5N1v2) Added checkboxes in instance settings to create different JSON datapoints for echarts 
 * (H5N1v2) Added 15-minute sum json, hourly sum json, 15-minute json for locations, hourly json for locations
-* (Thisoft) fix: doc image, wrong pv directions 
+* (Thisoft) fix: doc image, wrong pv directions
 
 ### 1.0.0 (2026-03-15)
 * (H5N1v2) Added checkboxes in instance settings for daily, hourly and 15-minutely totals (only visible if multiple locations are configured).
