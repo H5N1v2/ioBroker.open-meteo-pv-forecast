@@ -130,6 +130,27 @@ class OpenMeteoPvForecast extends utils.Adapter {
           }
         }
       }
+      if (!this.config.locationsTotal_minutely_json || !this.config.minutes_15 || this.config.locations.length <= 1) {
+        const jsonObj = await this.getObjectAsync("sum_peak_15-min-json_chart");
+        if (jsonObj) {
+          await this.delObjectAsync("sum_peak_15-min-json_chart");
+          this.log.debug("Cleanup: Deleted sum_peak_15-min-json_chart (option disabled or not needed)");
+        }
+      }
+      if (!this.config.minutes_15_json) {
+        const jsonObj = await this.getObjectAsync(`${locName}.15-min-json_chart`);
+        if (jsonObj) {
+          await this.delObjectAsync(`${locName}.15-min-json_chart`);
+          this.log.debug(`Cleanup: Deleted 15-min-json_chart for ${locName}`);
+        }
+      }
+      if (!this.config.hours_json) {
+        const jsonObj = await this.getObjectAsync(`${locName}.hourly-json_chart`);
+        if (jsonObj) {
+          await this.delObjectAsync(`${locName}.hourly-json_chart`);
+          this.log.debug(`Cleanup: Deleted hourly-json_chart for ${locName}`);
+        }
+      }
     }
     this.log.debug("Cleanup finished.");
   }
@@ -198,6 +219,29 @@ class OpenMeteoPvForecast extends utils.Adapter {
             },
             type: "string",
             role: "date",
+            read: true,
+            write: false
+          },
+          native: {}
+        });
+        await this.setObjectNotExistsAsync(`${locationName}.hourly-forecast.hour${hour}.unix_time_stamp`, {
+          type: "state",
+          common: {
+            name: {
+              en: "Unix Time Stamp",
+              de: "Unix-Zeitstempel",
+              ru: "Unix-\u0432\u0440\u0435\u043C\u0435\u043D\u043D\u0430\u044F \u043C\u0435\u0442\u043A\u0430",
+              pt: "Carimbo de tempo Unix",
+              nl: "Unix-tijdstempel",
+              fr: "Horodatage Unix",
+              it: "Timestamp Unix",
+              es: "Marca de tiempo Unix",
+              pl: "Znacznik czasu Unix",
+              uk: "Unix-\u043C\u0456\u0442\u043A\u0430 \u0447\u0430\u0441\u0443",
+              "zh-cn": "Unix\u65F6\u95F4\u6233"
+            },
+            type: "number",
+            role: "value.time",
             read: true,
             write: false
           },
@@ -295,7 +339,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
               "zh-cn": "\u98CE\u901F 10 \u7C73"
             },
             type: "number",
-            role: "value.speed",
+            role: "value.speed.wind",
             unit: "km/h",
             read: true,
             write: false
@@ -430,7 +474,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
               "zh-cn": "\u6BCF\u65E5\u5CF0\u503C\u80FD\u91CF"
             },
             type: "number",
-            role: "value.power.consumption",
+            role: "value.power",
             unit: "Wh",
             read: true,
             write: false
@@ -525,19 +569,37 @@ class OpenMeteoPvForecast extends utils.Adapter {
           native: {}
         });
         const states = {
+          unix_time_stamp: {
+            name: {
+              en: "unix time stamp",
+              de: "Unix-Zeitstempel",
+              ru: "Unix-\u0432\u0440\u0435\u043C\u0435\u043D\u043D\u0430\u044F \u043C\u0435\u0442\u043A\u0430",
+              pt: "Carimbo de tempo Unix",
+              nl: "Unix-tijdstempel",
+              fr: "Horodatage Unix",
+              it: "Timestamp Unix",
+              es: "Sello de tiempo Unix",
+              pl: "Znacznik czasu Unix",
+              uk: "Unix-\u043C\u0456\u0442\u043A\u0430 \u0447\u0430\u0441\u0443",
+              "zh-cn": "Unix\u65F6\u95F4\u6233"
+            },
+            type: "number",
+            role: "value.time",
+            unit: ""
+          },
           time: {
             name: {
-              en: "Time",
-              de: "Zeit",
-              ru: "\u0412\u0440\u0435\u043C\u044F",
-              pt: "Tempo",
-              nl: "Tijd",
-              fr: "L'heure",
-              it: "Tempo",
-              es: "Tiempo",
-              pl: "Czas",
-              uk: "\u0427\u0430\u0441",
-              "zh-cn": "Time"
+              en: "formatted time",
+              de: "Formatierte Zeit",
+              ru: "\u041E\u0442\u0444\u043E\u0440\u043C\u0430\u0442\u0438\u0440\u043E\u0432\u0430\u043D\u043D\u043E\u0435 \u0432\u0440\u0435\u043C\u044F",
+              pt: "Hora formatada",
+              nl: "Opgemaakte tijd",
+              fr: "Heure format\xE9e",
+              it: "Ora formattata",
+              es: "Hora formateada",
+              pl: "Sformatowany czas",
+              uk: "\u0412\u0456\u0434\u0444\u043E\u0440\u043C\u0430\u0442\u043E\u0432\u0430\u043D\u0438\u0439 \u0447\u0430\u0441",
+              "zh-cn": "\u683C\u5F0F\u5316\u65F6\u95F4"
             },
             type: "string",
             role: "text",
@@ -558,7 +620,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
               "zh-cn": "\u8F90\u7167\u5EA6"
             },
             type: "number",
-            role: "value.irradiance",
+            role: "value.power",
             unit: "W/m\xB2"
           },
           temperature_2m: {
@@ -594,7 +656,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
               "zh-cn": "\u98CE\u901F"
             },
             type: "number",
-            role: "value.speed",
+            role: "value.speed.wind",
             unit: "km/h"
           },
           sunshine_duration: {
@@ -663,8 +725,160 @@ class OpenMeteoPvForecast extends utils.Adapter {
           }
         }
       }
+      if (this.config.minutes_15_json) {
+        await this.setObjectNotExistsAsync(`${locationName}.15-min-json_chart`, {
+          type: "state",
+          common: {
+            name: {
+              en: "JSON Chart Data",
+              de: "JSON-Diagrammdaten",
+              ru: "\u0414\u0430\u043D\u043D\u044B\u0435 \u0434\u0438\u0430\u0433\u0440\u0430\u043C\u043C\u044B \u0432 \u0444\u043E\u0440\u043C\u0430\u0442\u0435 JSON",
+              pt: "Dados do gr\xE1fico JSON",
+              nl: "JSON-grafiekgegevens",
+              fr: "Donn\xE9es du graphique JSON",
+              it: "Dati del grafico JSON",
+              es: "Datos de gr\xE1ficos JSON",
+              pl: "Dane wykresu JSON",
+              uk: "\u0414\u0430\u043D\u0456 \u0434\u0456\u0430\u0433\u0440\u0430\u043C\u0438 JSON",
+              "zh-cn": "JSON \u56FE\u8868\u6570\u636E"
+            },
+            type: "string",
+            role: "json",
+            read: true,
+            write: false,
+            desc: {
+              en: "History data for eCharts in JSON format",
+              de: "Verlaufsdaten f\xFCr eCharts im JSON-Format",
+              ru: "\u0418\u0441\u0442\u043E\u0440\u0438\u0447\u0435\u0441\u043A\u0438\u0435 \u0434\u0430\u043D\u043D\u044B\u0435 \u0434\u043B\u044F eCharts \u0432 \u0444\u043E\u0440\u043C\u0430\u0442\u0435 JSON",
+              pt: "Dados hist\xF3ricos do eCharts em formato JSON",
+              nl: "Historische gegevens voor eCharts in JSON-formaat.",
+              fr: "Donn\xE9es historiques pour eCharts au format JSON",
+              it: "Dati storici per eCharts in formato JSON",
+              es: "Datos hist\xF3ricos de eCharts en formato JSON",
+              pl: "Dane historyczne dla eCharts w formacie JSON",
+              uk: "\u0406\u0441\u0442\u043E\u0440\u0438\u0447\u043D\u0456 \u0434\u0430\u043D\u0456 \u0434\u043B\u044F eCharts \u0443 \u0444\u043E\u0440\u043C\u0430\u0442\u0456 JSON",
+              "zh-cn": "eCharts \u7684\u5386\u53F2\u6570\u636E\uFF08JSON \u683C\u5F0F\uFF09"
+            }
+          },
+          native: {}
+        });
+      }
+      if (this.config.hours_json) {
+        await this.setObjectNotExistsAsync(`${locationName}.hourly-json_chart`, {
+          type: "state",
+          common: {
+            name: {
+              en: "JSON Chart Data Hours",
+              de: "JSON-Diagrammdaten Stunden",
+              ru: "\u0414\u0430\u043D\u043D\u044B\u0435 \u0434\u0438\u0430\u0433\u0440\u0430\u043C\u043C\u044B \u0432 \u0444\u043E\u0440\u043C\u0430\u0442\u0435 JSON \u0427\u0430\u0441\u044B",
+              pt: "Dados do gr\xE1fico JSON Horas",
+              nl: "JSON-grafiekgegevens Uren",
+              fr: "Donn\xE9es du graphique JSON Heures",
+              it: "Dati del grafico JSON Ore",
+              es: "Datos de gr\xE1ficos JSON Horas",
+              pl: "Dane wykresu JSON Godziny",
+              uk: "\u0414\u0430\u043D\u0456 \u0434\u0456\u0430\u0433\u0440\u0430\u043C\u0438 JSON \u0413\u043E\u0434\u0438\u043D\u0438",
+              "zh-cn": "JSON \u56FE\u8868\u6570\u636E \u5C0F\u65F6"
+            },
+            type: "string",
+            role: "json",
+            read: true,
+            write: false,
+            desc: {
+              en: "Hour History data for eCharts in JSON format",
+              de: "St\xFCndliche Verlaufsdaten f\xFCr eCharts im JSON-Format",
+              ru: "\u0427\u0430\u0441\u043E\u0432\u044B\u0435 \u0438\u0441\u0442\u043E\u0440\u0438\u0447\u0435\u0441\u043A\u0438\u0435 \u0434\u0430\u043D\u043D\u044B\u0435 \u0434\u043B\u044F eCharts \u0432 \u0444\u043E\u0440\u043C\u0430\u0442\u0435 JSON",
+              pt: "Dados hist\xF3ricos por hora do eCharts em formato JSON",
+              nl: "Uur historische gegevens voor eCharts in JSON-formaat.",
+              fr: "Donn\xE9es historiques horaires pour eCharts au format JSON",
+              it: "Dati storici orari per eCharts in formato JSON",
+              es: "Datos hist\xF3ricos por hora de eCharts en formato JSON",
+              pl: "Godzinowe dane historyczne dla eCharts w formacie JSON",
+              uk: "\u041F\u043E\u0433\u043E\u0434\u0438\u043D\u043D\u0456 \u0456\u0441\u0442\u043E\u0440\u0438\u0447\u043D\u0456 \u0434\u0430\u043D\u0456 \u0434\u043B\u044F eCharts \u0443 \u0444\u043E\u0440\u043C\u0430\u0442\u0456 JSON",
+              "zh-cn": "eCharts \u7684\u5386\u53F2\u6570\u636E\uFF08\u6309\u5C0F\u65F6\uFF0CJSON \u683C\u5F0F\uFF09"
+            }
+          },
+          native: {}
+        });
+      }
+      if (this.config.locationsTotal_minutely_json && this.config.minutes_15 && this.config.locations.length > 1) {
+        await this.setObjectNotExistsAsync(`sum_peak_15-min-json_chart`, {
+          type: "state",
+          common: {
+            name: {
+              en: "Sum JSON Chart Data 15 minutes",
+              de: "Summe JSON Diagramm Daten 15 Minuten",
+              ru: "\u0421\u0443\u043C\u043C\u0430\u0440\u043D\u044B\u0435 \u0434\u0430\u043D\u043D\u044B\u0435 JSON \u0437\u0430 15 \u043C\u0438\u043D\u0443\u0442",
+              pt: "Sum JSON Dados do Gr\xE1fico 15 minutos",
+              nl: "Sum JSON Grafiekgegevens 15 minuten",
+              fr: "Sum JSON Donn\xE9es du graphique 15 minutes",
+              it: "Sum JSON Grafico Dati 15 minuti",
+              es: "Sum JSON Datos de carga 15 minutos",
+              pl: "Sum JSON Wykres Dane 15 minut",
+              uk: "\u0421\u0443\u043C\u0430 JSON \u0413\u0440\u0430\u0444\u0456\u043A \u0434\u0430\u043D\u0438\u0445 15 \u0445\u0432\u0438\u043B\u0438\u043D",
+              "zh-cn": "JSON\u603B\u548C \u56FE\u8868 15\u5206\u949F"
+            },
+            type: "string",
+            role: "json",
+            read: true,
+            write: false,
+            desc: {
+              en: "Sum History data for eCharts in JSON format",
+              de: "Summe f\xFCr eCharts im JSON-Format",
+              ru: "\u0414\u0430\u043D\u043D\u044B\u0435 \u0438\u0441\u0442\u043E\u0440\u0438\u0438 \u0441\u0443\u043C\u043C \u0434\u043B\u044F \u044D\u043B\u0435\u043A\u0442\u0440\u043E\u043D\u043D\u044B\u0445 \u0434\u0438\u0430\u0433\u0440\u0430\u043C\u043C\u044B \u0432 \u0444\u043E\u0440\u043C\u0430\u0442\u0435 JSON",
+              pt: "Dados do Sum History para eCharts em JSON",
+              nl: "Som geschiedenisgegevens voor eCharts in JSON-formaat",
+              fr: "Historique des sommes pour eCharts au format JSON",
+              it: "Sum History per eCharts in formato JSON",
+              es: "Sumar datos hist\xF3ricos de ECharts en formato JSON",
+              pl: "Suma danych historii dla eCharts w formacie JSON",
+              uk: "\u0421\u0443\u043C\u0430 \u0434\u0430\u043D\u0438\u0445 \u0456\u0441\u0442\u043E\u0440\u0456\u0457 \u0434\u043B\u044F eCharts \u0443 \u0444\u043E\u0440\u043C\u0430\u0442\u0456 JSON",
+              "zh-cn": "\u4EE5 JSON \u683C\u5F0F\u6C47\u603B ECharts \u7684\u5386\u53F2\u6570\u636E"
+            }
+          },
+          native: {}
+        });
+      }
+      if (this.config.locationsTotal_hourly_json && this.config.locations.length > 1) {
+        await this.setObjectNotExistsAsync(`sum_peak_hourly-json_chart`, {
+          type: "state",
+          common: {
+            name: {
+              en: "Sum JSON Chart Data Hourly",
+              de: "Summe JSON Diagramm Daten St\xFCndlich",
+              ru: "\u0421\u0443\u043C\u043C\u0430\u0440\u043D\u044B\u0435 \u0434\u0430\u043D\u043D\u044B\u0435 JSON \u0437\u0430 \u0447\u0430\u0441",
+              pt: "Sum JSON Dados do Gr\xE1fico Hor\xE1rio",
+              nl: "Sum JSON Grafiekgegevens Uurlijk",
+              fr: "Sum JSON Donn\xE9es du graphique Horaire",
+              it: "Sum JSON Grafico Dati Orari",
+              es: "Sum JSON Datos de carga Horaria",
+              pl: "Sum JSON Wykres Dane Godzinowe",
+              uk: "\u0421\u0443\u043C\u0430 JSON \u0413\u0440\u0430\u0444\u0456\u043A \u0434\u0430\u043D\u0438\u0445 \u0429\u043E\u0433\u043E\u0434\u0438\u043D\u0438",
+              "zh-cn": "JSON\u603B\u548C \u56FE\u8868 \u6BCF\u5C0F\u65F6"
+            },
+            type: "string",
+            role: "json",
+            read: true,
+            write: false,
+            desc: {
+              en: "Sum History data for eCharts in JSON format",
+              de: "Summe f\xFCr eCharts im JSON-Format",
+              ru: "\u0414\u0430\u043D\u043D\u044B\u0435 \u0438\u0441\u0442\u043E\u0440\u0438\u0438 \u0441\u0443\u043C\u043C \u0434\u043B\u044F \u044D\u043B\u0435\u043A\u0442\u0440\u043E\u043D\u043D\u044B\u0445 \u0434\u0438\u0430\u0433\u0440\u0430\u043C\u043C\u044B \u0432 \u0444\u043E\u0440\u043C\u0430\u0442\u0435 JSON",
+              pt: "Dados do Sum History para eCharts em JSON",
+              nl: "Som geschiedenisgegevens voor eCharts in JSON-formaat",
+              fr: "Historique des sommes pour eCharts au format JSON",
+              it: "Sum History per eCharts in formato JSON",
+              es: "Sumar datos hist\xF3ricos de ECharts en formato JSON",
+              pl: "Suma danych historii dla eCharts w formacie JSON",
+              uk: "\u0421\u0443\u043C\u0430 \u0434\u0430\u043D\u0438\u0445 \u0456\u0441\u0442\u043E\u0440\u0456\u0457 \u0434\u043B\u044F eCharts \u0443 \u0444\u043E\u0440\u043C\u0430\u0442\u0456 JSON",
+              "zh-cn": "\u4EE5 JSON \u683C\u5F0F\u6C47\u603B ECharts \u7684\u5386\u53F2\u6570\u636E"
+            }
+          },
+          native: {}
+        });
+      }
     }
-    if (this.config.locationsTotal && this.config.minutes_15 && this.config.locationsTotal_minutely && this.config.locations.length > 1) {
+    if (this.config.minutes_15 && this.config.locationsTotal_minutely && this.config.locations.length > 1) {
       await this.setObjectNotExistsAsync("sum_peak_locations_15_Minutely", {
         type: "channel",
         common: {
@@ -740,7 +954,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
         });
       }
     }
-    if (this.config.locationsTotal && this.config.locationsTotal_hourly && this.config.locations.length > 1) {
+    if (this.config.locationsTotal_hourly && this.config.locations.length > 1) {
       await this.setObjectNotExistsAsync("sum_peak_locations_Hourly", {
         type: "channel",
         common: {
@@ -841,49 +1055,64 @@ class OpenMeteoPvForecast extends utils.Adapter {
     await this.updateSumLocations();
   }
   async updateSumLocations() {
-    if (!this.config.locationsTotal || this.config.locations.length <= 1) {
-      return;
+    if (this.config.locationsTotal && this.config.locations.length >= 1) {
+      for (let day = 0; day < this.config.forecastDays; day++) {
+        let sum = 0;
+        for (const location of this.config.locations) {
+          const locationName = this.sanitizeLocationName(location.name);
+          const state = await this.getStateAsync(`${locationName}.daily-forecast.day${day}.Peak_day`);
+          if (state && state.val !== null && state.val !== void 0) {
+            sum += state.val;
+          }
+        }
+        await this.setState(`sum_peak_locations_Daily.day${day}.sum_locations`, { val: sum, ack: true });
+      }
     }
-    for (let day = 0; day < this.config.forecastDays; day++) {
-      let sum = 0;
-      for (const location of this.config.locations) {
-        const locationName = this.sanitizeLocationName(location.name);
-        const state = await this.getStateAsync(`${locationName}.daily-forecast.day${day}.Peak_day`);
-        if (state && state.val !== null && state.val !== void 0) {
-          sum += state.val;
+    if (this.config.locationsTotal_hourly && this.config.locations.length >= 1) {
+      for (let hour = 0; hour < this.config.forecastHours; hour++) {
+        let sum = 0;
+        for (const location of this.config.locations) {
+          const locationName = this.sanitizeLocationName(location.name);
+          const state = await this.getStateAsync(
+            `${locationName}.hourly-forecast.hour${hour}.global_tilted_irradiance`
+          );
+          if (state && state.val !== null && state.val !== void 0) {
+            sum += state.val;
+          }
+        }
+        await this.setState(`sum_peak_locations_Hourly.Hour${hour}.sum_locations`, { val: sum, ack: true });
+      }
+    }
+    if (this.config.minutes_15 && this.config.locationsTotal_minutely && this.config.locations.length > 1) {
+      this.log.debug("Starting 15-min sum calculation...");
+      for (let i = 0; i < 96; i++) {
+        let totalSum = 0;
+        let timeVal = "";
+        let foundAnyValue = false;
+        for (const location of this.config.locations) {
+          const locationName = this.sanitizeLocationName(location.name);
+          const stateId = `${locationName}.15-min-forecast.${i}.global_tilted_irradiance`;
+          const timeId = `${locationName}.15-min-forecast.${i}.time`;
+          const locState = await this.getStateAsync(stateId);
+          const locTime = await this.getStateAsync(timeId);
+          if (locState && locState.val !== null && locState.val !== void 0) {
+            totalSum += Number(locState.val);
+            foundAnyValue = true;
+          }
+          if (locTime && locTime.val) {
+            timeVal = String(locTime.val);
+          }
+        }
+        if (foundAnyValue) {
+          await this.setState(`sum_peak_locations_15_Minutely.${i}.sum_locations`, {
+            val: totalSum,
+            ack: true
+          });
+        }
+        if (timeVal) {
+          await this.setState(`sum_peak_locations_15_Minutely.${i}.time`, { val: timeVal, ack: true });
         }
       }
-      await this.setState(`sum_peak_locations_Daily.day${day}.sum_locations`, { val: sum, ack: true });
-    }
-    if (!this.config.locationsTotal || !this.config.locationsTotal_hourly || this.config.locations.length <= 1) {
-      return;
-    }
-    for (let hour = 0; hour < this.config.forecastHours; hour++) {
-      let sum = 0;
-      for (const location of this.config.locations) {
-        const locationName = this.sanitizeLocationName(location.name);
-        const state = await this.getStateAsync(
-          `${locationName}.hourly-forecast.hour${hour}.global_tilted_irradiance`
-        );
-        if (state && state.val !== null && state.val !== void 0) {
-          sum += state.val;
-        }
-      }
-      await this.setState(`sum_peak_locations_Hourly.Hour${hour}.sum_locations`, { val: sum, ack: true });
-    }
-    if (!this.config.locationsTotal || !this.config.minutes_15 || !this.config.locationsTotal_minutely || this.config.locations.length <= 1) {
-      return;
-    }
-    for (let i = 0; i < 96; i++) {
-      let sum = 0;
-      for (const location of this.config.locations) {
-        const locationName = this.sanitizeLocationName(location.name);
-        const state = await this.getStateAsync(`${locationName}.15-min-forecast.${i}.global_tilted_irradiance`);
-        if (state && state.val !== null && state.val !== void 0) {
-          sum += state.val;
-        }
-      }
-      await this.setState(`sum_peak_locations_15_Minutely.${i}.sum_locations`, { val: sum, ack: true });
     }
   }
   async updateLocation(location) {
@@ -962,10 +1191,15 @@ class OpenMeteoPvForecast extends utils.Adapter {
         if (idx < data.hourly.time.length) {
           const apiDate = new Date(data.hourly.time[idx]);
           const formattedTime = apiDate.toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
+          const unixTimestamp = apiDate.getTime();
           const powerW = Math.round(data.hourly.global_tilted_irradiance[idx] * kwpFactor);
           const sunshineMinutes = Math.round((data.hourly.sunshine_duration[idx] || 0) / 60);
           await this.setState(`${locationName}.hourly-forecast.hour${hour}.time`, {
             val: formattedTime,
+            ack: true
+          });
+          await this.setState(`${locationName}.hourly-forecast.hour${hour}.unix_time_stamp`, {
+            val: unixTimestamp,
             ack: true
           });
           await this.setState(`${locationName}.hourly-forecast.hour${hour}.global_tilted_irradiance`, {
@@ -997,7 +1231,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
             val: pvTemp,
             ack: true
           });
-          if (this.config.locationsTotal && this.config.locationsTotal_hourly && this.config.locations.length > 1) {
+          if (this.config.locationsTotal_hourly && this.config.locations.length > 1) {
             await this.setState(`sum_peak_locations_Hourly.Hour${hour}.time`, {
               val: formattedTime,
               ack: true
@@ -1008,16 +1242,19 @@ class OpenMeteoPvForecast extends utils.Adapter {
       if (this.config.minutes_15 && data.minutely_15) {
         this.log.debug(`[${location.name}] Fill in the 15-minute forecast...`);
         const minData = data.minutely_15;
+        let unixTimestamp = 0;
         for (let i = 0; i < 96; i++) {
           if (minData.time[i]) {
             const apiDate = new Date(minData.time[i]);
+            unixTimestamp = apiDate.getTime();
             const formattedTime = apiDate.toLocaleTimeString("de-DE", {
               hour: "2-digit",
               minute: "2-digit"
             });
             const path = `${locationName}.15-min-forecast.${i}`;
             await this.setState(`${path}.time`, { val: formattedTime, ack: true });
-            if (this.config.locationsTotal && this.config.locationsTotal_minutely && this.config.locations.length > 1) {
+            await this.setState(`${path}.unix_time_stamp`, { val: unixTimestamp, ack: true });
+            if (this.config.locationsTotal_minutely && this.config.locations.length > 1) {
               await this.setState(`sum_peak_locations_15_Minutely.${i}.time`, {
                 val: formattedTime,
                 ack: true
@@ -1060,6 +1297,118 @@ class OpenMeteoPvForecast extends utils.Adapter {
               }
             }
           }
+        }
+      }
+      if (this.config.minutes_15_json && data.minutely_15) {
+        this.log.debug(`[${location.name}] Generating 15-minute JSON chart...`);
+        const minData = data.minutely_15;
+        const chartData = [];
+        for (let i = 0; i < 96; i++) {
+          if (minData.time[i]) {
+            const apiDate = new Date(minData.time[i]);
+            const unixTimestamp = apiDate.getTime();
+            const irradianceValue = minData.global_tilted_irradiance ? Math.round(minData.global_tilted_irradiance[i] * kwpFactor) : 0;
+            chartData.push({
+              ts: unixTimestamp,
+              val: irradianceValue
+            });
+          }
+        }
+        await this.setState(`${locationName}.15-min-json_chart`, {
+          val: JSON.stringify(chartData),
+          ack: true
+        });
+      }
+      if (this.config.hours_json && data.hourly) {
+        this.log.debug(`[${location.name}] Generating hourly JSON chart...`);
+        const hourlyData = data.hourly;
+        const chartData = [];
+        const forecastHours = this.config.forecastHours || 24;
+        for (let i = 0; i < forecastHours; i++) {
+          if (hourlyData.time[i]) {
+            const apiDate = new Date(hourlyData.time[i]);
+            const unixTimestamp = apiDate.getTime();
+            const irradianceValue = hourlyData.global_tilted_irradiance ? Math.round(hourlyData.global_tilted_irradiance[i] * kwpFactor) : 0;
+            chartData.push({
+              ts: unixTimestamp,
+              val: irradianceValue
+            });
+          }
+        }
+        await this.setState(`${locationName}.hourly-json_chart`, {
+          val: JSON.stringify(chartData),
+          ack: true
+        });
+      }
+      if (this.config.locationsTotal_minutely_json && this.config.minutes_15 && this.config.locations.length > 1) {
+        const sumChartData = [];
+        for (let i = 0; i < 96; i++) {
+          let totalSum = 0;
+          let currentTimeStr = "";
+          for (const location2 of this.config.locations) {
+            const locationName2 = this.sanitizeLocationName(location2.name);
+            const locTimeState = await this.getStateAsync(
+              `${locationName2}.15-min-forecast.${i}.unix_time_stamp`
+            );
+            const locValState = await this.getStateAsync(
+              `${locationName2}.15-min-forecast.${i}.global_tilted_irradiance`
+            );
+            if (locValState && locValState.val !== null) {
+              totalSum += locValState.val;
+            }
+            if (locTimeState && locTimeState.val) {
+              currentTimeStr = String(locTimeState.val);
+            }
+          }
+          if (currentTimeStr) {
+            sumChartData.push({
+              ts: currentTimeStr,
+              val: totalSum
+            });
+          }
+        }
+        if (sumChartData.length > 0) {
+          await this.setState(`sum_peak_15-min-json_chart`, {
+            val: JSON.stringify(sumChartData),
+            ack: true
+          });
+          this.log.debug(`15-min Sum-JSON created.`);
+        }
+      }
+      if (this.config.locationsTotal_minutely_json && this.config.minutes_15 && this.config.locations.length > 1) {
+        const sumChartData = [];
+        const forecastHours = this.config.forecastHours || 24;
+        for (let i = 0; i < forecastHours; i++) {
+          let totalSum = 0;
+          let currentTimeStr = "";
+          for (const location2 of this.config.locations) {
+            const locationName2 = this.sanitizeLocationName(location2.name);
+            const locTimeState = await this.getStateAsync(
+              `${locationName2}.hourly-forecast.hour${i}.unix_time_stamp`
+            );
+            const locValState = await this.getStateAsync(
+              `${locationName2}.hourly-forecast.hour${i}.global_tilted_irradiance`
+            );
+            if (locValState && locValState.val !== null) {
+              totalSum += locValState.val;
+            }
+            if (locTimeState && locTimeState.val) {
+              currentTimeStr = String(locTimeState.val);
+            }
+          }
+          if (currentTimeStr) {
+            sumChartData.push({
+              ts: currentTimeStr,
+              val: totalSum
+            });
+          }
+        }
+        if (sumChartData.length > 0) {
+          await this.setState(`sum_peak_hourly-json_chart`, {
+            val: JSON.stringify(sumChartData),
+            ack: true
+          });
+          this.log.debug(`Hourly Sum-JSON created.`);
         }
       }
       this.log.info(
