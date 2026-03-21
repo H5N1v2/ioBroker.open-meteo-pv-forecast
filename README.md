@@ -7,6 +7,7 @@
 ![Current version in stable repository](https://iobroker.live/badges/open-meteo-pv-forecast-stable.svg)
 
 [![NPM](https://nodei.co/npm/iobroker.open-meteo-pv-forecast.png?downloads=true)](https://nodei.co/npm/iobroker.open-meteo-pv-forecast/)
+
 **Tests:** ![Test and Release](https://github.com/H5N1v2/ioBroker.open-meteo-pv-forecast/workflows/Test%20and%20Release/badge.svg)
 
 ## open-meteo-pv-forecast adapter for ioBroker
@@ -54,6 +55,12 @@ For each configured location, a channel is created with the following data point
 | `Date` | - | Forecast date (DD.MM.YYYY). |
 | `Peak_day` | Wh | Expected total daily yield. |
 
+### Forecast JSON (`location_folder`) if enebled
+| Data Point | Unit | Description |
+|:---|:---|:---|
+| `15-min-json_chart` | - | JSON 15-min |
+| `hourly-json_chart` | - | JSON hourly |
+
 ### Hourly Forecast (`hourly-forecast.hourX`)
 | Data Point | Unit | Description |
 |:---|:---|:---|
@@ -82,6 +89,12 @@ For each configured location, a channel is created with the following data point
 | `sum_locations` | Wh | Sum of Locations Hourly |
 | `time` | - | Forecast time (HH:mm). |
 
+### JSON Datapoints if enebled
+| Data Point | Unit | Description |
+|:---|:---|:---|
+| `sum_peak_15-min-json_chart` | - | Sum of Locations 15 min in JSON |
+| `sum_peak_hourly-json_chart` | - | Sum of Locations hourly in JSON |
+
 
 ---
 
@@ -107,7 +120,7 @@ The following values must be defined for each location:
 
 ![Logo](admin/img/doc.png)
 
-### Global Options, only visible if you have multible Locations!
+### Global Options, only adjustable if you have multible Locations!
 * **Total Sum (Daily):** Creates the channel `sum_peak_locations_Daily`, summing the yields of all systems.
 * **Total Sum (Hourly):** Creates the channel `sum_peak_locations_Hourly` for the total hourly performance.
 * **Total Sum (15-Minutely):** Creates the channel `sum_peak_locations_15_Minutely` for the total 15 Minutes forecast.
@@ -127,6 +140,11 @@ Upon restart or configuration changes, the adapter automatically removes stale d
 
 
 ## Changelog
+### **WORK IN PROGRESS**
+* (H5N1v2) Added checkboxes in instance settings to create different JSON datapoints for echarts 
+* (H5N1v2) Added 15-minute sum json, hourly sum json, 15-minute json for locations, hourly json for locations
+* (Thisoft) fix: doc image, wrong pv directions 
+
 ### 1.0.0 (2026-03-15)
 * (H5N1v2) Added checkboxes in instance settings for daily, hourly and 15-minutely totals (only visible if multiple locations are configured).
 * (H5N1v2) Added hourlyUpdate configuration for rolling vs. fixed hour selection.
