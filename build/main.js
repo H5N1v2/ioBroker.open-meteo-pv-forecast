@@ -157,8 +157,27 @@ class OpenMeteoPvForecast extends utils.Adapter {
   async createStatesForLocations() {
     for (const location of this.config.locations) {
       const locationName = this.sanitizeLocationName(location.name);
+      await this.extendForeignObjectAsync(this.namespace, {
+        type: "meta",
+        common: {
+          name: {
+            en: "Open-Meteo PV-Forecast Service",
+            de: "Open-Meteo PV-Vorhersagedienst",
+            ru: "\u0421\u0435\u0440\u0432\u0438\u0441 \u043F\u0440\u043E\u0433\u043D\u043E\u0437\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u044F \u0441\u043E\u043B\u043D\u0435\u0447\u043D\u043E\u0439 \u0430\u043A\u0442\u0438\u0432\u043D\u043E\u0441\u0442\u0438 Open-Meteo",
+            pt: "Servi\xE7o de Previs\xE3o Fotovoltaica Open-Meteo",
+            nl: "Open-Meteo PV-voorspellingsservice",
+            fr: "Service de pr\xE9vision Open-Meteo PV",
+            it: "Servizio di previsione PV di Open-Meteo",
+            es: "Servicio de pron\xF3stico fotovoltaico de Open-Meteo",
+            pl: "Us\u0142uga prognozowania fotowoltaicznego Open-Meteo",
+            uk: "\u0421\u043B\u0443\u0436\u0431\u0430 \u043F\u0440\u043E\u0433\u043D\u043E\u0437\u0443 \u0441\u043E\u043D\u044F\u0447\u043D\u0438\u0445 \u0431\u0430\u0442\u0430\u0440\u0435\u0439 Open-Meteo",
+            "zh-cn": "Open-Meteo \u5149\u4F0F\u9884\u6D4B\u670D\u52A1"
+          },
+          type: "meta.user"
+        }
+      });
       await this.setObjectNotExistsAsync(locationName, {
-        type: "channel",
+        type: "device",
         common: { name: location.name },
         native: {}
       });
@@ -266,7 +285,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
                 "zh-cn": "\u5168\u7403\u503E\u659C\u8F90\u7167\u5EA6"
               },
               type: "number",
-              role: "value.power",
+              role: "value.energy",
               unit: "Wh",
               read: true,
               write: false
@@ -315,7 +334,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
               "zh-cn": "\u4E91\u5C42\u8986\u76D6"
             },
             type: "number",
-            role: "value.percent",
+            role: "value.clouds",
             unit: "%",
             read: true,
             write: false
@@ -474,7 +493,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
               "zh-cn": "\u6BCF\u65E5\u5CF0\u503C\u80FD\u91CF"
             },
             type: "number",
-            role: "value.power",
+            role: "value.energy",
             unit: "Wh",
             read: true,
             write: false
@@ -539,7 +558,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
                 "zh-cn": "\u6240\u6709\u4F4D\u7F6E\u7684\u603B\u548C"
               },
               type: "number",
-              role: "value.power.consumption",
+              role: "value.energy",
               unit: "Wh",
               read: true,
               write: false
@@ -620,8 +639,8 @@ class OpenMeteoPvForecast extends utils.Adapter {
               "zh-cn": "\u8F90\u7167\u5EA6"
             },
             type: "number",
-            role: "value.power",
-            unit: "W/m\xB2"
+            role: "value.energy",
+            unit: "Wh"
           },
           temperature_2m: {
             name: {
@@ -922,7 +941,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
               "zh-cn": "15 Minutes Sum of all locations"
             },
             type: "number",
-            role: "value.power.consumption",
+            role: "value.energy",
             unit: "Wh",
             read: true,
             write: false
@@ -1011,7 +1030,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
               "zh-cn": "\u6240\u6709\u5730\u70B9\u6BCF\u5C0F\u65F6\u603B\u548C"
             },
             type: "number",
-            role: "value.power.consumption",
+            role: "value.energy",
             unit: "Wh",
             read: true,
             write: false

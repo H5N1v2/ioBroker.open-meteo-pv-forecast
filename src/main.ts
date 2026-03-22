@@ -185,8 +185,28 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		for (const location of this.config.locations) {
 			const locationName = this.sanitizeLocationName(location.name);
 
+			await this.extendForeignObjectAsync(this.namespace, {
+				type: 'meta',
+				common: {
+					name: {
+						en: 'Open-Meteo PV-Forecast Service',
+						de: 'Open-Meteo PV-Vorhersagedienst',
+						ru: 'Сервис прогнозирования солнечной активности Open-Meteo',
+						pt: 'Serviço de Previsão Fotovoltaica Open-Meteo',
+						nl: 'Open-Meteo PV-voorspellingsservice',
+						fr: 'Service de prévision Open-Meteo PV',
+						it: 'Servizio di previsione PV di Open-Meteo',
+						es: 'Servicio de pronóstico fotovoltaico de Open-Meteo',
+						pl: 'Usługa prognozowania fotowoltaicznego Open-Meteo',
+						uk: 'Служба прогнозу сонячних батарей Open-Meteo',
+						'zh-cn': 'Open-Meteo 光伏预测服务',
+					},
+					type: 'meta.user',
+				},
+			});
+
 			await this.setObjectNotExistsAsync(locationName, {
-				type: 'channel',
+				type: 'device',
 				common: { name: location.name },
 				native: {},
 			});
@@ -298,7 +318,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 								'zh-cn': '全球倾斜辐照度',
 							},
 							type: 'number',
-							role: 'value.power',
+							role: 'value.energy',
 							unit: 'Wh',
 							read: true,
 							write: false,
@@ -347,7 +367,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 							'zh-cn': '云层覆盖',
 						},
 						type: 'number',
-						role: 'value.percent',
+						role: 'value.clouds',
 						unit: '%',
 						read: true,
 						write: false,
@@ -511,7 +531,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 							'zh-cn': '每日峰值能量',
 						},
 						type: 'number',
-						role: 'value.power',
+						role: 'value.energy',
 						unit: 'Wh',
 						read: true,
 						write: false,
@@ -579,7 +599,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 								'zh-cn': '所有位置的总和',
 							},
 							type: 'number',
-							role: 'value.power.consumption',
+							role: 'value.energy',
 							unit: 'Wh',
 							read: true,
 							write: false,
@@ -663,8 +683,8 @@ class OpenMeteoPvForecast extends utils.Adapter {
 							'zh-cn': '辐照度',
 						},
 						type: 'number',
-						role: 'value.power',
-						unit: 'W/m²',
+						role: 'value.energy',
+						unit: 'Wh',
 					},
 					temperature_2m: {
 						name: {
@@ -985,7 +1005,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 							'zh-cn': '15 Minutes Sum of all locations',
 						},
 						type: 'number',
-						role: 'value.power.consumption',
+						role: 'value.energy',
 						unit: 'Wh',
 						read: true,
 						write: false,
@@ -1078,7 +1098,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 							'zh-cn': '所有地点每小时总和',
 						},
 						type: 'number',
-						role: 'value.power.consumption',
+						role: 'value.energy',
 						unit: 'Wh',
 						read: true,
 						write: false,
