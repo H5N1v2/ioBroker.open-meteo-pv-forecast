@@ -140,7 +140,7 @@ Upon restart or configuration changes, the adapter automatically removes stale d
 
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 1.1.1 (2026-03-22)
 * (H5N1v2) fix: responsive layout properties for locations table in jsonConfig
 * (H5N1v2) fix: role types
 * (Thisoft) fix: wrong directions in documentation image

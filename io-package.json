@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "open-meteo-pv-forecast",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "news": {
+      "1.1.1": {
+        "en": "fix: responsive layout properties for locations table in jsonConfig\nfix: role types\nfix: wrong directions in documentation image",
+        "de": "fix: responsive Layout-Eigenschaften für Standorte Tabelle in jsonConfig\nfix: rollentypen\nfix: falsche richtungen im dokumentationsbild",
+        "ru": "исправление: адаптивные свойства компоновки для таблицы местоположений в jsonConfig\nфиксация: типы ролей\nисправление: неправильные направления в изображении документации",
+        "pt": "correção: propriedades de layout responsivo para a tabela de locais em jsonConfig\ncorrigir: tipos de funções\ncorrigir: direções erradas na imagem de documentação",
+        "nl": "fix: responsieve lay-out eigenschappen voor locaties tabel in jsonConfig\nfix: roltypes\nfix: verkeerde aanwijzingen in het documentatiebeeld",
+        "fr": "correction : propriétés de mise en page réactives pour la table des emplacements dans jsonConfig\ncorrection : types de rôles\ncorrection : mauvaise direction dans l'image de documentation",
+        "it": "fix: proprietà di layout reattiva per la tabella delle posizioni in jsonConfig\nfix: tipi di ruolo\ncorrezione: indicazioni sbagliate nell'immagine di documentazione",
+        "es": "fijado: propiedades de diseño sensibles para las ubicaciones tabla en jsonConfig\nfijación: tipos de roles\narreglar: direcciones erróneas en la imagen de la documentación",
+        "pl": "fix: odpowiednie właściwości układu dla tabel lokalizacji w jsonConfig\nfix: typy ról\nfix: błędne kierunki w obrazie dokumentacji",
+        "uk": "виправити: чуйні верстки властивості для розташування столу в jsonConfig\nвиправити: типи ролі\nвиправити: неправильні напрямки в документі зображення",
+        "zh-cn": "固定: jsonConfig 中位置表的响应布局属性\n固定: 角色类型\n修补:文档图像中的错误方向"
+      },
       "1.1.0": {
         "en": "Added checkboxes in instance settings to create different JSON datapoints for echarts \nAdded 15-minute sum json, hourly sum json, 15-minute json for locations, hourly json for locations\nfix: doc image, wrong pv directions",
         "de": "Hinzugefügt Checkboxen in Beispieleinstellungen, um verschiedene JSON-Datenpunkte für echarts zu erstellen\nHinzugefügt 15-minütige Summe json, stündliche Summe json, 15-Minuten-Json für Orte, stündliche json für Orte\nfix: doc bild, falsche pv richtungen",
