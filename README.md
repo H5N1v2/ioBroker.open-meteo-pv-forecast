@@ -140,6 +140,11 @@ Upon restart or configuration changes, the adapter automatically removes stale d
 
 
 ## Changelog
+### **WORK IN PROGRESS**
+* (H5N1v2) fix: responsive layout properties for locations table in jsonConfig
+* (H5N1v2) fix: role types
+* (Thisoft) fix: wrong directions in documentation image
+
 ### 1.1.0 (2026-03-21)
 * (H5N1v2) Added checkboxes in instance settings to create different JSON datapoints for echarts 
 * (H5N1v2) Added 15-minute sum json, hourly sum json, 15-minute json for locations, hourly json for locations
