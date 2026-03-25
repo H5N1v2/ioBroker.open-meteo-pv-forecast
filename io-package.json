@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "open-meteo-pv-forecast",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "news": {
+      "1.1.2": {
+        "en": "Update @types/node dependency to version 22.19.15\nfix: Update role type from 'json' to 'chart' for forecast data",
+        "de": "Update @types/node Abhängigkeit von Version 22.19.15\nfix: Aktualisieren Sie Rollentyp von 'json' zu 'chart' für Prognosedaten",
+        "ru": "Обновление @types/node Dependency до версии 22.19.15\nобновление типа роли от «json» до «chart» для прогнозных данных",
+        "pt": "Atualizar a dependência @types/node para a versão 22.19.15\ncorreção: Atualizar tipo de função de 'json' para 'chart' para dados de previsão",
+        "nl": "Update @types/node afhankelijkheid naar versie 22.19.15\nfix: Update roltype van 'json' naar 'chart' voor prognosegegevens",
+        "fr": "Mettre à jour la dépendance @types/node vers la version 22.19.15\ncorrection: Type de rôle de mise à jour de 'json' à 'chart' pour les données prévisionnelles",
+        "it": "Aggiorna @types/node dependency alla versione 22.19.15\ncorrezione: Tipo di ruolo di aggiornamento da 'json' a 'chart' per i dati di previsione",
+        "es": "Actualizar @types/node dependencia a la versión 22.19.15\nfijación: Actualizar el tipo de función de 'json' a 'chart' para datos de pronóstico",
+        "pl": "Update @ types / node dependent to version 22.19.15\nfix: Aktualizuj typ roli z 'json' do 'chart' dla prognozowanych danych",
+        "uk": "Update @types/node залежність до версії 22.19.15\nвиправити: Тип ролі оновлення від 'json' до 'chart' для прогнозування даних",
+        "zh-cn": "将@types/节点依赖性更新到22.19.15版本\nfix: 将预测数据从“ json” 更新为“ 图表 ”"
+      },
       "1.1.1": {
         "en": "fix: responsive layout properties for locations table in jsonConfig\nfix: role types\nfix: wrong directions in documentation image",
         "de": "fix: responsive Layout-Eigenschaften für Standorte Tabelle in jsonConfig\nfix: rollentypen\nfix: falsche richtungen im dokumentationsbild",

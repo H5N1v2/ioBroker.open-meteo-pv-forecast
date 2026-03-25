@@ -140,7 +140,7 @@ Upon restart or configuration changes, the adapter automatically removes stale d
 
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 1.1.2 (2026-03-25)
 * (H5N1v2) Update @types/node dependency to version 22.19.15
 * (H5N1v2) fix: Update role type from 'json' to 'chart' for forecast data
 
