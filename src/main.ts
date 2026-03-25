@@ -814,7 +814,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 							'zh-cn': 'JSON 图表数据',
 						},
 						type: 'string',
-						role: 'json',
+						role: 'chart',
 						read: true,
 						write: false,
 						desc: {
@@ -853,7 +853,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 							'zh-cn': 'JSON 图表数据 小时',
 						},
 						type: 'string',
-						role: 'json',
+						role: 'chart',
 						read: true,
 						write: false,
 						desc: {
@@ -895,7 +895,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 							'zh-cn': 'JSON总和 图表 15分钟',
 						},
 						type: 'string',
-						role: 'json',
+						role: 'chart',
 						read: true,
 						write: false,
 						desc: {
@@ -934,7 +934,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 							'zh-cn': 'JSON总和 图表 每小时',
 						},
 						type: 'string',
-						role: 'json',
+						role: 'chart',
 						read: true,
 						write: false,
 						desc: {
