@@ -56,6 +56,11 @@
         "zh-cn": "每日、小时和15分钟总计的设置中添加的复选框(仅在配置多个位置时可见).\n小时增加 更新滚动对定时选择的配置 .\n增加了15分钟高分辨率预报数据(每天96个间隔).\n增加自动总和计算,所有地点间隔15分钟.\n改进更新Interval逻辑,以便在设定为0时允许手动/加时执行(Disabled).\n根据Faiman模型,在小时位置预测中增加了一个新的数据点“pv_温度”."
       }
     },
+      "plugins": {
+        "sentry": {
+          "dsn": "https://99639c52c838486c89f8a75244665d65@sentry.iknox.de/1"
+        }
+      },    
     "titleLang": {
       "en": "Open Meteo PV Forecast",
       "de": "Open Meteo PV-Vorhersage",
