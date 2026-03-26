@@ -10,6 +10,11 @@
 
 **Tests:** ![Test and Release](https://github.com/H5N1v2/ioBroker.open-meteo-pv-forecast/workflows/Test%20and%20Release/badge.svg)
 
+## Important
+**This adapter uses Sentry libraries to automatically report exceptions and code errors to the developers.** For more details and instructions on disabling error reporting, please refer to the [Sentry-Plugin Documentation](https://github.com/ioBroker/plugin-sentry#plugin-sentry)! Use of Sentry reporting starts with js-controller 3.0.
+
+I use my own Sentry server based on Glitchtip.
+
 ## open-meteo-pv-forecast adapter for ioBroker
 
 **This adapter provides photovoltaic yield forecasts based on weather data from Open-Meteo.**
@@ -140,6 +145,9 @@ Upon restart or configuration changes, the adapter automatically removes stale d
 
 
 ## Changelog
+### **WORK IN PROGRESS**
+* (H5N1v2) add sentry plugin to automatically report errors to developer
+
 ### 1.1.2 (2026-03-25)
 * (H5N1v2) Update @types/node dependency to version 22.19.15
 * (H5N1v2) fix: Update role type from 'json' to 'chart' for forecast data
