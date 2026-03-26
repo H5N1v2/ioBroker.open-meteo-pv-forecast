@@ -145,7 +145,7 @@ Upon restart or configuration changes, the adapter automatically removes stale d
 
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 1.1.3 (2026-03-26)
 * (H5N1v2) add sentry plugin to automatically report errors to developer
 
 ### 1.1.2 (2026-03-25)

@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "open-meteo-pv-forecast",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "news": {
+      "1.1.3": {
+        "en": "add sentry plugin to automatically report errors to developer",
+        "de": "sendry plugin hinzufügen, um automatisch fehler an entwickler zu melden",
+        "ru": "добавляйте шторный плагин для автоматического сообщения об ошибках разработчику",
+        "pt": "adicionar um 'plugin' de sentinela para comunicar automaticamente erros ao programador",
+        "nl": "toe te voegen wachtwoord plugin om automatisch fouten melden aan ontwikkelaar",
+        "fr": "ajouter le plugin sentiry pour signaler automatiquement les erreurs au développeur",
+        "it": "aggiungere plug-in inviato per segnalare automaticamente gli errori allo sviluppatore",
+        "es": "añadir plugin centry para reportar automáticamente errores al desarrollador",
+        "pl": "dodaj wtyczkę sentry do automatycznego zgłaszania błędów deweloperowi",
+        "uk": "додати плагін відправки, щоб автоматично звітувати помилки розробника",
+        "zh-cn": "添加哨兵插件以自动向开发者报告错误"
+      },
       "1.1.2": {
         "en": "Update @types/node dependency to version 22.19.15\nfix: Update role type from 'json' to 'chart' for forecast data",
         "de": "Update @types/node Abhängigkeit von Version 22.19.15\nfix: Aktualisieren Sie Rollentyp von 'json' zu 'chart' für Prognosedaten",
@@ -56,11 +69,11 @@
         "zh-cn": "每日、小时和15分钟总计的设置中添加的复选框(仅在配置多个位置时可见).\n小时增加 更新滚动对定时选择的配置 .\n增加了15分钟高分辨率预报数据(每天96个间隔).\n增加自动总和计算,所有地点间隔15分钟.\n改进更新Interval逻辑,以便在设定为0时允许手动/加时执行(Disabled).\n根据Faiman模型,在小时位置预测中增加了一个新的数据点“pv_温度”."
       }
     },
-      "plugins": {
-        "sentry": {
-          "dsn": "https://99639c52c838486c89f8a75244665d65@sentry.iknox.de/1"
-        }
-      },    
+    "plugins": {
+      "sentry": {
+        "dsn": "https://99639c52c838486c89f8a75244665d65@sentry.iknox.de/1"
+      }
+    },
     "titleLang": {
       "en": "Open Meteo PV Forecast",
       "de": "Open Meteo PV-Vorhersage",
