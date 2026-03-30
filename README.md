@@ -145,7 +145,7 @@ Upon restart or configuration changes, the adapter automatically removes stale d
 
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 1.1.4 (2026-03-30)
 * (H5N1v2) Update axios dependency to version 1.14.0
 
 ### 1.1.3 (2026-03-26)
