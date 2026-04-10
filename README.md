@@ -145,10 +145,9 @@ Upon restart or configuration changes, the adapter automatically removes stale d
 
 
 ## Changelog
-### **WORK IN PROGRESS**
+### 1.1.5 (2026-04-10)
 * (FredF) fix timeformat for Daily forecast
 * (H5N1v2) Update axios dependency to version 1.15.0
-
 
 ### 1.1.4 (2026-03-30)
 * (H5N1v2) Update axios dependency to version 1.14.0

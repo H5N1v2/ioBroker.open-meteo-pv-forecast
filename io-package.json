@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "open-meteo-pv-forecast",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "news": {
+      "1.1.5": {
+        "en": "fix timeformat for Daily forecast\nUpdate axios dependency to version 1.15.0",
+        "de": "fixzeitformat für Tagesprognose\nUpdate axios Abhängigkeit von Version 1.15.0",
+        "ru": "фиксировать формат времени для ежедневного прогноза\nЗависимость аксиоса от версии 1.15.0",
+        "pt": "fixar o formato do tempo para previsão diária\nAtualizar dependência de axios para a versão 1.15.0",
+        "nl": "fix tijdformaat voor dagelijkse prognose\nAxios afhankelijkheid bijwerken naar versie 1.15.0",
+        "fr": "corriger timeformat pour les prévisions quotidiennes\nMettre à jour la dépendance axios vers la version 1.15.0",
+        "it": "fissare il formato di tempo per le previsioni quotidiane\nAggiornare la dipendenza dagli assi nella versione 1.15.0",
+        "es": "tiempo de fijación para el pronóstico diario\nActualizar la dependencia de axios a la versión 1.15.0",
+        "pl": "ustaw format czasowy prognozy dziennej\nAktualizuj zależność aksjosu od wersji 1.15.0",
+        "uk": "фіксувати часовий формат для добового прогнозу\nUpdate axios залежність до версії 1.15.0",
+        "zh-cn": "每日预报的固定时间格式\n将 Axios 依赖性更新到 1. 15. 0 版本"
+      },
       "1.1.4": {
         "en": "Update axios dependency to version 1.14.0",
         "de": "Update axios Abhängigkeit von Version 1.14.0",

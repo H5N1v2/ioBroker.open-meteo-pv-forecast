@@ -774,7 +774,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
               "zh-cn": "JSON \u56FE\u8868\u6570\u636E"
             },
             type: "string",
-            role: "chart",
+            role: "json",
             read: true,
             write: false,
             desc: {
@@ -812,7 +812,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
               "zh-cn": "JSON \u56FE\u8868\u6570\u636E \u5C0F\u65F6"
             },
             type: "string",
-            role: "chart",
+            role: "json",
             read: true,
             write: false,
             desc: {
@@ -850,7 +850,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
               "zh-cn": "JSON\u603B\u548C \u56FE\u8868 15\u5206\u949F"
             },
             type: "string",
-            role: "chart",
+            role: "json",
             read: true,
             write: false,
             desc: {
@@ -888,7 +888,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
               "zh-cn": "JSON\u603B\u548C \u56FE\u8868 \u6BCF\u5C0F\u65F6"
             },
             type: "string",
-            role: "chart",
+            role: "json",
             read: true,
             write: false,
             desc: {
