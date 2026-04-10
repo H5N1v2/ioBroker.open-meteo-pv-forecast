@@ -26,6 +26,9 @@ var import_api_caller = require("./lib/api_caller");
 class OpenMeteoPvForecast extends utils.Adapter {
   apiCaller;
   updateInterval;
+  /*
+   * Initialisiert den Adapter und registriert die Lifecycle-Handler.
+   */
   constructor(options = {}) {
     super({
       ...options,
@@ -35,6 +38,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
     this.on("stateChange", this.onStateChange.bind(this));
     this.on("unload", this.onUnload.bind(this));
   }
+  /*
+   * Startet den Adapter, bereitet States vor und plant zyklische Updates.
+   */
   async onReady() {
     this.apiCaller = new import_api_caller.ApiCaller(this);
     this.log.info("Starting open-meteo-pv-forecast adapter");
@@ -63,6 +69,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
       );
     }
   }
+  /*
+   * Entfernt nicht mehr benoetigte States und Kanaele anhand der aktuellen Konfiguration.
+   */
   async cleanupStaleObjects() {
     this.log.debug("Starting cleanup of stale objects...");
     const sumChannels = [
@@ -154,6 +163,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
     }
     this.log.debug("Cleanup finished.");
   }
+  /*
+   * Legt alle benoetigten Objekte und States fuer konfigurierte Standorte an.
+   */
   async createStatesForLocations() {
     for (const location of this.config.locations) {
       const locationName = this.sanitizeLocationName(location.name);
@@ -470,7 +482,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
               "zh-cn": "\u65E5\u671F"
             },
             type: "string",
-            role: "date",
+            role: "text",
             read: true,
             write: false
           },
@@ -1063,6 +1075,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
       }
     }
   }
+  /*
+   * Aktualisiert alle Standorte und berechnet anschliessend die Summenstates.
+   */
   async updateAllLocations() {
     for (const location of this.config.locations) {
       try {
@@ -1073,6 +1088,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
     }
     await this.updateSumLocations();
   }
+  /*
+   * Aggregiert Tages-, Stunden- und 15-Minuten-Werte ueber alle Standorte.
+   */
   async updateSumLocations() {
     if (this.config.locationsTotal && this.config.locations.length >= 1) {
       for (let day = 0; day < this.config.forecastDays; day++) {
@@ -1134,6 +1152,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
       }
     }
   }
+  /*
+   * Holt die Forecast-Daten fuer einen Standort und schreibt die berechneten States.
+   */
   async updateLocation(location) {
     var _a, _b;
     const locationName = this.sanitizeLocationName(location.name);
@@ -1182,12 +1203,18 @@ class OpenMeteoPvForecast extends utils.Adapter {
         }
       }
       const todayObj = /* @__PURE__ */ new Date();
+      todayObj.setHours(12, 0, 0, 0);
+      const sysLang = this.language || "de";
       for (let day = 0; day < this.config.forecastDays; day++) {
         const targetDate = new Date(todayObj);
         targetDate.setDate(todayObj.getDate() + day);
         const dateKey = `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, "0")}-${String(targetDate.getDate()).padStart(2, "0")}`;
         const totalWh = Math.round(dailySums[dateKey] || 0);
-        const formattedDisplayDate = `${String(targetDate.getDate()).padStart(2, "0")}.${String(targetDate.getMonth() + 1).padStart(2, "0")}.${targetDate.getFullYear()}`;
+        const formattedDisplayDate = targetDate.toLocaleDateString(sysLang, {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric"
+        });
         await this.setState(`${locationName}.daily-forecast.day${day}.Date`, {
           val: formattedDisplayDate,
           ack: true
@@ -1437,15 +1464,24 @@ class OpenMeteoPvForecast extends utils.Adapter {
       this.log.error(`[${location.name}] Error: ${error.message}`);
     }
   }
+  /*
+   * Normalisiert einen Standortnamen fuer die Verwendung in State-IDs.
+   */
   sanitizeLocationName(name) {
     return name.replace(/[^a-zA-Z0-9_-]/g, "_").replace(/_+/g, "_").replace(/^_|_$/g, "");
   }
+  /*
+   * Raeumt laufende Timer auf, bevor der Adapter entladen wird.
+   */
   onUnload(callback) {
     if (this.updateInterval) {
       clearInterval(this.updateInterval);
     }
     callback();
   }
+  /*
+   * Protokolliert unbestaetigte State-Aenderungen.
+   */
   onStateChange(id, state) {
     if (state && !state.ack) {
       this.log.debug(`DEBUG:state ${id} changed: ${state.val}`);

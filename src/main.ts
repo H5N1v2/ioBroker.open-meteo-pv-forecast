@@ -1,7 +1,3 @@
-/*
- * Created with @iobroker/create-adapter v3.1.2
- */
-
 import * as utils from '@iobroker/adapter-core';
 import { ApiCaller } from './lib/api_caller';
 import type { Location } from './lib/adapter-config';
@@ -10,6 +6,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
 	private apiCaller!: ApiCaller;
 	private updateInterval?: NodeJS.Timeout;
 
+	/*
+	 * Initialisiert den Adapter und registriert die Lifecycle-Handler.
+	 */
 	public constructor(options: Partial<utils.AdapterOptions> = {}) {
 		super({
 			...options,
@@ -20,6 +19,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		this.on('unload', this.onUnload.bind(this));
 	}
 
+	/*
+	 * Startet den Adapter, bereitet States vor und plant zyklische Updates.
+	 */
 	private async onReady(): Promise<void> {
 		this.apiCaller = new ApiCaller(this);
 
@@ -42,7 +44,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 
 		await this.updateAllLocations();
 
-		// --- INTERVALL ---
 		const intervalMinutes = Number(this.config.updateInterval);
 
 		if (intervalMinutes > 0) {
@@ -58,10 +59,12 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		}
 	}
 
+	/*
+	 * Entfernt nicht mehr benoetigte States und Kanaele anhand der aktuellen Konfiguration.
+	 */
 	private async cleanupStaleObjects(): Promise<void> {
 		this.log.debug('Starting cleanup of stale objects...');
 
-		// 1. Definition der Summen-Channels und deren Abhängigkeiten
 		const sumChannels = [
 			{ id: 'sum_peak_locations_Daily', configKey: 'locationsTotal_daily', masterKey: null },
 			{ id: 'sum_peak_locations_Hourly', configKey: 'locationsTotal_hourly', masterKey: null },
@@ -69,7 +72,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		];
 
 		for (const channel of sumChannels) {
-			// Prüfung: Muss dieser Summen-Ordner gelöscht werden?
 			const masterDisabled = channel.masterKey && !(this.config as any)[channel.masterKey];
 			const sumOptionDisabled = !(this.config as any)[channel.configKey];
 			const tooFewLocations = this.config.locations.length <= 1;
@@ -83,7 +85,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 			}
 		}
 
-		// 2. Locations und deren Unterordner bereinigen
 		const configuredNames = new Set(this.config.locations.map(l => this.sanitizeLocationName(l.name)));
 		const allObjects = await this.getAdapterObjectsAsync();
 
@@ -92,7 +93,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 			const parts = localId.split('.');
 			const locName = parts[0];
 
-			// Ignoriere die Summen-Ordner in dieser Schleife (wurden oben bereits behandelt)
 			if (
 				['sum_peak_locations_Daily', 'sum_peak_locations_Hourly', 'sum_peak_locations_15_Minutely'].includes(
 					locName,
@@ -101,9 +101,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 				continue;
 			}
 
-			// A) FALLS DIE LOCATION ENTFERNT WURDE
 			if (!configuredNames.has(locName)) {
-				// Nur den Haupt-Channel löschen, recursive löscht den Rest
 				if (allObjects[fullId].type === 'channel' && parts.length === 1) {
 					await this.delObjectAsync(localId, { recursive: true });
 					this.log.info(`Cleanup: Deleted removed location: ${locName}`);
@@ -111,16 +109,13 @@ class OpenMeteoPvForecast extends utils.Adapter {
 				continue;
 			}
 
-			// B) FALLS DIE LOCATION NOCH EXISTIERT -> UNTERORDNER PRÜFEN
 			if (configuredNames.has(locName)) {
-				// 1. Check: 15-Minuten komplett deaktiviert?
 				if (localId.includes('.15-min-forecast') && !this.config.minutes_15) {
 					await this.delObjectAsync(localId, { recursive: true });
 					this.log.debug(`Cleanup: Deleted 15-min-forecast for ${locName} (option disabled)`);
 					continue;
 				}
 
-				// 2. Check: Reduzierte TAGE (daily-forecast.dayX)
 				const dayMatch = localId.match(/\.daily-forecast\.day(\d+)$/);
 				if (dayMatch) {
 					const dayIndex = parseInt(dayMatch[1]);
@@ -130,7 +125,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					}
 				}
 
-				// 3. Check: Reduzierte STUNDEN (hourly-forecast.hourX)
 				const hourMatch = localId.match(/\.hourly-forecast\.hour(\d+)$/);
 				if (hourMatch) {
 					const hourIndex = parseInt(hourMatch[1]);
@@ -140,7 +134,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					}
 				}
 
-				// 4. Check: 15-Minuten-Intervalle (Sicherheit: Falls i >= 96)
 				const minMatch = localId.match(/\.15-min-forecast\.(\d+)$/);
 				if (minMatch) {
 					const minIndex = parseInt(minMatch[1]);
@@ -149,7 +142,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					}
 				}
 			}
-			// SUM JSON-Objekt löschen falls deaktiviert
 			if (
 				!this.config.locationsTotal_minutely_json ||
 				!this.config.minutes_15 ||
@@ -161,7 +153,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					this.log.debug('Cleanup: Deleted sum_peak_15-min-json_chart (option disabled or not needed)');
 				}
 			}
-			// Location JSON-Objekt löschen falls deaktiviert
 			if (!this.config.minutes_15_json) {
 				const jsonObj = await this.getObjectAsync(`${locName}.15-min-json_chart`);
 				if (jsonObj) {
@@ -169,7 +160,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					this.log.debug(`Cleanup: Deleted 15-min-json_chart for ${locName}`);
 				}
 			}
-			// Location StundeJSON-Objekt löschen falls deaktiviert
 			if (!this.config.hours_json) {
 				const jsonObj = await this.getObjectAsync(`${locName}.hourly-json_chart`);
 				if (jsonObj) {
@@ -181,6 +171,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		this.log.debug('Cleanup finished.');
 	}
 
+	/*
+	 * Legt alle benoetigten Objekte und States fuer konfigurierte Standorte an.
+	 */
 	private async createStatesForLocations(): Promise<void> {
 		for (const location of this.config.locations) {
 			const locationName = this.sanitizeLocationName(location.name);
@@ -507,7 +500,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 							'zh-cn': '日期',
 						},
 						type: 'string',
-						role: 'date',
+						role: 'text',
 						read: true,
 						write: false,
 					},
@@ -609,7 +602,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 				}
 			}
 			if (this.config.minutes_15) {
-				// 1. Haupt-Channel erstellen
 				await this.setObjectNotExistsAsync(`${locationName}.15-min-forecast`, {
 					type: 'channel',
 					common: {
@@ -630,7 +622,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					native: {},
 				});
 
-				// Definition der Datenpunkte pro 15-Min-Schritt
 				const states = {
 					unix_time_stamp: {
 						name: {
@@ -742,19 +733,15 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					},
 				};
 
-				// Schleife für die Intervalle (z.B. für 24 Stunden = 96 Intervalle)
-				// Du kannst '96' auch durch eine Config-Variable ersetzen
 				for (let i = 0; i < 96; i++) {
 					const channelId = `${locationName}.15-min-forecast.${i}`;
 
-					// Unter-Channel für den Zeitschritt erstellen
 					await this.setObjectNotExistsAsync(channelId, {
 						type: 'channel',
 						common: { name: `Interval ${i}` },
 						native: {},
 					});
 
-					// Alle Datenpunkte innerhalb des Intervalls erstellen
 					for (const [key, info] of Object.entries(states)) {
 						await this.setObjectNotExistsAsync(`${channelId}.${key}`, {
 							type: 'state',
@@ -795,7 +782,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					}
 				}
 			}
-			// Optional: JSON-Chart-Datenpunkt für 15-Minuten-Vorhersage
 			if (this.config.minutes_15_json) {
 				await this.setObjectNotExistsAsync(`${locationName}.15-min-json_chart`, {
 					type: 'state',
@@ -814,7 +800,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 							'zh-cn': 'JSON 图表数据',
 						},
 						type: 'string',
-						role: 'chart',
+						role: 'json',
 						read: true,
 						write: false,
 						desc: {
@@ -834,7 +820,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					native: {},
 				});
 			}
-			// Optional: JSON-Chart-Datenpunkt für Stunden-Vorhersage
 			if (this.config.hours_json) {
 				await this.setObjectNotExistsAsync(`${locationName}.hourly-json_chart`, {
 					type: 'state',
@@ -853,7 +838,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 							'zh-cn': 'JSON 图表数据 小时',
 						},
 						type: 'string',
-						role: 'chart',
+						role: 'json',
 						read: true,
 						write: false,
 						desc: {
@@ -895,7 +880,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 							'zh-cn': 'JSON总和 图表 15分钟',
 						},
 						type: 'string',
-						role: 'chart',
+						role: 'json',
 						read: true,
 						write: false,
 						desc: {
@@ -915,7 +900,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					native: {},
 				});
 			}
-			// sum JSON-Objekt für Stunden-Vorhersage erstellen, falls aktiviert und mehr als 1 Standort
 			if (this.config.locationsTotal_hourly_json && this.config.locations.length > 1) {
 				await this.setObjectNotExistsAsync(`sum_peak_hourly-json_chart`, {
 					type: 'state',
@@ -934,7 +918,7 @@ class OpenMeteoPvForecast extends utils.Adapter {
 							'zh-cn': 'JSON总和 图表 每小时',
 						},
 						type: 'string',
-						role: 'chart',
+						role: 'json',
 						read: true,
 						write: false,
 						desc: {
@@ -956,7 +940,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 			}
 		}
 
-		//minütlich Summe aller Standorte
 		if (this.config.minutes_15 && this.config.locationsTotal_minutely && this.config.locations.length > 1) {
 			await this.setObjectNotExistsAsync('sum_peak_locations_15_Minutely', {
 				type: 'channel',
@@ -981,7 +964,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 			for (let i = 0; i < 96; i++) {
 				const channelId = `sum_peak_locations_15_Minutely.${i}`;
 
-				// Unter-Channel für den Zeitschritt erstellen
 				await this.setObjectNotExistsAsync(channelId, {
 					type: 'channel',
 					common: { name: `Interval ${i}` },
@@ -1038,7 +1020,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 				});
 			}
 		}
-		//stündliche Summe aller Standorte
 		if (this.config.locationsTotal_hourly && this.config.locations.length > 1) {
 			await this.setObjectNotExistsAsync('sum_peak_locations_Hourly', {
 				type: 'channel',
@@ -1133,6 +1114,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		}
 	}
 
+	/*
+	 * Aktualisiert alle Standorte und berechnet anschliessend die Summenstates.
+	 */
 	private async updateAllLocations(): Promise<void> {
 		for (const location of this.config.locations) {
 			try {
@@ -1144,8 +1128,10 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		await this.updateSumLocations();
 	}
 
+	/*
+	 * Aggregiert Tages-, Stunden- und 15-Minuten-Werte ueber alle Standorte.
+	 */
 	private async updateSumLocations(): Promise<void> {
-		// Summe Täglich
 		if (this.config.locationsTotal && this.config.locations.length >= 1) {
 			for (let day = 0; day < this.config.forecastDays; day++) {
 				let sum = 0;
@@ -1159,7 +1145,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 				await this.setState(`sum_peak_locations_Daily.day${day}.sum_locations`, { val: sum, ack: true });
 			}
 		}
-		// Summe Stündlich
 		if (this.config.locationsTotal_hourly && this.config.locations.length >= 1) {
 			for (let hour = 0; hour < this.config.forecastHours; hour++) {
 				let sum = 0;
@@ -1175,14 +1160,13 @@ class OpenMeteoPvForecast extends utils.Adapter {
 				await this.setState(`sum_peak_locations_Hourly.Hour${hour}.sum_locations`, { val: sum, ack: true });
 			}
 		}
-		// --- Summe 15 Minuten ---
 		if (this.config.minutes_15 && this.config.locationsTotal_minutely && this.config.locations.length > 1) {
 			this.log.debug('Starting 15-min sum calculation...');
 
 			for (let i = 0; i < 96; i++) {
 				let totalSum = 0;
 				let timeVal = '';
-				let foundAnyValue = false; // Flag, um zu sehen, ob wir überhaupt Daten finden
+				let foundAnyValue = false;
 
 				for (const location of this.config.locations) {
 					const locationName = this.sanitizeLocationName(location.name);
@@ -1201,8 +1185,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					}
 				}
 
-				// Nur schreiben, wenn wir auch wirklich etwas gefunden haben oder die Summe 0 ist
-				// (Vermeidet das Schreiben von "0", wenn eigentlich gar keine Daten da waren)
 				if (foundAnyValue) {
 					await this.setState(`sum_peak_locations_15_Minutely.${i}.sum_locations`, {
 						val: totalSum,
@@ -1217,10 +1199,12 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		}
 	}
 
+	/*
+	 * Holt die Forecast-Daten fuer einen Standort und schreibt die berechneten States.
+	 */
 	private async updateLocation(location: Location): Promise<void> {
 		const locationName = this.sanitizeLocationName(location.name);
 
-		// Prüfen ob Latitude/Longitude gesetzt sind, ggf. Systemkonfiguration verwenden
 		const effectiveLocation = { ...location };
 		const latMissing =
 			effectiveLocation.latitude === undefined ||
@@ -1253,7 +1237,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		}
 
 		try {
-			// Wir übergeben jetzt die Anzahl der TAGE an den ApiCaller
 			const data = await this.apiCaller.fetchForecastData(effectiveLocation, this.config.forecastDays);
 
 			if (!data || !data.hourly || !data.hourly.time) {
@@ -1261,7 +1244,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 				return;
 			}
 
-			// kwp sicher als Zahl interpretieren (Komma durch Punkt ersetzen falls String)
 			let kwpRaw = location.kwp as any;
 			if (typeof kwpRaw === 'string') {
 				kwpRaw = kwpRaw.replace(',', '.');
@@ -1270,13 +1252,12 @@ class OpenMeteoPvForecast extends utils.Adapter {
 
 			const dailySums: Record<string, number> = {};
 
-			// 1. Alle Stunden summieren
 			for (let i = 0; i < data.hourly.time.length; i++) {
 				const timeStr = data.hourly.time[i];
 				const rawIrradiance = data.hourly.global_tilted_irradiance[i];
 
 				if (timeStr && rawIrradiance !== undefined) {
-					const dateKey = timeStr.split('T')[0]; // "2026-02-15"
+					const dateKey = timeStr.split('T')[0];
 					if (!dailySums[dateKey]) {
 						dailySums[dateKey] = 0;
 					}
@@ -1284,16 +1265,23 @@ class OpenMeteoPvForecast extends utils.Adapter {
 				}
 			}
 
-			// 2. Daily States schreiben
 			const todayObj = new Date();
+			todayObj.setHours(12, 0, 0, 0);
+
+			const sysLang = this.language || 'de';
+
 			for (let day = 0; day < this.config.forecastDays; day++) {
 				const targetDate = new Date(todayObj);
 				targetDate.setDate(todayObj.getDate() + day);
 
 				const dateKey = `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, '0')}-${String(targetDate.getDate()).padStart(2, '0')}`;
-
 				const totalWh = Math.round(dailySums[dateKey] || 0);
-				const formattedDisplayDate = `${String(targetDate.getDate()).padStart(2, '0')}.${String(targetDate.getMonth() + 1).padStart(2, '0')}.${targetDate.getFullYear()}`;
+
+				const formattedDisplayDate = targetDate.toLocaleDateString(sysLang, {
+					day: '2-digit',
+					month: '2-digit',
+					year: 'numeric',
+				});
 
 				await this.setState(`${locationName}.daily-forecast.day${day}.Date`, {
 					val: formattedDisplayDate,
@@ -1302,28 +1290,21 @@ class OpenMeteoPvForecast extends utils.Adapter {
 				await this.setState(`${locationName}.daily-forecast.day${day}.Peak_day`, { val: totalWh, ack: true });
 			}
 
-			// 3. Stündliche Rolling-Werte (für die Anzeige "was kommt als nächstes")
 			const now = new Date();
 			let startSearchTime: number;
 
-			// --- LOGIK-WEICHE START ---
 			if (this.config.hourlyUpdate === 1) {
-				// FESTE STUNDEN: Start bei heute 0:00 Uhr
 				startSearchTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0).getTime();
 			} else {
-				// ROLLENDE STUNDEN: Start bei aktueller Stunde (Dein Original-Code)
 				startSearchTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours()).getTime();
 			}
 
-			// Finde den Index im API-Array basierend auf der berechneten Zeit
 			let currentHourIndex = data.hourly.time.findIndex(t => new Date(t).getTime() >= startSearchTime);
 
 			if (currentHourIndex === -1) {
 				currentHourIndex = 0;
 			}
-			// --- LOGIK-WEICHE ENDE ---
 
-			// Ab hier bleibt dein Code fast gleich, nutzt aber den neuen currentHourIndex
 			for (let hour = 0; hour < this.config.forecastHours; hour++) {
 				const idx = currentHourIndex + hour;
 				if (idx < data.hourly.time.length) {
@@ -1363,13 +1344,11 @@ class OpenMeteoPvForecast extends utils.Adapter {
 						val: sunshineMinutes,
 						ack: true,
 					});
-					// Platten Temperatur berechnen
 					const ambientTemp = data.hourly.temperature_2m[idx];
 					const irradiance = data.hourly.global_tilted_irradiance[idx];
 					const windSpeedKmH = data.hourly.wind_speed_10m[idx] || 0;
 					const windSpeedMS = windSpeedKmH / 3.6;
 
-					// Faiman-Berechnung (Werte 25 und 6.84 sind Standard für Aufdach-Montage)
 					const pvTemp = Math.round((ambientTemp + irradiance / (25 + 6.84 * windSpeedMS)) * 10) / 10;
 
 					await this.setState(`${locationName}.hourly-forecast.hour${hour}.pv_temperature`, {
@@ -1385,16 +1364,13 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					}
 				}
 			}
-			// --- 15-MINUTEN VORHERSAGE BEFÜLLEN ---
 			if (this.config.minutes_15 && (data as any).minutely_15) {
 				this.log.debug(`[${location.name}] Fill in the 15-minute forecast...`);
 
-				// Open-Meteo liefert 15-Min-Daten oft im Key "minutely_15"
 				const minData = (data as any).minutely_15;
 				let unixTimestamp = 0;
 
 				for (let i = 0; i < 96; i++) {
-					// 96 * 15min = 24h
 					if (minData.time[i]) {
 						const apiDate = new Date(minData.time[i]);
 						unixTimestamp = apiDate.getTime();
@@ -1404,7 +1380,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 						});
 						const path = `${locationName}.15-min-forecast.${i}`;
 
-						// Werte schreiben
 						await this.setState(`${path}.time`, { val: formattedTime, ack: true });
 						await this.setState(`${path}.unix_time_stamp`, { val: unixTimestamp, ack: true });
 
@@ -1448,8 +1423,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 								const windSpeedKmH = minData.wind_speed_10m ? minData.wind_speed_10m[i] : 0;
 								const windSpeedMS = windSpeedKmH / 3.6;
 
-								// Faiman-Modell: T_module = T_ambient + Irradiance / (U0 + U1 * Windspeed)
-								// Werte 25 (U0) und 6.84 (U1) sind Standard für Aufdach-Montage
 								const pvTemp =
 									Math.round((ambientTemp + irradiance / (25 + 6.84 * windSpeedMS)) * 10) / 10;
 
@@ -1462,7 +1435,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					}
 				}
 			}
-			// --- Neuer Block für das JSON-Chart nach dem Einzelpunkte-Block ---
 			if (this.config.minutes_15_json && (data as any).minutely_15) {
 				this.log.debug(`[${location.name}] Generating 15-minute JSON chart...`);
 
@@ -1478,7 +1450,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 							? Math.round(minData.global_tilted_irradiance[i] * kwpFactor)
 							: 0;
 
-						// Datenpunkt für das Array hinzufügen
 						chartData.push({
 							ts: unixTimestamp,
 							val: irradianceValue,
@@ -1486,13 +1457,11 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					}
 				}
 
-				// Den fertigen JSON-String in den State schreiben
 				await this.setState(`${locationName}.15-min-json_chart`, {
 					val: JSON.stringify(chartData),
 					ack: true,
 				});
 			}
-			// --- Neuer Stunden Block für das JSON-Chart nach dem Einzelpunkte-Block ---
 			if (this.config.hours_json && (data as any).hourly) {
 				this.log.debug(`[${location.name}] Generating hourly JSON chart...`);
 
@@ -1509,7 +1478,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 							? Math.round(hourlyData.global_tilted_irradiance[i] * kwpFactor)
 							: 0;
 
-						// Datenpunkt für das Array hinzufügen
 						chartData.push({
 							ts: unixTimestamp,
 							val: irradianceValue,
@@ -1517,14 +1485,12 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					}
 				}
 
-				// Den fertigen JSON-String in den State schreiben
 				await this.setState(`${locationName}.hourly-json_chart`, {
 					val: JSON.stringify(chartData),
 					ack: true,
 				});
 			}
 
-			//summe aller Standorte im 15-Minuten-Intervall als JSON für eCharts
 			if (
 				this.config.locationsTotal_minutely_json &&
 				this.config.minutes_15 &&
@@ -1532,16 +1498,13 @@ class OpenMeteoPvForecast extends utils.Adapter {
 			) {
 				const sumChartData = [];
 
-				// Wir gehen die 96 Zeitpunkte (15-Min-Intervalle) durch
 				for (let i = 0; i < 96; i++) {
 					let totalSum = 0;
 					let currentTimeStr = '';
 
-					// Wir loopen über alle konfigurierten Locations, um die Werte zu addieren
 					for (const location of this.config.locations) {
 						const locationName = this.sanitizeLocationName(location.name);
 
-						// Wir holen uns die Werte der einzelnen Locations aus deren States
 						const locTimeState = await this.getStateAsync(
 							`${locationName}.15-min-forecast.${i}.unix_time_stamp`,
 						);
@@ -1557,7 +1520,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 						}
 					}
 
-					// Nur hinzufügen, wenn wir eine Uhrzeit gefunden haben
 					if (currentTimeStr) {
 						sumChartData.push({
 							ts: currentTimeStr,
@@ -1566,7 +1528,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					}
 				}
 
-				// Das fertige JSON schreiben
 				if (sumChartData.length > 0) {
 					await this.setState(`sum_peak_15-min-json_chart`, {
 						val: JSON.stringify(sumChartData),
@@ -1575,7 +1536,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					this.log.debug(`15-min Sum-JSON created.`);
 				}
 			}
-			//summe aller Standorte Stunden als JSON für eCharts
 			if (
 				this.config.locationsTotal_minutely_json &&
 				this.config.minutes_15 &&
@@ -1588,11 +1548,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					let totalSum = 0;
 					let currentTimeStr = '';
 
-					// Wir loopen über alle konfigurierten Locations, um die Werte zu addieren
 					for (const location of this.config.locations) {
 						const locationName = this.sanitizeLocationName(location.name);
 
-						// Wir holen uns die Werte der einzelnen Locations aus deren States
 						const locTimeState = await this.getStateAsync(
 							`${locationName}.hourly-forecast.hour${i}.unix_time_stamp`,
 						);
@@ -1608,7 +1566,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 						}
 					}
 
-					// Nur hinzufügen, wenn wir eine Uhrzeit gefunden haben
 					if (currentTimeStr) {
 						sumChartData.push({
 							ts: currentTimeStr,
@@ -1617,7 +1574,6 @@ class OpenMeteoPvForecast extends utils.Adapter {
 					}
 				}
 
-				// Das fertige JSON schreiben
 				if (sumChartData.length > 0) {
 					await this.setState(`sum_peak_hourly-json_chart`, {
 						val: JSON.stringify(sumChartData),
@@ -1635,6 +1591,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		}
 	}
 
+	/*
+	 * Normalisiert einen Standortnamen fuer die Verwendung in State-IDs.
+	 */
 	private sanitizeLocationName(name: string): string {
 		return name
 			.replace(/[^a-zA-Z0-9_-]/g, '_')
@@ -1642,6 +1601,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
 			.replace(/^_|_$/g, '');
 	}
 
+	/*
+	 * Raeumt laufende Timer auf, bevor der Adapter entladen wird.
+	 */
 	private onUnload(callback: () => void): void {
 		if (this.updateInterval) {
 			clearInterval(this.updateInterval);
@@ -1649,6 +1611,9 @@ class OpenMeteoPvForecast extends utils.Adapter {
 		callback();
 	}
 
+	/*
+	 * Protokolliert unbestaetigte State-Aenderungen.
+	 */
 	private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
 		if (state && !state.ack) {
 			this.log.debug(`DEBUG:state ${id} changed: ${state.val}`);
