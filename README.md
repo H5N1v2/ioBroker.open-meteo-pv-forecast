@@ -10,6 +10,11 @@
 
 **Tests:** ![Test and Release](https://github.com/H5N1v2/ioBroker.open-meteo-pv-forecast/workflows/Test%20and%20Release/badge.svg)
 
+
+## Important information:
+
+This adapter is no longer maintained. This adapter have now been merged in [ioBroker.open-meteo-weather](https://github.com/H5N1v2/ioBroker.open-meteo-weather).
+
 ## Important
 **This adapter uses Sentry libraries to automatically report exceptions and code errors to the developers.** For more details and instructions on disabling error reporting, please refer to the [Sentry-Plugin Documentation](https://github.com/ioBroker/plugin-sentry#plugin-sentry)! Use of Sentry reporting starts with js-controller 3.0.
 
